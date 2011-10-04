@@ -1,5 +1,8 @@
 all: build upload
 
+rm:
+	find -name '*.rst~' | xargs rm
+
 clean:
 	rm -rf _build
 

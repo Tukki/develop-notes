@@ -1,5 +1,11 @@
+---
 active_modules:
     - blog
     - tags
+    - pygments
+    - latex
 author: "Tukki"
 canonical_url: http://127.0.0.1:8000
+modules:
+    pygments:
+        style: tango

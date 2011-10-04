@@ -1,11 +1,39 @@
 <!doctype html>
 <html>
-    <head>
-        <title>{% block title %}{% endblock %}</title>
-        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    </head>
-    <body>
-    {%block body%}
-    {%endblock%}
-    </body>
+  <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+      {% block htmlhead %}
+      <title>{% block title %}Home{% endblock %} | 稻草人.L的记录</title>
+      <link href="http://fonts.googleapis.com/css?family=Vollkorn&subset=latin" rel="stylesheet" type="text/css">
+      <link rel="stylesheet" href="/static/style.css" type="text/css">
+      {%- for link in links %}
+      <link rel="{{ link.rel }}" href="{{ link.href }}"{%
+      if link.media %} media="{{ link.media }}"{% endif %} type="{{ link.type }}">
+      {%- endfor %}
+      {% endblock %}
+  </head>
+  <body>
+      <div class=container>
+          <div class=header>
+              <a href="/">稻草人.L的记录</a>
+          </div>
+          <div class=navigation>
+              <ul>
+                  <li><a href="/">blog</a>
+                  <li><a href="/archive/">archive</a>
+                  <li><a href="/tags/">tags</a>
+              </ul>
+          </div>
+          <div class=body>
+              {% block body %}{% endblock %}
+          </div>
+          <div class=footer>
+              <p>&copy; Copyright {{ format_date(format='YYYY') }} by 稻草人.L
+              <p>
+              Content licensed under the Creative Commons
+              attribution-noncommercial-sharealike License.
+              <p>
+          </div>
+      </div>
+  </body>
 </html>

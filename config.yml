@@ -4,8 +4,10 @@ active_modules:
     - tags
     - pygments
     - latex
-author: "Tukki"
-canonical_url: http://127.0.0.1:8000
+
+author: "稻草人.L"
+canonical_url: http://notes-tukki.dotcloud.com
+
 modules:
     pygments:
         style: tango

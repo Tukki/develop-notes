@@ -13,5 +13,7 @@ serve:
 	run-rstblog serve
 
 upload:
-	#rsync -a _build/ pocoo.org:/var/www/lucumr.pocoo.org/new/
-	@echo "TODO ..."
+	rsync -a --delete _build/ ../dotcloud-public/
+	cp static/dotcloud.yml ../dotcloud-public/dotcloud.yml
+	dotcloud push notes ../dotcloud-public/
+	@echo "Done..."

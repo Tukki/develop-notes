@@ -1,15 +1,12 @@
-public: no
+public: yes
+tag: [python, jinja2]
 
-
-==============================
+================
 Jiaja2 Notes
-==============================
+================
 
+Call a python function from jiaja2, from `stackoverflow <http://stackoverflow.com/questions/6036082/call-a-python-function-from-jinja2>`_
 
-Call a python function from jiaja2
---------------------------------------
-
-from `stackoverflow <http://stackoverflow.com/questions/6036082/call-a-python-function-from-jinja2>`_
 .. sourcecode:: python
 
    from jinja2 import Environment, FileSystemLoader

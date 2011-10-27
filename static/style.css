@@ -87,3 +87,5 @@ ul.tagcloud li  { margin: 0; padding: 0 10px; display: inline; }
 
 /* latex math */
 span.math img   { margin-bottom: -7px; }
+
+.strike { text-decoration: line-through;}

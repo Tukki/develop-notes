@@ -5,19 +5,42 @@ tag: [jQuery, itch]
 在新浪微博网页添加ReadItLater功能
 ===================================
 
+.. role:: strike
+    :class: strike
+
 About `Read it later <http://readitlaterlist.com/>`_, bookmarking service, one of the GTD tools.
 
 关于 `新浪微博 <http://weibo.com>`_, 呃, 的确是一个不错的获取资讯的平台, 获取各种各样的自己感兴趣的资讯.
 
-总有些Weibo想然后再细读的, 现阶段利用 ReadItLater的 `Add link <http://readitlaterlist.com/api/adding/>`_ 方法, 做了个简单的注入实现. 又因为懒得每次点击书签栏, 追加了FireFox Greasemonkey和Chrome Extensions实现, 源码放在了 `github <https://github.com/Tukki/codesnippet/tree/master/javascript/Weibo-RIL>`_
+总有些Weibo想稍候再读的, 例如有些音乐, 有些链接.  :strike:`现阶段利用 ReadItLater的Add Links方法,` 自己做了个书签工具作简单的注入实现. 又因为懒得每次点击书签栏, 追加了FireFox Greasemonkey和Chrome Extensions实现, 源码放在了 `github <https://github.com/Tukki/codesnippet/tree/master/javascript/Weibo-RIL>`_
+
+效果图:
+
+.. image:: /static/2011-10/read-weibo-later.png
 
 
-.. raw:: html
-   
-   <script type="text/javascript">
+-------------
+使用方法
+-------------
 
-   </script>
+1. 如果使用书签栏工具的话, 自己创建书签, 将 `js文件 <https://raw.github.com/Tukki/codesnippet/master/javascript/Weibo-RIL/for_bookmark_tool.min.js>`_ 的内容复制一份作为书签的网址/位置保存.
 
+2. 如果使用firefox, 可以在 `UserScript <http://userscripts.org/scripts/show/116025>`_ 安装, 不过先得有插件 `Greasemonkey <https://addons.mozilla.org/en-US/firefox/addon/greasemonkey/>`_.
+
+3. 如何使用的是chrome, 可以直接下载 `chrome extension打包文件 <https://github.com/Tukki/codesnippet/blob/master/javascript/Weibo-RIL/read-weibo-later.crx>`_ 安装. 不准备添加到Chrome Webstore.
+
+
+
+以下内容是开放时的一些笔记. 
+
+--------------------------
+Read It Later button
+--------------------------
+
+| 官方介绍: http://readitlaterlist.com/api/buttons/  
+| 其重点在其js实现上面. http://readitlaterlist.com/button/multi_v1.js
+
+通过插入<iframe>获取按钮, 没有用到ajax操作. 而先前尝试用jQuery的异步调用其提供的API, 返回结果的确是'200ok', 但确实错误返回, 一直没找出原因.
 
 ----------------------
 detect dom changed
@@ -63,4 +86,5 @@ chrome extensions notes
  
    content_scripts::js, The list of JavaScript files to be injected into matching pages.
    These are injected in the order they appear in this array.
+
 

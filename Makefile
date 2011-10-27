@@ -13,7 +13,7 @@ serve:
 	run-rstblog serve
 
 upload:
-	#rsync -a --delete _build/ ../public/
 	rsync -a static/dotcloud.yml _build/dotcloud.yml
-	dotcloud push notes _build/
+	rsync -a --delete _build/ ../.develop-blog-www/
+	dotcloud push notes ../.develop-blog-www/
 	@echo "Done..."

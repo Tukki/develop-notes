@@ -1,5 +1,5 @@
 public: yes
-tag: [pyramid, repoze]
+tags: [pyramid, repoze]
 
 ========================================
 repoze.who 实现"记住我"功能

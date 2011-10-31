@@ -1,5 +1,5 @@
 public: yes
-tag: [jQuery, itch]
+tags: [jQuery, itch]
 
 ===================================
 在新浪微博网页添加ReadItLater功能

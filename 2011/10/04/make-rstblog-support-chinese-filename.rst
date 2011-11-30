@@ -35,3 +35,9 @@ tags: [python, rstblog]
 再run_rstblog build一次, 这次没有报错.在debug_serve下测试页成功显示. 至于生成的atom是否能正确使用, 需部署到外网后再做验证
     
 
+edit:
+  因为想部署到GAE, 而GAE不支持中文文件名, 也没确定是否有方法. so, 遵守游戏规则, 改回英文名
+  Wed Nov 30 02:05:03 CST 2011
+
+
+

@@ -7,6 +7,7 @@ active_modules:
 
 author: "稻草人.L"
 canonical_url: http://notes-tukki.dotcloud.com
+#canonical_url: http://scarecrow-notes.appspot.com
 
 modules:
     pygments:

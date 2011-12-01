@@ -51,25 +51,42 @@ Django is great, but why not? 用 `Ben Bangert <http://stackoverflow.com/users/9
 - `pylons-and-django <diffle-history.blogspot.com/2007/12/pylons-and-django.html>`_
 
 
-自己经验
+============ 分割线 ====================
 
+以下尽量时自己经验
+---------------------
 
-model query join
+Model
+............
+  
+why Django?
+
+  如果不熟悉SQL, 也不需要负责的查询, Just Django. 定义表结构简单, CURD简单. 
+
+  对应复杂的查询可以用 `Q <https://docs.djangoproject.com/en/dev/topics/db/queries/#complex-lookups-with-q-objects>`_, 还可以直接用 `raw SQL <https://docs.djangoproject.com/en/dev/topics/db/sql/>`_.
+
+  支持表继承. 而且带proxy模式. 用proxy模式改变数据行为很好用.
+
+why not Django? 
+  我不明确Django对于复杂的查询的支持程度, 还是自己在设计上面出发点就错了, 不过在自定义Join查询方面自己曾经头痛过. 
+
+  因为Django, 学会了写数据库视图, 知道了有"物化视图"的实现, 甚至思考过, 好的分离, 是数据使用者根本不需要知道下面的是视图还是实表. 
+
+  在用了SQLAlchemy后, 如果再遇到数据库操作较复杂, 且没有数据库程序员这个角色的话, 再用Django会列个一二三对比后才决定
+   
 
 Template
+...............
   
- why Django
+why Django
 
   The Django template language 很明显地区分为 "For designers" 和 "For programmmers". 
-
   个人陋见, 对于Designer(D)角色, 不用懂Python, 只需用学习Django的tags和filters的用法即可, 如果需要什么, 让Programmer(P)角色提供, 不管是数据还是方法. 
-
   而P角色只要好好地去理解template的Node和Context就能写出合适的tag和filter. 
 
   其中 *inclusion_tag* 在DP同在的情况下, 建议还是少用. 虽然超级好用, 比继承Node然后重写render返回数据让D调用快多了. 但维护成本增大了. 页面是多变的, 把"_header.html"固化在tag文件夹里面了, D角色改页面的时候还得去程序文件里面找对应的对用. 还不如用普通的tag返回数据然后让D角色自己 *include* 一次"_header.html". 管页面以后变成"_wft.html", 与数据无关, 与P角色无关. 当然, DP两个角色都是你的话, 自己衡量吧.
 
-
- why not Django
+why not Django
 
   Django 文档里面有句"Web designers (as opposed to developers)". 很明显的定位, 页面设计师和程序员是对立的~. 如果只有你自己一个人, 准备分演两个角色吧.
   
@@ -78,16 +95,20 @@ Template
   Python世界还有很多html template实现. `Jinja2 <http://jinja.pocoo.org/docs>`_, `Mako <http://www.makotemplates.org/>`_, `Genshi <http://genshi.edgewall.org/>`_ 等等等等. Jinja2的语法和DjangoTemplate的就差不了多少, 过渡成本不高. Mako甚至可以把Python像PHP一样用... Django外面的世界也很精彩, 例如想用适合自己的实现, Django可能就不是满足这类需求的实现.  不过, 如果遵循MVC或者工程小, 用什么Template区别不大, 甚至可以考虑让客户端js来渲染大部分页面.
 
 
-  
-form
+Form
+.........
 
-json
-
-
+Django的Form是一体化的, 包含了html生成, 数据校验等. 当然也可以自定义html, 不管是自定义widget还是在template上. 自己来说, 不喜欢这种一体化来用. 后台做好数据校验就行, 不需要考虑页面上数据时怎样显示的.
 
 
+All Together
+..................
 
+自己认同的一句: Django, 简单用很简单, 复杂用很负责. 
 
+如果只有一个人担当多个角色, 用Django吧. 一站式服务. 如果有多个人担当多个角色, 也用Django吧. Django的学习成本不高, 沟通容易. 
+
+如果你想多点控制, 多点选择, 还是不要Django了.
 
 
 
@@ -111,3 +132,5 @@ json
 
 更多 Python Web Framework 查看 `python wiki <http://wiki.python.org/moin/WebFrameworks>`_
 
+
+<!-- update: Fri Dec 2 00:03:02 CST 2011 -->

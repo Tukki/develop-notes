@@ -11,8 +11,13 @@ tags: [freemind, weibo]
 
 	<script type="text/javascript" src="/static/flash/flashobject.js"> </script>
 	<style>
-	#lashcontent {
-	   width: 100%
+	html {
+		height: 100%;
+		overflow: hidden;
+	}
+
+	#flashcontent {
+	   height: 100%
 	}
 	</style>
 

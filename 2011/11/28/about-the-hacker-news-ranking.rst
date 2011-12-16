@@ -1,5 +1,5 @@
 public: yes
-tags: [algorithm]
+tags: [algorithms]
 
 =========================================
 about The Hacker News Ranking

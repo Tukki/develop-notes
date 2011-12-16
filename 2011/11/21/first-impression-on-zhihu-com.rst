@@ -1,5 +1,5 @@
 public: yes
-tags: [Internet, thoughts]
+tags: [WWW, thoughts]
 
 ======================
 使用知乎的第一印象

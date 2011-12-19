@@ -63,3 +63,18 @@ Hierarchecal Data on Database
 
 
 <!-- Fri Dec  2 16:59:20 CST 2011 -->
+
+[update] 简单的对比记录
+
+1. 经常读写但不在意查询子树结构的, 用Adjacency List(邻接列表). 递归查询
+2. 不经常改写, 且需要经常查子树结构, 用nested sets
+3. Path Enumeration查询直接子节点比较麻烦. 对生成路径有天然的优势.
+   树结构排序也需要额外的字段协调
+4. Closure Table -> 两个表. 查询子孙很容易. 但构建目录结构需要一次"group by"
+   在非按ID顺序情况下构建树缺乏优势.
+
+没有银弹. Adjacency List是基础模型, 然后可以按需求选择对应的方法/变种进行辅助. django-mptt_ 实现中, 除了lft/ rght外, 保存对应的父节点, 还引入tree_id, level两个字段来辅助查询/构建树结构.
+
+再来, 还有NoSQL组合使用的可能. 
+
+<!-- Mon Dec 19 15:22:43 CST 2011 -->

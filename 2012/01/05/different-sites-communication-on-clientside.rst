@@ -46,5 +46,10 @@ Flash
 
 Diigo, WebNotes提供嵌入当前页面的工具条. 没有认真拆解过, 但确认其没用到Html5特性. 而且两个都属于有后续有不确定交互发生的存在, 由于iframe设定是"上下文无关". 那猜想应该是用了flash. `Using the External API for Flash-JavaScript Communication <http://www.adobe.com/devnet/flash/articles/external_interface.html>`_
 
+直接请求
+------------
 
-<!-- Thu Jan  5 15:31:24 CST 2012 -->
+WebNotes的工具条, 刚才用Firebug测了下, 不是Flash. (内置的flash显示时timer, 不知道时用了干啥的, 心跳包?). 对于HighLighting触发时, 是一GET请求, 带好长的一段编码/加密过的参数. 然后返回一JS, try{...}catch(e){}
+
+
+updated: <!-- Fri Jan  6 14:33:07 CST 2012 -->

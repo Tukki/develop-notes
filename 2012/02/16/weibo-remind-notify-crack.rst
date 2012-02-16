@@ -41,5 +41,7 @@ time	      status	follower      cmt     dm      mcmt    	 mstatus    group   not
 
 <Thu Feb 16 18:53:54 CST 2012>
 
+示例文件: `weibo_remind_crackr.html <https://github.com/Tukki/codesnippet/blob/master/javascript/weibo_remind_crackr.html>`_
 
+<Thu Feb 16 23:14:33 CST 2012>
 

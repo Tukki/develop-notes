@@ -45,3 +45,6 @@ time	      status	follower      cmt     dm      mcmt    	 mstatus    group   not
 
 <Thu Feb 16 23:14:33 CST 2012>
 
+update: 这个隐私泄漏问题修正了. 
+
+<Sat Feb 25 00:33:04 CST 2012>

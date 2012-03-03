@@ -45,6 +45,14 @@ time	      status	follower      cmt     dm      mcmt    	 mstatus    group   not
 
 <Thu Feb 16 23:14:33 CST 2012>
 
-update: 这个隐私泄漏问题修正了. 
+.. role:: strike
+   :class: strike
 
-<Sat Feb 25 00:33:04 CST 2012>
+:strike:`update: 这个隐私泄漏问题修正了.`
+
+:strike:`<Sat Feb 25 00:33:04 CST 2012>`
+
+问题依旧. 不知道该如何反映此问题. 或在这隐私没那么重要?
+
+<Sat Mar  3 15:09:41 CST 2012>
+

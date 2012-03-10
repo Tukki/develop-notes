@@ -34,3 +34,12 @@ JavsScript的"污染"问题, 闭包, 浏览器事件的利用. Django内置ORM, 
   
 <Fri Mar  9 01:46:17 CST 2012>
 
+keep learn. 好好地去扎实下基础吧, 谁叫我喜欢上了开发.
+
+<Sat Mar 10 17:25:56 CST 2012>
+
+
+
+
+
+

@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title type="text">Recent Blog Posts</title>
+  <id>/develop-notes/feed.atom</id>
+  <updated>2012-04-03T00:00:00Z</updated>
+  <link href="/develop-notes/" />
+  <link href="/develop-notes/feed.atom" rel="self" />
+  <subtitle type="text">Recent blog posts</subtitle>
+  <generator>Werkzeug</generator>
+  <entry xml:base="/develop-notes/feed.atom">
+    <title type="text">Notes for Pyramid with Nginx</title>
+    <id>/develop-notes/2011/10/09/notes-for-Pyramid-with-Nginx</id>
+    <updated>2011-10-09T00:00:00Z</updated>
+    <link href="/develop-notes/2011/10/09/notes-for-Pyramid-with-Nginx" />
+    <author>
+      <name>稻草人.L</name>
+    </author>
+    <content type="html">&lt;p&gt;pyramid_cookbook上的 &lt;a class="reference external" href="https://docs.pylonsproject.org/projects/pyramid_cookbook/dev/deployment/nginx.html"&gt;Nginx + paster + supervisord&lt;/a&gt;.&lt;/p&gt;
+&lt;div class="section" id="pastescript-cherrypy"&gt;
+&lt;h2&gt;PasteScript#cherrypy使用&lt;/h2&gt;
+&lt;p&gt;the pyramid cookbook在当前(v0.1)版本, 使用PasteScript#cherrypy作为server:&lt;/p&gt;
+&lt;pre class="literal-block"&gt;
+[server:main]
+host = 127.0.0.1
+port = %(http_port)s
+
+use = egg:PasteScript#cherrypy
+numthreads = 10
+timeout = 180
+request_queue_size = 200
+&lt;/pre&gt;
+&lt;p&gt;如果使用Pastecript-1.7.4.2版本, 会抛出:&lt;/p&gt;
+&lt;pre class="literal-block"&gt;
+lib/python2.5/site-packages/paste/script/cherrypy_server.py&amp;quot;, line 4, in &amp;lt;module&amp;gt;
+import paste.script.wsgiserver as wsgiserver
+ImportError: No module named wsgiserver
+&lt;/pre&gt;
+&lt;p&gt;在PasteScript的BitBucket有相关记录 &lt;a class="reference external" href="https://bitbucket.org/ianb/pastescript/issue/1/no-module-named-pastescriptwsgiserver"&gt;Issue #1&lt;/a&gt;:&lt;/p&gt;
+&lt;pre class="literal-block"&gt;
+The module paste.script.wsgiserver seems to have been removed when going from 1.7.3 to 1.7.4.
+&lt;/pre&gt;
+&lt;p&gt;如果一定要使用这配置, 使用pastescript==1.7.3版本才行. 官方文档需要更新了.&lt;/p&gt;
+&lt;p&gt;疑问: 查看cherry_server.py的 &lt;a class="reference external" href="https://bitbucket.org/ianb/pastescript/changeset/8e8ae01e5231#chg-paste/script/cherrypy_server.py"&gt;history&lt;/a&gt;, 07年已经不再依赖CherryPy. 那CherryPy一直以来的更新和优化, 是不是一致没有用上?&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="section" id="pastedeployprefixmiddleware"&gt;
+&lt;h2&gt;使用PasteDeploy的prefixMiddleware&lt;/h2&gt;
+&lt;p&gt;在[filter:paste_prefix]中添加:&lt;/p&gt;
+&lt;pre class="literal-block"&gt;
+prefix = /prefix
+&lt;/pre&gt;
+&lt;p&gt;然后在nginx的location可以设置对应的prefix.&lt;/p&gt;
+&lt;/div&gt;
+</content>
+  </entry>
+  <entry xml:base="/develop-notes/feed.atom">
+    <title type="text">Pyramid Authentication and Authorization</title>
+    <id>/develop-notes/2011/10/31/pyramid-auth</id>
+    <updated>2011-10-31T00:00:00Z</updated>
+    <link href="/develop-notes/2011/10/31/pyramid-auth" />
+    <author>
+      <name>稻草人.L</name>
+    </author>
+    <content type="html">&lt;div class="section" id="forbidden-vs-unauthorized"&gt;
+&lt;h2&gt;Forbidden vs Unauthorized&lt;/h2&gt;
+&lt;p&gt;&lt;a class="reference external" href="http://docs.pylonsproject.org/projects/pyramid/1.2/narr/security.html"&gt;官方1.2文档&lt;/a&gt;:&lt;/p&gt;
+&lt;pre class="literal-block"&gt;
+if the authorization policy denies access, the view callable is not invoked;
+instead the Forbidden view is invoked.
+&lt;/pre&gt;
+&lt;p&gt;不满足权限要求, 抛出 &lt;em&gt;pyramid.httpexceptions.HTTPForbidden&lt;/em&gt;, 即使使用 &lt;a class="reference external" href="http://docs.pylonsproject.org/projects/pyramid/1.2/api/security.html#pyramid.security.Authenticated"&gt;security.Authenticated&lt;/a&gt;, 得到的也是Forbidden的403, 而不是Unauthorized的401.&lt;/p&gt;
+&lt;p&gt;对于某资源, 非登录用户无权限访问而显示个登录界面是个不错的用户体验; 但对于登录用户无权限访问时, 给对方显示个登录界面颇为不妥. 至今了解到的资料, 在pyramid默认的auth机制中, 分离 &lt;em&gt;login_required&lt;/em&gt; 和 &lt;em&gt;permission&lt;/em&gt; 还得额外处理.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="section" id="default-permission"&gt;
+&lt;h2&gt;default permission&lt;/h2&gt;
+&lt;p&gt;&lt;a class="reference external" href="http://docs.pylonsproject.org/projects/pyramid/1.2/narr/security.html#setting-a-default-permission"&gt;Setting a Default Permission&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;避免循环, 对于 &lt;em&gt;HTTPForbidden View&lt;/em&gt; 要开放权限 &lt;a class="reference external" href="http://docs.pylonsproject.org/projects/pyramid/1.2/api/security.html#pyramid.security.NO_PERMISSION_REQUIRED"&gt;pyramid.security.NO_PERMISSION_REQUIED&lt;/a&gt;:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt; &lt;span class="c"&gt;#默认都得登录才能访问&lt;/span&gt;
+&lt;span class="n"&gt;config&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;set_default_permission&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;#39;login_required&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+
+&lt;span class="n"&gt;config&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;add_view&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;#39;project.views.login&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+                &lt;span class="n"&gt;renderer&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;#39;login.mako&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+                &lt;span class="n"&gt;context&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;#39;pyramid.httpexceptions.HTTPForbidden&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+                &lt;span class="n"&gt;permission&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="n"&gt;NO_PERMISSION_REQUIRED&lt;/span&gt;&lt;span class="s"&gt;&amp;#39;&lt;/span&gt;
+                &lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class="section" id="traversal-context"&gt;
+&lt;h2&gt;traversal context&lt;/h2&gt;
+&lt;p&gt;访问无权限时直接显示登录界面而不作跳转. 以前在Django学到的方式是: 用decorator判断, 直接调用login_view作为返回. 而在pyramid可以用traversalh直接设定context:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="n"&gt;config&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;add_view&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;#39;project.views.login&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+                &lt;span class="n"&gt;renderer&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;#39;login.mako&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+                &lt;span class="n"&gt;context&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;#39;pyramid.httpexceptions.HTTPUnathorized&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+                &lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;注意上面的代码没有&amp;quot;route_name&amp;quot;, 即使带&amp;quot;route_name&amp;quot;也会被忽略, 导致无法直接访问登录页面. 解决方法是再用 &lt;a class="reference external" href="http://docs.pylonsproject.org/projects/pyramid/1.2/narr/urldispatch.html#urldispatch-chapter"&gt;URL Dispatch&lt;/a&gt; 的方式再添加登录界面一次. (traversal的方式, 还没搞明白)&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="section" id="pyramid-auth-api-design-postmortem"&gt;
+&lt;h2&gt;Pyramid &amp;quot;Auth&amp;quot; API Design Postmortem&lt;/h2&gt;
+&lt;p&gt;Chrism写得API设计验尸报告, &lt;a class="reference external" href="http://plope.com/pyramid_auth_design_api_postmortem"&gt;http://plope.com/pyramid_auth_design_api_postmortem&lt;/a&gt;&lt;/p&gt;
+&lt;ol class="arabic simple"&gt;
+&lt;li&gt;The &amp;quot;groupfinder&amp;quot; is a &amp;quot;knob on a knob&amp;quot;. A Pyramid authentication policy is already replaceable wholesale; you can write a custom authentication policy and use it as necessary. However, because writing a custom authentication policy no fun, the default authentication policies themselves have become miniframeworks by allowing (really, requiring) a user to pass a &amp;quot;groupfinder&amp;quot; function. This is a common source of confusion. It would be much better if there was only one &amp;quot;knob&amp;quot; for a user to turn: registering a custom authentication policy, rather than two (allowing a custom authentication policy or allowing them to use the groupfinder miniframework with stock authentication policies). But for it to be feasible for a nonexpert user to create an authentication policy, the contract of the policy itself needs to be simpler.&lt;/li&gt;
+&lt;li&gt;If the user wants to control the horizontal and vertical of authorization, they have to override both the authentication policy and the authorization policy bacause both rely on persistent storage local to the application itself. This is bad.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;只需要简单的登录验证, 默认提供的auth机制的确够用了. 复杂一点的就选择repoze.who. 为在pyramid上面使用repoze.who提供了个支持.&lt;/p&gt;
+&lt;p&gt;[Mon Oct 31 15:18:23 CST 2011]&lt;/p&gt;
+&lt;/div&gt;
+</content>
+  </entry>
+  <entry xml:base="/develop-notes/feed.atom">
+    <title type="text">repoze.who 实现"记住我"功能</title>
+    <id>/develop-notes/2011/10/26/implementing-rememeber-me-in-repoze-who</id>
+    <updated>2011-10-26T00:00:00Z</updated>
+    <link href="/develop-notes/2011/10/26/implementing-rememeber-me-in-repoze-who" />
+    <author>
+      <name>稻草人.L</name>
+    </author>
+    <content type="html">&lt;p&gt;至今没有去思考和深究&amp;quot;为什么pyramid有repoze.who好好的不去用, 而再次实现自己的authentication.&amp;quot;&lt;/p&gt;
+&lt;p&gt;今天要为用repoze.who实现的登录功能添加个&amp;quot;remember me&amp;quot;功能, 辗转了好几个地方才算是解决.&lt;/p&gt;
+&lt;p&gt;repoze.who的plugins &lt;em&gt;AuthTktCookiePlugin&lt;/em&gt; 提供的两个初始参数, timeout和reissue_time,
+&lt;a class="reference external" href="http://docs.repoze.org/who/1.0/narr.html"&gt;官方文档&lt;/a&gt; 如是说(1.0版本, 2.0的文档当前未完整):&lt;/p&gt;
+&lt;pre class="literal-block"&gt;
+If timeout is specfied, it is the maximum age in seconds allowed for a cookie.
+If reissue_time is specified, when we encounter a cookie that is older than
+the reissue time (in seconds), but younger that the timeout, a new cookie will
+be issued. If timeout is specified, you must also set reissue_time to a lower value.
+&lt;/pre&gt;
+&lt;p&gt;比较笼统, 还颇带误导成分. 看pyramid的 &lt;a class="reference external" href="http://docs.pylonsproject.org/projects/pyramid/1.2/api/authentication.html#module-pyramid.authentication"&gt;pyramid.authentication.AuthTktAuthenticationPolicy&lt;/a&gt;
+的文档说明或者更清晰点:&lt;/p&gt;
+&lt;pre class="literal-block"&gt;
+timeout
+
+   Default: None. Maximum number of seconds which a newly issued ticket will be considered valid.
+   After this amount of time, the ticket will expire (effectively logging the user out).
+   If this value is None, the ticket never expires. Optional.
+
+reissue_time
+
+   Default: None. If this parameter is set, it represents the number of seconds that must pass
+   before an authentication token cookie is automatically reissued as the result of a request
+   which requires authentication. The duration is measured as the number of seconds since the
+   last auth_tkt cookie was issued and ‘now’. If this value is 0, a new ticket cookie will be
+   reissued on every request which requires authentication.
+
+   A good rule of thumb: if you want auto-expired cookies based on inactivity: set the timeout
+   value to 1200 (20 mins) and set the reissue_time value to perhaps a tenth of the timeout
+   value (120 or 2 mins). It’s nonsensical to set the timeout value lower than the reissue_time
+   value, as the ticket will never be reissued if so. However, such a configuration is not
+   explicitly prevented.
+
+   Optional.
+&lt;/pre&gt;
+&lt;p&gt;如pyramid文档说, timeout和reissue_time其实是服务器端处理的. 截取源码:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="c"&gt;#in repoze.who.plugins.auth_tkt.py line-71&lt;/span&gt;
+&lt;span class="c"&gt;#IIdentifier&lt;/span&gt;
+&lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;timeout&lt;/span&gt; &lt;span class="ow"&gt;and&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;timestamp&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;timeout&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;&lt;/span&gt; &lt;span class="n"&gt;time&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;time&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt; &lt;span class="p"&gt;):&lt;/span&gt;
+    &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="bp"&gt;None&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;而一般所说的cookie过期应该是客户端的, 过期的cookie不会发送到服务器段, 要设定的应该时max_age参数, pyramid文档:&lt;/p&gt;
+&lt;pre class="literal-block"&gt;
+max_age
+
+Default: None. The max age of the auth_tkt cookie, in seconds. This differs from timeout inasmuch
+as timeout represents the lifetime of the ticket contained in the cookie, while this value represents
+the lifetime of the cookie itself. When this value is set, the cookie’s Max-Age and Expires settings
+will be set, allowing the auth_tkt cookie to last between browser sessions.
+It is typically nonsensical to set this to a value that is lower than timeout or reissue_time,
+although it is not explicitly prevented. Optional.
+&lt;/pre&gt;
+&lt;p&gt;repoze.who中auth_tkt的max_age不在初始化中传递, 发现在remember中在参数identity中尝试获取. 文档只字未提, &lt;a class="reference external" href="http://bugs.repoze.org/issue87"&gt;Repoze Issue87&lt;/a&gt; 有相关信息.:&lt;/p&gt;
+&lt;pre class="literal-block"&gt;
+in remember now you get
+max_age = identity.get('max_age', None)
+and _get_cookies correctly sets it
+&lt;/pre&gt;
+&lt;p&gt;其实问题解决的缺口在repoze.who-friendlyform, 在其源码中&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="k"&gt;try&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+     &lt;span class="n"&gt;credentials&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s"&gt;&amp;#39;max_age&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;form&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s"&gt;&amp;#39;remember&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
+&lt;span class="k"&gt;except&lt;/span&gt; &lt;span class="ne"&gt;KeyError&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+     &lt;span class="k"&gt;pass&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;不过明显不符合需求. &amp;quot;remember&amp;quot;一般是checkbox吧, 而不是上面那样是&amp;quot;max_age&amp;quot;的值. 将其修改为:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="n"&gt;form&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;get&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;#39;remember&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+    &lt;span class="n"&gt;credentials&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s"&gt;&amp;#39;max_age&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;the&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;max_age&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;value&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;如果不想这样pitch, 就自己实现个继承friendlyform.FriendlyFormPlugin的class, 覆盖其identity函数, 同时能灵活处理*max_age*值的获取方式. 我把自己的实现放在了github的 &lt;a class="reference external" href="https://github.com/Tukki/codesnippet/blob/master/python/friendlyform_fix_rememberme.py"&gt;这里&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;[Wed Oct 26 20:41:10 CST 2011]&lt;/p&gt;
+</content>
+  </entry>
+  <entry xml:base="/develop-notes/feed.atom">
+    <title type="text">WebOb-1.2不再支持Python2.5</title>
+    <id>/develop-notes/2011/10/28/webob-no-longer-support-py25</id>
+    <updated>2011-10-28T00:00:00Z</updated>
+    <link href="/develop-notes/2011/10/28/webob-no-longer-support-py25" />
+    <author>
+      <name>稻草人.L</name>
+    </author>
+    <content type="html">&lt;p&gt;WebOb更新, 在 &lt;a class="reference external" href="http://docs.webob.org/en/latest/news.html"&gt;1.2a1&lt;/a&gt; 已经明确不支持Python2.5. 而继续在Python2.5环境安装pyramid-1.2.1时会, 会自动安装最新的WebOb版本, 导致 &lt;em&gt;paster create --list-templates&lt;/em&gt; 出现错误.&lt;/p&gt;
+&lt;p&gt;此时可以卸载WebOb的安装, 改用WebOb-1.1.1版本:&lt;/p&gt;
+&lt;pre class="literal-block"&gt;
+pip uninstall webob
+pip install webob==1.1.1
+&lt;/pre&gt;
+&lt;p&gt;另外, WebOb1.2已经支持Python3.2, 而Pyramid对Python3的支持也在进行中: &lt;a class="reference external" href="https://github.com/Pylons/pyramid/wiki/Python-3-Porting"&gt;Python 3 Porting&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;[Fri Oct 28 17:09:05 CST 2011]&lt;/p&gt;
+</content>
+  </entry>
+  <entry xml:base="/develop-notes/feed.atom">
+    <title type="text">Why I leave Pyramid</title>
+    <id>/develop-notes/2012/04/03/why-I-leave-pyramid</id>
+    <updated>2012-04-03T00:00:00Z</updated>
+    <link href="/develop-notes/2012/04/03/why-I-leave-pyramid" />
+    <author>
+      <name>稻草人.L</name>
+    </author>
+    <content type="html">&lt;p&gt;&lt;a class="reference external" href="http://www.pylonsproject.org/"&gt;Pyramid&lt;/a&gt;, Pylons和Repoze.bfg两个框架的合并产物. 2011年下半年用来做个两个最后失败只有上线没有运营的工程. 现在, 已经确认未来有一段时间不会再用其来构建python web project. 离开, 纯属个人喜欢, 非基于技术性的选择.&lt;/p&gt;
+&lt;p&gt;一开始, 只是在享受django带来方便的同时, 不适应其居多的限制. 作为一个爱折腾喜欢灵活的人, 开始尝试 pylons + sqlalchemy. 却又适逢Pylons停止开发, 和Repoze.bfg衍生出Pyramid, 出于技术框架的在开源社区上面的支持程度来作长远的考虑 -- 回想这一点, 觉得有点不妥, startup的时候, 长远考虑不一定是件好事, 未来变化太多了, startup或者应该用熟悉的工具尽快起步 -- 于是改用了Pyramid.:&lt;/p&gt;
+&lt;pre class="literal-block"&gt;
+Web development with style, your way!
+&lt;/pre&gt;
+&lt;p&gt;这句吸引了我. 但事实上, 自己对 web development 还没有自己的style. 不过, 里面一个单文件就搭建好一个简单的application, 至少当时对于只用过django的我是很吸引的. 当然django也可以做到, 其他框架也至此(web.py, flask). 借口! 灵活性吸引了我.&lt;/p&gt;
+&lt;p&gt;django外面的世界, Template上面mako, jinja2都比django内置的强大(个人认为) form也更多的选择, django的orm在非django环境下面使用有点麻烦. 这些, 在Pylons/Pyramid上面都能自主选择.&lt;/p&gt;
+&lt;p&gt;也许是太灵活, 而且我还是个版本控, 导致还没有style的我在选择上面走了不少弯路.&lt;/p&gt;
+&lt;p&gt;1.0/1.1版的文档没有1.3版的清晰, 主推过Traversal, 事实上更多人习惯的是Route.&lt;/p&gt;
+&lt;p&gt;内置的时Chameleon Template, 要用Mako还需要额外配置一下.&lt;/p&gt;
+&lt;p&gt;内置的Authorization Policy, 感觉还不如用repoze.who/repoze.what. 一直就想不明白, 作为一个&amp;quot;灵活的框架&amp;quot;, 要内置的Authorization Policy干啥, 想原Pylons那样, 指导用可选的第三方实现不是一样可以吗?&lt;/p&gt;
+&lt;p&gt;现在第三方依赖和第三方可选是两回事. Pyramid一开始时第三方依赖严重, 导致版本升级协调难. 在WebOb和Paste上面就载过跟斗. 后来Pyramid把Paste也舍弃了, 直接内置了相关的实现,(应该没记错). 也不知道算不算是间好事.&lt;/p&gt;
+&lt;p&gt;可能, 当时最不习惯的, 莫过于interfaces了. 是Python不是Java吧.&lt;/p&gt;
+&lt;p&gt;其实, 更多还是个人原因, 用一样的东西就喜欢全局地看其功能, 去了解其底层的实现. 而且自己还不是一个在深入研究python web framework的人. 所以, pyramid的灵活性, 不是我现在要去handle的. 灵活又小的框架, 现在有个想法, I will get &lt;a class="reference external" href="http://flask.pocoo.org/"&gt;Flask&lt;/a&gt; a try.&lt;/p&gt;
+&lt;p&gt;不想掉入什么语言之争, 框架之争. 用合适的工具来解决问题. sorry, Pyramid. 在索取阶段已经选择离开, 还没作建设性的回馈. 有机会, 再合作.&lt;/p&gt;
+&lt;p&gt;balabala又一个小时, 回看, 实在没什么建设性的内容. 总结能力要继续提高才行.&lt;/p&gt;
+&lt;p&gt;&amp;lt;Tue Apr  3 16:38:33 CST 2012&amp;gt;&lt;/p&gt;
+</content>
+  </entry>
+</feed>
+

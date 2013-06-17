@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title type="text">Recent Blog Posts</title>
+  <id>/develop-notes/feed.atom</id>
+  <updated>2011-11-17T00:00:00Z</updated>
+  <link href="/develop-notes/" />
+  <link href="/develop-notes/feed.atom" rel="self" />
+  <subtitle type="text">Recent blog posts</subtitle>
+  <generator>Werkzeug</generator>
+  <entry xml:base="/develop-notes/feed.atom">
+    <title type="text">对trapit-toolbar进行模拟的记录</title>
+    <id>/develop-notes/2011/11/17/notes-on-trapit-toolbar</id>
+    <updated>2011-11-17T00:00:00Z</updated>
+    <link href="/develop-notes/2011/11/17/notes-on-trapit-toolbar" />
+    <author>
+      <name>稻草人.L</name>
+    </author>
+    <content type="html">&lt;p&gt;对 &lt;a class="reference external" href="http://trap.it"&gt;Trap It&lt;/a&gt; 里面的toolbar实现猜想现在证明是冲动的结果.&lt;/p&gt;
+&lt;p&gt;原认为用的是javascript injection, 后台加载目标网站后添加自己想要的javascript进去. 自己还去找了找有没有哪个实现能在后台加载渲染整个网页, 包括javascript和css. 只是没有或在没找到, &lt;a class="reference external" href="http://wwwsearch.sourceforge.net/mechanize/"&gt;mechanize&lt;/a&gt; 也不支持javascript, 甚至相关chrome有无命令行版本的... 回头冷静想想, 用Firebug一看. 是直接打开目标网站的, 才想起iframe能实现这内嵌效果. 简单不冲突.&lt;/p&gt;
+&lt;p&gt;用tornado写了个demo, (本来想用pyramid, 不过感觉不够micro, 用mako还得配置). 根据传递的&amp;quot;url&amp;quot;更改iframe的src值. 本来应该就这样结束的. 点击iframe里面的链接, 才发现iframe的src值和浏览器地址栏都不会随着更新(Trapit的因为是一大串数字没在意), 而且浏览器的前后导航变动针对的是iframe里面的切换.&lt;/p&gt;
+&lt;p&gt;然后就是, javascript无法获取iframe里面的内容. &lt;a class="reference external" href="http://stackoverflow.com/questions/364952/jquery-javascript-accessing-contents-of-an-iframe"&gt;Stackoverflow&lt;/a&gt; 有个相关的问题, 然后重点在Wikipedia的 &lt;a class="reference external" href="http://en.wikipedia.org/wiki/Same_origin_policy"&gt;Same origin policy&lt;/a&gt; 上面. 里面提到&amp;quot;Same protocol and host but different port&amp;quot;都属于限制的, 但这里就有个TODO新添加了: 为什么同一ip地址不同端口的两个实现, 能共享cookie?&lt;/p&gt;
+&lt;p&gt;&amp;lt;!-- Thu Nov 17 01:50:28 CST 2011 --&amp;gt;&lt;/p&gt;
+</content>
+  </entry>
+</feed>
+

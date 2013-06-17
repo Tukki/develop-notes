@@ -1,0 +1,73 @@
+<!doctype html>
+<html>
+  <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+      
+      <title>Crawler for Dynamic Page | 稻草人.L的记录</title>
+      <!--<link href="http://fonts.googleapis.com/css?family=Vollkorn&subset=latin" rel="stylesheet" type="text/css">-->
+      <link rel="stylesheet" href="/develop-notes/static/style.css" type="text/css">
+      <link rel="stylesheet" href="/static/_pygments.css" type="text/css">
+      
+  </head>
+  <body>
+      <div class=container>
+          <div class=header>
+              <a href="/">稻草人.L的记录</a>
+          </div>
+          <div class=navigation>
+              <ul>
+                  <li><a href="/develop-notes/">blog</a></li>
+                  <li><a href="/develop-notes/archive/">archive</a></li>
+                  <li><a href="/develop-notes/tags/">tags</a></li>
+                  <li><a href="/develop-notes/feed.atom" rel="alternate" title="Recent Blog Posts">feed</a></li>
+              </ul>
+          </div>
+          <div class=body>
+              
+  <h1 class="title">Crawler for Dynamic Page</h1>
+
+  
+  <p class=date>written on Monday, December 26, 2011
+  
+
+  <p>事实上, 我只是知道有网络爬虫的存在, 对其实现细节, 历史阿都不了解. 这里只是说一个猜测性的可能.</p>
+<p>最近想写个数据备份脚本, 但目标网站提供的开放API有居多限制, 最重要莫过于数量限制. 于是想直接解析页面获取相关的数据. 下载一个页面回来不是很麻烦的时, 麻烦在于如何让里面的渲染用的javascript执行生存完整的页面. 想过利用自动脚本下载页面源码回来, 调用浏览器渲染, 再保存渲染后的页面进行解析. 于是, 发现 <a class="reference external" href="http://seleniumhq.org/">Selenium</a>:</p>
+<pre class="literal-block">
+selenium automates browsers. That's it.
+</pre>
+<p>本来就是一个自动测试工具.(保存Delicious的时候才发现以前已经保存过) 稍稍阅读了其文档, 发现其不仅可以模拟人控制浏览器触发各类事件, 对我最重要一点时可以直接获取到浏览器渲染完成后的html完整代码. ps. 顺带把网页截图的可能也解决了.</p>
+<p>在试Chrome时, 要用到 <a class="reference external" href="http://code.google.com/p/selenium/wiki/ChromeDriver">ChromeDriver</a>. 知道其可以构建service. 就这样想法来了, 是不是爬虫用来对付动态页面的一种方法:</p>
+<pre class="literal-block">
+为爬虫实现一个针对动态网页的Proxy中间层.
+Selenium控制Chrome获取目标网页的内容, 然后再让爬虫在上面进行分析处理.
+</pre>
+<p>我不确定现在的爬虫对于Javascript的处理能力有多强. 但我因为有javascript的经验, 知道其带来的可能性接近无限.</p>
+<p>Google有自己的浏览器实现Chrome, 有自己的Javascript引擎V8, 而且还是开源. Selenium也是个开源的项目. Chrome搭建服务群, V8加速动态内容生成, Selenium协助爬虫获取内容进行分析. 不确定Google是不是真的在争浏览器市场份额, 当如果这个模式是行得通的话, Google在搜索这一块就有了明显的先天优势.</p>
+<p>现在的网站越来越动态, 而网页构建应该是最终用户友好而不是爬虫友好的. 这个中间层, 也是一种解决可能. 不过构建中间层的资源, 就得搜索引擎方自己买单了.</p>
+<p>ps. 写下来, 发现这标题定得真是大而虚. 内容还乱七八糟没重点.</p>
+<p>&lt;!-- Tue Dec 27 00:40:50 CST 2011 --&gt;</p>
+
+
+  
+  <p class=tags>This entry was tagged
+    
+      <a href="/develop-notes/tags/thoughts/">thoughts</a>
+  
+
+          </div>
+          <div class=footer>
+              <p>&copy; Copyright 2013 by 稻草人.L
+              <p>
+              Content licensed under the Creative Commons
+              attribution-noncommercial-sharealike License.
+              <p>
+              联系我: 
+	      <span>Tukki.Eta(#)gmail.com</span> &nbsp;
+	      <a href="http://twitter.com/scarecrow_L">Twitter</a> &nbsp;
+          <a href="https://www.github.com/tukki">Github</></a> &nbsp;
+      </div>
+
+          </div>
+      </div>
+  </body>
+</html>

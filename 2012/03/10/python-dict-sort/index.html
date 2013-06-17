@@ -1,0 +1,80 @@
+<!doctype html>
+<html>
+  <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+      
+      <title>Python Dict Sort | 稻草人.L的记录</title>
+      <!--<link href="http://fonts.googleapis.com/css?family=Vollkorn&subset=latin" rel="stylesheet" type="text/css">-->
+      <link rel="stylesheet" href="/develop-notes/static/style.css" type="text/css">
+      <link rel="stylesheet" href="/static/_pygments.css" type="text/css">
+      
+  </head>
+  <body>
+      <div class=container>
+          <div class=header>
+              <a href="/">稻草人.L的记录</a>
+          </div>
+          <div class=navigation>
+              <ul>
+                  <li><a href="/develop-notes/">blog</a></li>
+                  <li><a href="/develop-notes/archive/">archive</a></li>
+                  <li><a href="/develop-notes/tags/">tags</a></li>
+                  <li><a href="/develop-notes/feed.atom" rel="alternate" title="Recent Blog Posts">feed</a></li>
+              </ul>
+          </div>
+          <div class=body>
+              
+  <h1 class="title">Python Dict Sort</h1>
+
+  
+  <p class=date>written on Saturday, March 10, 2012
+  
+
+  <div class="section" id="sort-a-dictionary-by-key-or-value">
+<h2>Sort a dictionary by key or value</h2>
+<p>checkout <a class="reference external" href="http://stackoverflow.com/questions/613183/python-sort-a-dictionary-by-value">stackoverflow</a></p>
+<p>里面的例子如果改用lambda的话(不知道性能是否有很大的差别...)</p>
+<div class="highlight"><pre><span class="kn">import</span> <span class="nn">operator</span>
+<span class="n">x</span> <span class="o">=</span> <span class="p">{</span><span class="mi">1</span><span class="p">:</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">:</span><span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">:</span><span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">:</span><span class="mi">0</span><span class="p">}</span>
+<span class="n">sorted_x</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">iteritems</span><span class="p">(),</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>  <span class="c"># by value</span>
+</pre></div>
+<p>联系昨晚遇到的场景, dict的value是列表. 按value长度排序一下. 我用了个笨方法, 再开一个列表记录value的长度与key的对应值, 再枚举输出. 其实可以更pythonic点:</p>
+<div class="highlight"><pre><span class="n">sorted_x</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="n">iteritems</span><span class="p">(),</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+</pre></div>
+<p>这里也额外记录一下, 在python里面list的比较, 是按对应位移比较的. 相等则下一位.</p>
+</div>
+<div class="section" id="ordered-dict">
+<h2>Ordered Dict</h2>
+<p>python的dict内部是无序的. 如果想要有序的dict?</p>
+<p>Python2.7的collections有 <a class="reference external" href="http://docs.python.org/library/collections.html?highlight=ordereddict#collections.OrderedDict">OrderedDict</a>.</p>
+<p>对于Python2.4-2.6, 有 <a class="reference external" href="http://pypi.python.org/pypi/ordereddict">pypi ordereddict</a>, <em>A drop-in substitute for Py2.7's new collections.OrderedDict</em> .</p>
+<p>Django的比较有爱, 内置了一个SortedDict实现, 在utils.datastructures里面.</p>
+<p>简单看了看代码实现, Django的实现是&quot;继承dict, 然后在内部维护一个key列表&quot;. 而ordereddict的, 有一个 __map[key] = [link_prev, link_next, key]. 是直接链表维护, 减少key order的变动成本.</p>
+<p>原来某君说的用list来维护顺序低效的出处在这里. 受用了.</p>
+<p>&lt;Sat Mar 10 18:14:54 CST 2012&gt;</p>
+</div>
+
+
+  
+  <p class=tags>This entry was tagged
+    
+      <a href="/develop-notes/tags/python/">python</a>
+  
+
+          </div>
+          <div class=footer>
+              <p>&copy; Copyright 2013 by 稻草人.L
+              <p>
+              Content licensed under the Creative Commons
+              attribution-noncommercial-sharealike License.
+              <p>
+              联系我: 
+	      <span>Tukki.Eta(#)gmail.com</span> &nbsp;
+	      <a href="http://twitter.com/scarecrow_L">Twitter</a> &nbsp;
+          <a href="https://www.github.com/tukki">Github</></a> &nbsp;
+      </div>
+
+          </div>
+      </div>
+  </body>
+</html>

@@ -1,0 +1,73 @@
+<!doctype html>
+<html>
+  <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+      
+      <title>jQuery Attribute Selector Error | 稻草人.L的记录</title>
+      <!--<link href="http://fonts.googleapis.com/css?family=Vollkorn&subset=latin" rel="stylesheet" type="text/css">-->
+      <link rel="stylesheet" href="/develop-notes/static/style.css" type="text/css">
+      <link rel="stylesheet" href="/static/_pygments.css" type="text/css">
+      
+  </head>
+  <body>
+      <div class=container>
+          <div class=header>
+              <a href="/">稻草人.L的记录</a>
+          </div>
+          <div class=navigation>
+              <ul>
+                  <li><a href="/develop-notes/">blog</a></li>
+                  <li><a href="/develop-notes/archive/">archive</a></li>
+                  <li><a href="/develop-notes/tags/">tags</a></li>
+                  <li><a href="/develop-notes/feed.atom" rel="alternate" title="Recent Blog Posts">feed</a></li>
+              </ul>
+          </div>
+          <div class=body>
+              
+  <h1 class="title">jQuery Attribute Selector Error</h1>
+
+  
+  <p class=date>written on Wednesday, July 4, 2012
+  
+
+  <p>简单记录一个jquery1.7.2在IE上面的错误, 或在说是差异, 备忘.</p>
+<div class="highlight"><pre><span class="nx">$</span><span class="p">(</span><span class="s2">&quot;[data-toggle=&#39;sns_platform&#39;][name=&#39;sina_weibo&#39;]&quot;</span><span class="p">)</span>
+</pre></div>
+<p>利用 <a class="reference external" href="http://api.jquery.com/attribute-equals-selector/">attribute equals selector</a> 进行标签选定. 在chrome/FF上面work well. 但后来发现在IE上面不生效.</p>
+<p>当只有一个attribute选择, 能行. 最后没找到合适的错误原因. 直接改在父标签里面选择具体的name来绑定事件.</p>
+<p>现在看来, 原来的html结构就不够高效. 加了太多的重复标签. 或在这样会更好</p>
+<div class="highlight"><pre><span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&quot;sns_platform&quot;</span><span class="nt">&gt;</span>
+   <span class="nt">&lt;span</span> <span class="na">name=</span><span class="s">&quot;sina_weibo&quot;</span><span class="nt">&gt;</span>Sina<span class="nt">&lt;/span&gt;</span>
+   <span class="nt">&lt;span</span> <span class="na">name=</span><span class="s">&quot;qq_weibo&quot;</span><span class="nt">&gt;</span>QQ<span class="nt">&lt;/span&gt;</span>
+<span class="nt">&lt;/div&gt;</span>
+</pre></div>
+<p>这样, 再用上&quot;on&quot;, 直接:</p>
+<div class="highlight"><pre><span class="nx">$</span><span class="p">(</span><span class="s2">&quot;[name=&#39;qq_weib&#39;]&quot;</span><span class="p">,</span> <span class="s2">&quot;#sns_platform&quot;</span><span class="p">)</span>
+</pre></div>
+<p>好像跑题了. done</p>
+
+
+  
+  <p class=tags>This entry was tagged
+    
+      <a href="/develop-notes/tags/javascript/">javascript</a> and 
+      <a href="/develop-notes/tags/jquery/">jquery</a>
+  
+
+          </div>
+          <div class=footer>
+              <p>&copy; Copyright 2013 by 稻草人.L
+              <p>
+              Content licensed under the Creative Commons
+              attribution-noncommercial-sharealike License.
+              <p>
+              联系我: 
+	      <span>Tukki.Eta(#)gmail.com</span> &nbsp;
+	      <a href="http://twitter.com/scarecrow_L">Twitter</a> &nbsp;
+          <a href="https://www.github.com/tukki">Github</></a> &nbsp;
+      </div>
+
+          </div>
+      </div>
+  </body>
+</html>

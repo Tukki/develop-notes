@@ -1,0 +1,114 @@
+<!doctype html>
+<html>
+  <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+      
+      <title>在新浪微博网页添加ReadItLater功能 | 稻草人.L的记录</title>
+      <!--<link href="http://fonts.googleapis.com/css?family=Vollkorn&subset=latin" rel="stylesheet" type="text/css">-->
+      <link rel="stylesheet" href="/develop-notes/static/style.css" type="text/css">
+      <link rel="stylesheet" href="/static/_pygments.css" type="text/css">
+      
+  </head>
+  <body>
+      <div class=container>
+          <div class=header>
+              <a href="/">稻草人.L的记录</a>
+          </div>
+          <div class=navigation>
+              <ul>
+                  <li><a href="/develop-notes/">blog</a></li>
+                  <li><a href="/develop-notes/archive/">archive</a></li>
+                  <li><a href="/develop-notes/tags/">tags</a></li>
+                  <li><a href="/develop-notes/feed.atom" rel="alternate" title="Recent Blog Posts">feed</a></li>
+              </ul>
+          </div>
+          <div class=body>
+              
+  <h1 class="title">在新浪微博网页添加ReadItLater功能</h1>
+
+  
+  <p class=date>written on Friday, October 21, 2011
+  
+
+  <p>About <a class="reference external" href="http://readitlaterlist.com/">Read it later</a>, bookmarking service, one of the GTD tools.</p>
+<p>关于 <a class="reference external" href="http://weibo.com">新浪微博</a>, 呃, 的确是一个不错的获取资讯的平台, 获取各种各样的自己感兴趣的资讯.</p>
+<p>总有些Weibo想稍候再读的, 例如有些音乐, 有些链接.  <span class="strike">现阶段利用 ReadItLater的Add Links方法,</span> 自己做了个书签工具作简单的注入实现. 又因为懒得每次点击书签栏, 追加了FireFox Greasemonkey和Chrome Extensions实现, 源码放在了 <a class="reference external" href="https://github.com/Tukki/codesnippet/tree/master/javascript/Weibo-RIL">github</a></p>
+<p>效果图:</p>
+<img alt="/static/2011-10/read-weibo-later.png" src="/static/2011-10/read-weibo-later.png" />
+<div class="section" id="id2">
+<h2>使用方法</h2>
+<ol class="arabic simple">
+<li>如果使用书签栏工具的话, 自己创建书签, 将 <a class="reference external" href="https://raw.github.com/Tukki/codesnippet/master/javascript/Weibo-RIL/for_bookmark_tool.min.js">js文件</a> 的内容复制一份作为书签的网址/位置保存.</li>
+<li>如果使用firefox, 可以在 <a class="reference external" href="http://userscripts.org/scripts/show/116025">UserScript</a> 安装, 不过先得有插件 <a class="reference external" href="https://addons.mozilla.org/en-US/firefox/addon/greasemonkey/">Greasemonkey</a>.</li>
+<li>如何使用的是chrome, 可以直接下载 <a class="reference external" href="https://github.com/Tukki/codesnippet/blob/master/javascript/Weibo-RIL/read-weibo-later.crx">chrome extension打包文件</a> 安装. 不准备添加到Chrome Webstore.</li>
+</ol>
+<p>以下内容是开放时的一些笔记.</p>
+</div>
+<div class="section" id="read-it-later-button">
+<h2>Read It Later button</h2>
+<div class="line-block">
+<div class="line">官方介绍: <a class="reference external" href="http://readitlaterlist.com/api/buttons/">http://readitlaterlist.com/api/buttons/</a></div>
+<div class="line">其重点在其js实现上面. <a class="reference external" href="http://readitlaterlist.com/button/multi_v1.js">http://readitlaterlist.com/button/multi_v1.js</a></div>
+</div>
+<p>通过插入&lt;iframe&gt;获取按钮, 没有用到ajax操作. 而先前尝试用jQuery的异步调用其提供的API, 返回结果的确是'200ok', 但确实错误返回, 一直没找出原因.</p>
+</div>
+<div class="section" id="detect-dom-changed">
+<h2>detect dom changed</h2>
+<p>要在ajax追加新微博后再次执行自定义的追加函数, 可以用 <a class="reference external" href="http://help.dottoro.com/ljmcxjla.php">DOMNodeInserted event</a>, 自己的实现中用了简单的锁, 对于发生连续的事件时, 减少追加函数的执行次数</p>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">hassetup</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
+<span class="kd">function</span> <span class="nx">detect_changed</span><span class="p">(</span><span class="nx">id</span><span class="p">,</span> <span class="nx">cbFunc</span><span class="p">){</span>
+     <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="nx">id</span><span class="p">).</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s1">&#39;DOMNodeInserted&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(){</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">hassetup</span><span class="p">)</span> <span class="p">{</span>
+           <span class="nb">window</span><span class="p">.</span><span class="nx">setTimeout</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
+               <span class="nx">cbFunc</span><span class="p">();</span>
+               <span class="nx">hassetup</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
+           <span class="p">},</span> <span class="mi">2000</span><span class="p">);</span>
+           <span class="nx">hassetup</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+        <span class="p">}</span>
+     <span class="p">})</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<div class="section" id="greasemonkey-notes">
+<h2>Greasemonkey notes</h2>
+<p>在Greasemonkey中使用jQuery, 可以使用其 <a class="reference external" href="http://wiki.greasespot.net/Metadata_Block#.40require">&#64;require</a>, <a class="reference external" href="http://wiki.greasespot.net/Third-Party_Libraries">wiki</a> 里面有介绍. 或在参看 <a class="reference external" href="http://joanpiedra.com/jquery/greasemonkey/">这里</a> 的实现, 用unsafeWindow来获取jQuery的引用. 先前提到的利用书签直接注入jQuery的方法在Greasemonkey不适用, 应该是 <a class="reference external" href="http://wiki.greasespot.net/Sandbox">Sandbox</a> 的问题.</p>
+<p>用*&#64;require*有个优势时在userscript安装的时候, 回下载目标js缓存下来, 以后就不必每次都网络加载.</p>
+</div>
+<div class="section" id="chrome-extensions-notes">
+<h2>chrome extensions notes</h2>
+<p>要在chrome extensions中加载jQuery或在其他第三方实现, 可以利用其 <a class="reference external" href="http://code.google.com/chrome/extensions/content_scripts.html">Content Scripts</a>:</p>
+<pre class="literal-block">
+Content scripts are JavaScript files that run in the context of web pages.
+</pre>
+<p>其实UserScript可以直接作为Chrome的扩展进行用, <a class="reference external" href="http://www.chromium.org/developers/design-documents/user-scripts">官方文档</a>, 但不支持*&#64;require*的解析, 要自己下载并确定顺序:</p>
+<pre class="literal-block">
+content_scripts::js, The list of JavaScript files to be injected into matching pages.
+These are injected in the order they appear in this array.
+</pre>
+</div>
+
+
+  
+  <p class=tags>This entry was tagged
+    
+      <a href="/develop-notes/tags/itch/">itch</a> and 
+      <a href="/develop-notes/tags/jQuery/">jQuery</a>
+  
+
+          </div>
+          <div class=footer>
+              <p>&copy; Copyright 2013 by 稻草人.L
+              <p>
+              Content licensed under the Creative Commons
+              attribution-noncommercial-sharealike License.
+              <p>
+              联系我: 
+	      <span>Tukki.Eta(#)gmail.com</span> &nbsp;
+	      <a href="http://twitter.com/scarecrow_L">Twitter</a> &nbsp;
+          <a href="https://www.github.com/tukki">Github</></a> &nbsp;
+      </div>
+
+          </div>
+      </div>
+  </body>
+</html>

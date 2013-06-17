@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title type="text">Recent Blog Posts</title>
+  <id>/develop-notes/feed.atom</id>
+  <updated>2012-03-09T00:00:00Z</updated>
+  <link href="/develop-notes/" />
+  <link href="/develop-notes/feed.atom" rel="self" />
+  <subtitle type="text">Recent blog posts</subtitle>
+  <generator>Werkzeug</generator>
+  <entry xml:base="/develop-notes/feed.atom">
+    <title type="text">Got from interview</title>
+    <id>/develop-notes/2012/03/09/got-from-interview</id>
+    <updated>2012-03-09T00:00:00Z</updated>
+    <link href="/develop-notes/2012/03/09/got-from-interview" />
+    <author>
+      <name>稻草人.L</name>
+    </author>
+    <content type="html">&lt;p&gt;今天去了面试.&lt;/p&gt;
+&lt;p&gt;笔试有题是求N边形的k等分点. 一开始想到的是如何在图的边上&amp;quot;走动&amp;quot;, 根据走动距离来记录对应的等分点. 现在想好像能行, 当时不知道卡在哪里就放弃. 换了种方式, 直接把N边形简化为直线. 直线的k等分点怎样求的够简单了吧. 错误的出发点.. 试着各等分点落在哪条边上再去计算最终坐标值. 等把实现写出来了, 才发现计算量真大. 憋足的解法. 待会再好好考虑下怎样高效点.&lt;/p&gt;
+&lt;p&gt;JavsScript的&amp;quot;污染&amp;quot;问题, 闭包, 浏览器事件的利用. Django内置ORM, cache, 现实应用场景的不足. 数据库设计, 查询优化. apache的worker和prefork(?)模式的区别, Python yeild. 感谢他们的知识分享&lt;/p&gt;
+&lt;p&gt;在面试过程中, 也再次突出自己现在的弱点.&lt;/p&gt;
+&lt;p&gt;毕业快3年, 还是再加上大学后两年吧. 在编程方面接触的东西真的是数不胜数. 安全, 游戏, 手机应用, 互联网前端后端, 数据库, 服务器. C++, Java, Groovy&amp;amp;Grails, JavaScript, HTML/CSS, PostgreSQL, Python, Django, Pyramid, Tornado, Vim, Emacs, Git, Apache, Nginx.. 其实现在接触了HTML5, 还有点冲动想学学Node.js.&lt;/p&gt;
+&lt;p&gt;看上去是不是好乱? 基本满足了&amp;quot;每年学一种新语言&amp;quot;. 好处: 学东西快, 看问题能更全面点更多些角度, &amp;quot;全能的娃&amp;quot;. 坏处: 有种浅尝则止, 学而不精的臭味. 为了证明自己有认真地学, 还真有点不容易, 算是耍尽十八般武艺来对付几个不同方向的工程师的提问. 当然, 懂得或在接触过的, 就尽量表述出来, 哪怕是自己的片面理解. 不懂的, 不装, 高手们就坐在我对面. 有些问题, 就直接认了, 我接触的应用场景还没到那个程度的实现, 我上马就实现就是&amp;quot;过早优化&amp;quot;了.&lt;/p&gt;
+&lt;p&gt;话说, 在创业公司混的人容易吗? 工程一旦失败, 就不能和工程一起成长了. 而创业工程的失败率是100%, 成功是偶然的. 我, 跌跌碰碰, 在失败中学了很多...&lt;/p&gt;
+&lt;p&gt;创业, 的确是很能锻炼, 这点不否认, 而且还能不停地学到新的东西. 问题在于, 新的东西, 可能是横向发展的, 不是纵深发掘. 我说我的核心竞争力在于我懂多少开发语言/框架. 我就狠狠地自嘲一下: 我们这里只用LAMP, 而且P不是Python, 是PHP. (写出来感觉... 其实我没恶意的)&lt;/p&gt;
+&lt;p&gt;有时候, 用合适的工具最快地解决问题, 比用最好的工具较慢低解决问题, 更实在. 至少, 在互联网这一块是这样吧. 更多时候, 很多问题是需要用更深层次的知识才能解决的, 而且没有到哪个高度, 这些问题是不会出现的. 当然, 很多东西是共通的, 特别是数据结构, 算法这些老生常谈的东西.&lt;/p&gt;
+&lt;p&gt;选择了技术这一块, 也该去好好地深入学习了. 不然的话, 以后的日子, 毫无技术可言.&lt;/p&gt;
+&lt;p&gt;这里, 摘录CC2里面的一句话:&lt;/p&gt;
+&lt;pre class="literal-block"&gt;
+  the bottom line on experience is this: if you work for 10 years, do you
+get 10 years of experience or do you get 1 year of experience 10 times?
+&lt;/pre&gt;
+&lt;p&gt;&amp;lt;Fri Mar  9 01:46:17 CST 2012&amp;gt;&lt;/p&gt;
+&lt;p&gt;keep learn. 好好地去扎实下基础吧, 谁叫我喜欢上了开发.&lt;/p&gt;
+&lt;p&gt;&amp;lt;Sat Mar 10 17:25:56 CST 2012&amp;gt;&lt;/p&gt;
+</content>
+  </entry>
+</feed>
+

@@ -1,0 +1,92 @@
+<!doctype html>
+<html>
+  <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+      
+      <title>MySQL group_concat on PostgreSQL | 稻草人.L的记录</title>
+      <!--<link href="http://fonts.googleapis.com/css?family=Vollkorn&subset=latin" rel="stylesheet" type="text/css">-->
+      <link rel="stylesheet" href="/develop-notes/static/style.css" type="text/css">
+      <link rel="stylesheet" href="/static/_pygments.css" type="text/css">
+      
+  </head>
+  <body>
+      <div class=container>
+          <div class=header>
+              <a href="/">稻草人.L的记录</a>
+          </div>
+          <div class=navigation>
+              <ul>
+                  <li><a href="/develop-notes/">blog</a></li>
+                  <li><a href="/develop-notes/archive/">archive</a></li>
+                  <li><a href="/develop-notes/tags/">tags</a></li>
+                  <li><a href="/develop-notes/feed.atom" rel="alternate" title="Recent Blog Posts">feed</a></li>
+              </ul>
+          </div>
+          <div class=body>
+              
+  <h1 class="title">MySQL group_concat on PostgreSQL</h1>
+
+  
+  <p class=date>written on Saturday, December 3, 2011
+  
+
+  <p>源于 <a class="reference external" href="http://karwin.blogspot.com/2010/03/rendering-trees-with-closure-tables.html">Rendering Trees with Closure Tables</a> 例子是基于MySQL的, 列出Path用的 <a class="reference external" href="http://dev.mysql.com/doc/refman/5.1/en/group-by-functions.html#function_group-concat">GROUP_CONCAT()</a> 在Postgresql上面没有对应的直接实现. 下面是自己对应Category版本的解决方法:</p>
+<div class="highlight"><pre><span class="k">select</span> <span class="n">d</span><span class="p">.</span><span class="n">descendant</span><span class="p">,</span>
+<span class="n">array_to_string</span><span class="p">(</span><span class="n">array_agg</span><span class="p">(</span><span class="n">cat</span><span class="p">.</span><span class="n">name</span> <span class="k">order</span> <span class="k">by</span> <span class="n">cat</span><span class="p">.</span><span class="n">id</span><span class="p">),</span> <span class="s1">&#39;/&#39;</span><span class="p">)</span> <span class="c1">-- line_2</span>
+<span class="k">as</span> <span class="n">path</span>
+<span class="k">from</span> <span class="n">closure</span> <span class="n">d</span>
+<span class="k">join</span> <span class="n">closure</span> <span class="n">a</span> <span class="k">on</span> <span class="p">(</span><span class="n">a</span><span class="p">.</span><span class="n">descendant</span> <span class="o">=</span> <span class="n">d</span><span class="p">.</span><span class="n">descendant</span><span class="p">)</span>
+<span class="k">join</span> <span class="n">category</span> <span class="n">cat</span> <span class="k">on</span> <span class="p">(</span><span class="n">cat</span><span class="p">.</span><span class="n">id</span> <span class="o">=</span> <span class="n">a</span><span class="p">.</span><span class="n">ancestor</span><span class="p">)</span>
+<span class="k">where</span> <span class="n">d</span><span class="p">.</span><span class="n">ancestor</span> <span class="o">=</span> <span class="mi">1</span> <span class="k">and</span> <span class="n">d</span><span class="p">.</span><span class="n">descendant</span> <span class="o">!=</span> <span class="n">d</span><span class="p">.</span><span class="n">ancestor</span>
+<span class="k">group</span> <span class="k">by</span> <span class="n">d</span><span class="p">.</span><span class="n">descendant</span>
+<span class="k">order</span> <span class="k">by</span> <span class="n">path</span><span class="p">;</span>   <span class="c1">-- line_last</span>
+</pre></div>
+<p>如果是PostgreSQL-9.0以上版本的, 可以用 <a class="reference external" href="http://developer.postgresql.org/pgdocs/postgres/functions-aggregate.html">string_agg</a> 代替上面的array_to_string:</p>
+<pre class="literal-block">
+string_agg(cat.label, '/' order by cat.id) -- line_2
+</pre>
+<p>其中, 如果line_2里面不用 &quot;order by cat.id&quot;, 得到的路径是倒序的:</p>
+<pre class="literal-block">
+&quot;sub11/sub1/root&quot;
+</pre>
+<p>如果没有line_last的&quot;order by path&quot;, 得到的结果是按&quot;descendant&quot;升序的, 没有把目录树结构顺序表现出来:</p>
+<pre class="literal-block">
+&quot;root/sub1&quot;
+&quot;root/sub2&quot;
+&quot;root/sub1/sub11&quot;
+&quot;root/sub2/sub21&quot;
+&quot;root/sub2/sub21/sub211&quot;
+</pre>
+<p>因为还没有实现文中提到的lenght, 所以也是假定祖先目录的id值比子孙目录的id值小.</p>
+<p>列出在Google找到的有用信息.</p>
+<p><a class="reference external" href="http://www.pgsql.cz/index.php/PostgreSQL_SQL_Tricks#MySQL_function_group_concat_in_PostgreSQL">MySQL function group_concat in PostgreSQL</a>, 里面提到个&quot;workaround&quot;(应急方案?). 用&quot;array_to_string + array_agg&quot;组合处理.</p>
+<p><a class="reference external" href="http://wiki.postgresql.org/wiki/Array_agg">array age on postgresql wiki</a>, 说明了在8.4版本前的PostgreSQL该怎样去实现这个 <em>array_agg</em>.</p>
+<p><a class="reference external" href="http://www.postgresonline.com/journal/archives/191-stringagg.html">STRING AGGREGATION IN POSTGRESQL, SQL SERVER, AND MYSQL</a>, 详细的对比式实现</p>
+<p>中文世界没详细找, 这里有一个 <a class="reference external" href="http://hi.baidu.com/bsdgo/blog/item/7a79fd02359ef71f1c9583f0.html">postgresql如何实现group_concat功能</a>, 但相对来说, 信息量还不够.</p>
+<p>&lt;!-- Sat Dec  3 21:05:25 CST 2011 --&gt;</p>
+
+
+  
+  <p class=tags>This entry was tagged
+    
+      <a href="/develop-notes/tags/database/">database</a> and 
+      <a href="/develop-notes/tags/postgresql/">postgresql</a>
+  
+
+          </div>
+          <div class=footer>
+              <p>&copy; Copyright 2013 by 稻草人.L
+              <p>
+              Content licensed under the Creative Commons
+              attribution-noncommercial-sharealike License.
+              <p>
+              联系我: 
+	      <span>Tukki.Eta(#)gmail.com</span> &nbsp;
+	      <a href="http://twitter.com/scarecrow_L">Twitter</a> &nbsp;
+          <a href="https://www.github.com/tukki">Github</></a> &nbsp;
+      </div>
+
+          </div>
+      </div>
+  </body>
+</html>

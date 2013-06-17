@@ -1,0 +1,78 @@
+<!doctype html>
+<html>
+  <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+      
+      <title>Notes for Pyramid with Nginx, uWSGI | 稻草人.L的记录</title>
+      <!--<link href="http://fonts.googleapis.com/css?family=Vollkorn&subset=latin" rel="stylesheet" type="text/css">-->
+      <link rel="stylesheet" href="/develop-notes/static/style.css" type="text/css">
+      <link rel="stylesheet" href="/static/_pygments.css" type="text/css">
+      
+  </head>
+  <body>
+      <div class=container>
+          <div class=header>
+              <a href="/">稻草人.L的记录</a>
+          </div>
+          <div class=navigation>
+              <ul>
+                  <li><a href="/develop-notes/">blog</a></li>
+                  <li><a href="/develop-notes/archive/">archive</a></li>
+                  <li><a href="/develop-notes/tags/">tags</a></li>
+                  <li><a href="/develop-notes/feed.atom" rel="alternate" title="Recent Blog Posts">feed</a></li>
+              </ul>
+          </div>
+          <div class=body>
+              
+  <h1 class="title">Notes for Pyramid with Nginx, uWSGI</h1>
+
+  
+  <p class=date>written on Sunday, October 9, 2011
+  
+
+  <p><a class="reference external" href="http://nichol.as/benchmark-of-python-web-servers">Benchmark of Python WSGI Servers</a></p>
+<p><a class="reference external" href="http://projects.unbit.it/uwsgi/wiki/RunOnNginx">Running wWSGI behind Nginx</a></p>
+<p><a class="reference external" href="http://projects.unbit.it/uwsgi/wiki/Example">uWSGI wiki example</a></p>
+<blockquote>
+<p>add uWSGI configuration directly in your development.ini/production.ini or whatever config file you are using for Pylons:</p>
+<pre class="literal-block">
+[uwsgi]
+socket = /tmp/i_am_a_unix_socket.sock
+master = true
+processes = 1
+./uwsgi --ini-paste &lt;path_to_your_pylons-configuration_file&gt;
+</pre>
+<p>finally add a location to nginx.conf:</p>
+<pre class="literal-block">
+location / {
+   include uwsgi_params;
+   uwsgi_pass unix:///tmp/i_am_a_unix_socket.sock;
+}
+</pre>
+</blockquote>
+<p><a class="reference external" href="http://projects.unbit.it/uwsgi/wiki/VirtualEnv">Using uWSGI with virtualenv</a>:</p>
+<pre class="literal-block">
+-H myenv
+</pre>
+<p>nice howto, Tony Landis's <a class="reference external" href="http://tonylandis.com/python/deployment-howt-pylons-nginx-and-uwsgi/">Deployment Notes for Pylons, Nginx, and uWSGI</a></p>
+
+
+  
+
+          </div>
+          <div class=footer>
+              <p>&copy; Copyright 2013 by 稻草人.L
+              <p>
+              Content licensed under the Creative Commons
+              attribution-noncommercial-sharealike License.
+              <p>
+              联系我: 
+	      <span>Tukki.Eta(#)gmail.com</span> &nbsp;
+	      <a href="http://twitter.com/scarecrow_L">Twitter</a> &nbsp;
+          <a href="https://www.github.com/tukki">Github</></a> &nbsp;
+      </div>
+
+          </div>
+      </div>
+  </body>
+</html>

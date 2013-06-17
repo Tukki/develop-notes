@@ -1,0 +1,94 @@
+<!doctype html>
+<html>
+  <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+      
+      <title>管理uwsgi | 稻草人.L的记录</title>
+      <!--<link href="http://fonts.googleapis.com/css?family=Vollkorn&subset=latin" rel="stylesheet" type="text/css">-->
+      <link rel="stylesheet" href="/develop-notes/static/style.css" type="text/css">
+      <link rel="stylesheet" href="/static/_pygments.css" type="text/css">
+      
+  </head>
+  <body>
+      <div class=container>
+          <div class=header>
+              <a href="/">稻草人.L的记录</a>
+          </div>
+          <div class=navigation>
+              <ul>
+                  <li><a href="/develop-notes/">blog</a></li>
+                  <li><a href="/develop-notes/archive/">archive</a></li>
+                  <li><a href="/develop-notes/tags/">tags</a></li>
+                  <li><a href="/develop-notes/feed.atom" rel="alternate" title="Recent Blog Posts">feed</a></li>
+              </ul>
+          </div>
+          <div class=body>
+              
+  <h1 class="title">管理uwsgi</h1>
+
+  
+  <p class=date>written on Tuesday, October 25, 2011
+  
+
+  <p>Django的文档是个好东西, 即使现在不是在Django下面搞开放. Django文档的 <a class="reference external" href="https://docs.djangoproject.com/en/dev/howto/deployment/uwsgi/">How to use Django with uWSGI</a> 有比较全面的安装, 管理教程. 后来才知道uWSGI官方wiki也有个 <a class="reference external" href="http://projects.unbit.it/uwsgi/wiki/Management">Management</a>, 虽然内容差不多.</p>
+<p>pidfile:</p>
+<pre class="literal-block">
+write the pidfile to the specified file before privileges drop
+A 'pidfile' is a plain text file containing just a process id
+</pre>
+<p>记录pid提供管理uWSGI的方便</p>
+<p>vacuum:</p>
+<pre class="literal-block">
+automatically remove unix socket and pidfiles on server exit
+</pre>
+<p>看中其退出时移除pidfile, 这样用fabric部署版本的时候, 可以简单根据pidfile是否存在判断uWSGI是否处于运行状态而选择start还是reload</p>
+<!-- TOOD english comment -->
+<div class="section" id="managing-uwsgi-daemon">
+<h2>managing uWSGI daemon</h2>
+<p>用kill来进行管理. -_-||</p>
+<div class="line-block">
+<div class="line">TERM for reload</div>
+<div class="line">HUP for patch</div>
+<div class="line">INT for stop.</div>
+</div>
+<p>关于patch:</p>
+<pre class="literal-block">
+One of the great advantages of uWSGI is its ability to gradually restart
+each worker without loosing any request.
+
+For example, uWSGI can be signaled that worker should reload the code
+after handling their current request (if any) from bash::
+
+   # using kill to send the signal
+      kill -HUP cat /tmp/project-master.pid
+
+   # if uwsgi was started with --touch-reload=/tmp/somefile
+      touch /tmp/somefile
+
+ Or from Python::
+
+     uwsgi.reload()
+</pre>
+<p>不丢失当前访问前提下restart. 看上去好实用, 在快速部署应该能起特效. 也可能带来麻烦, 重要更新一般都停服务器不?</p>
+</div>
+
+
+  
+
+          </div>
+          <div class=footer>
+              <p>&copy; Copyright 2013 by 稻草人.L
+              <p>
+              Content licensed under the Creative Commons
+              attribution-noncommercial-sharealike License.
+              <p>
+              联系我: 
+	      <span>Tukki.Eta(#)gmail.com</span> &nbsp;
+	      <a href="http://twitter.com/scarecrow_L">Twitter</a> &nbsp;
+          <a href="https://www.github.com/tukki">Github</></a> &nbsp;
+      </div>
+
+          </div>
+      </div>
+  </body>
+</html>

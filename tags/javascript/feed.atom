@@ -1,0 +1,283 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title type="text">Recent Blog Posts</title>
+  <id>/develop-notes/feed.atom</id>
+  <updated>2012-07-04T00:00:00Z</updated>
+  <link href="/develop-notes/" />
+  <link href="/develop-notes/feed.atom" rel="self" />
+  <subtitle type="text">Recent blog posts</subtitle>
+  <generator>Werkzeug</generator>
+  <entry xml:base="/develop-notes/feed.atom">
+    <title type="text">JavaScript JSON Stringify</title>
+    <id>/develop-notes/2012/02/16/json-stringify</id>
+    <updated>2012-02-16T00:00:00Z</updated>
+    <link href="/develop-notes/2012/02/16/json-stringify" />
+    <author>
+      <name>稻草人.L</name>
+    </author>
+    <content type="html">&lt;p&gt;今天搞玩具工程的时候有个对输出json的需求, 因为用的时jQuery, 一开始还想找jQuery的解决方案. 结果, json内置了. &lt;a class="reference external" href="http://www.json.org/js.html"&gt;JSON in JavaScript&lt;/a&gt; 里面有提到这个stringify函数.&lt;/p&gt;
+&lt;p&gt;一开始还怀疑只是Chrome, Firefox带, 再测Opera, IE8都是自带了的. 权当记录&lt;/p&gt;
+&lt;p&gt;&amp;lt;Thu Feb 16 23:06:56 CST 2012&amp;gt;&lt;/p&gt;
+</content>
+  </entry>
+  <entry xml:base="/develop-notes/feed.atom">
+    <title type="text">jQuery Attribute Selector Error</title>
+    <id>/develop-notes/2012/07/04/jquery-attribute-selector-error</id>
+    <updated>2012-07-04T00:00:00Z</updated>
+    <link href="/develop-notes/2012/07/04/jquery-attribute-selector-error" />
+    <author>
+      <name>稻草人.L</name>
+    </author>
+    <content type="html">&lt;p&gt;简单记录一个jquery1.7.2在IE上面的错误, 或在说是差异, 备忘.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="nx"&gt;$&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;[data-toggle=&amp;#39;sns_platform&amp;#39;][name=&amp;#39;sina_weibo&amp;#39;]&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;利用 &lt;a class="reference external" href="http://api.jquery.com/attribute-equals-selector/"&gt;attribute equals selector&lt;/a&gt; 进行标签选定. 在chrome/FF上面work well. 但后来发现在IE上面不生效.&lt;/p&gt;
+&lt;p&gt;当只有一个attribute选择, 能行. 最后没找到合适的错误原因. 直接改在父标签里面选择具体的name来绑定事件.&lt;/p&gt;
+&lt;p&gt;现在看来, 原来的html结构就不够高效. 加了太多的重复标签. 或在这样会更好&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="nt"&gt;&amp;lt;div&lt;/span&gt; &lt;span class="na"&gt;id=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;sns_platform&amp;quot;&lt;/span&gt;&lt;span class="nt"&gt;&amp;gt;&lt;/span&gt;
+   &lt;span class="nt"&gt;&amp;lt;span&lt;/span&gt; &lt;span class="na"&gt;name=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;sina_weibo&amp;quot;&lt;/span&gt;&lt;span class="nt"&gt;&amp;gt;&lt;/span&gt;Sina&lt;span class="nt"&gt;&amp;lt;/span&amp;gt;&lt;/span&gt;
+   &lt;span class="nt"&gt;&amp;lt;span&lt;/span&gt; &lt;span class="na"&gt;name=&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;qq_weibo&amp;quot;&lt;/span&gt;&lt;span class="nt"&gt;&amp;gt;&lt;/span&gt;QQ&lt;span class="nt"&gt;&amp;lt;/span&amp;gt;&lt;/span&gt;
+&lt;span class="nt"&gt;&amp;lt;/div&amp;gt;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;这样, 再用上&amp;quot;on&amp;quot;, 直接:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="nx"&gt;$&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;[name=&amp;#39;qq_weib&amp;#39;]&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;#sns_platform&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;好像跑题了. done&lt;/p&gt;
+</content>
+  </entry>
+  <entry xml:base="/develop-notes/feed.atom">
+    <title type="text">Less watch mode</title>
+    <id>/develop-notes/2012/06/01/less-watch-mode</id>
+    <updated>2012-06-01T00:00:00Z</updated>
+    <link href="/develop-notes/2012/06/01/less-watch-mode" />
+    <author>
+      <name>稻草人.L</name>
+    </author>
+    <content type="html">&lt;p&gt;&lt;a class="reference external" href="http://lesscss.org/"&gt;Less&lt;/a&gt; 里面提到的watch mode一直没能用上(在开发域名上面运行), 也没去找那里出错了. 忙乎阿. 刚才再Google了下, 找到了解决方式.&lt;/p&gt;
+&lt;p&gt;github上面提到个 &lt;a class="reference external" href="https://github.com/cloudhead/less.js/pull/679"&gt;pull request #679&lt;/a&gt;, 不过还处于open状态, 修改了源码. 解决方式一.&lt;/p&gt;
+&lt;p&gt;然后, &lt;a class="reference external" href="http://www.paulsprangers.com/2011/04/quick-tip-less-js-in-development-and-watch-mode/"&gt;Less.js in development and watch mode&lt;/a&gt;. 原文提到的方式不靠谱, 反而评论提到了两个方式, 一个是修改源码, 等于把自己的开放域名注册到Less.js文件里面. 另外一个, Force init value of less.env var:&lt;/p&gt;
+&lt;pre class="literal-block"&gt;
+// Force init value of less.env var
+var less = { env: ‘development’ };
+// Less itself
+
+// Watch
+less.watch();
+&lt;/pre&gt;
+&lt;p&gt;需要在加载Less.js之前初始化env变量, 不如在非本地测试环境, 加载Less.js后判断 env 是否为 &lt;em&gt;development&lt;/em&gt; 而选择了不同的模式. 再手动watch也不能生效.&lt;/p&gt;
+&lt;p&gt;ps. 可以用 less.poll 来控制watch频率&lt;/p&gt;
+&lt;p&gt;&amp;lt;!-- Fri Jun  1 00:43:06 CST 2012 --&amp;gt;&lt;/p&gt;
+</content>
+  </entry>
+  <entry xml:base="/develop-notes/feed.atom">
+    <title type="text">Notes for HTML5 canvas and WebScoket</title>
+    <id>/develop-notes/2012/03/06/notes-for-html5-canvas-and-websocket</id>
+    <updated>2012-03-06T00:00:00Z</updated>
+    <link href="/develop-notes/2012/03/06/notes-for-html5-canvas-and-websocket" />
+    <author>
+      <name>稻草人.L</name>
+    </author>
+    <content type="html">&lt;div class="section" id="the-useful-websites"&gt;
+&lt;h2&gt;the useful websites&lt;/h2&gt;
+&lt;p&gt;&lt;a class="reference external" href="http://websocket.org/echo.html"&gt;WebSocket Echo Test&lt;/a&gt;, 可以知道当前使用的浏览器是否支持WebSocket.&lt;/p&gt;
+&lt;p&gt;&lt;a class="reference external" href="http://caniuse.com"&gt;When Can I use...&lt;/a&gt;&lt;/p&gt;
+&lt;blockquote&gt;
+Compatibility tables for support of HTML5, CSS3, SVG,
+and more in desktop and mobile browser.&lt;/blockquote&gt;
+&lt;p&gt;可以查询到canvas, websocket等(其他全部)在各浏览器的支持程度, 应该属于HTML5开放必备收藏之一&lt;/p&gt;
+&lt;p&gt;对于canvas, IE9之前是不支持的, 当可以用Google的 &lt;a class="reference external" href="http://code.google.com/p/explorercanvas/"&gt;explorercanvas&lt;/a&gt; hack一下, 来提供相关的实现.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;  &lt;span class="c"&gt;&amp;lt;!--&lt;/span&gt;
+&lt;span class="c"&gt;Load Canvas support for IE8. ExplorerCanvas courtesy Google.&lt;/span&gt;
+&lt;span class="c"&gt;See: http://code.google.com/p/explorercanvas/&lt;/span&gt;
+&lt;span class="c"&gt;--&amp;gt;&lt;/span&gt;
+&lt;span class="c"&gt;&amp;lt;!--[if lt IE 9]&amp;gt;&lt;/span&gt;
+&lt;span class="c"&gt; &amp;lt;script src=&amp;quot;excanvas.js&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;&lt;/span&gt;
+&lt;span class="c"&gt;&amp;lt;![endif]--&amp;gt;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;&lt;a class="reference external" href="https://developer.mozilla.org/en/Canvas_tutorial"&gt;MDN Canvas tutorial&lt;/a&gt;, canvas入门上品.&lt;/p&gt;
+&lt;p&gt;而unionplatform有个协同画板的展示页 &lt;a class="reference external" href="http://www.unionplatform.com/?page_id=2762"&gt;Multiuser Drawing Pad&lt;/a&gt;, 里面可以下载源码看看画板如何绑定鼠标/touch事件的. 有必要看看此源码, 里面说明了不少事件的使用事项.&lt;/p&gt;
+&lt;p&gt;XMPP, CometD, WebSocket, all about the realtime apps. 现在Websocket的浏览器支持度并不高(&lt;a class="reference external" href="http://caniuse.com/#feat=websockets"&gt;Here&lt;/a&gt;), 现在找到的one-for-all方法为 &lt;a class="reference external" href="http://socket.io"&gt;Socket.io&lt;/a&gt;, 唯一问题在于其是前后端一体化实现, Javasript, Node.js&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="section" id="some-implememnt-details"&gt;
+&lt;h2&gt;some implememnt details&lt;/h2&gt;
+&lt;p&gt;在touch devices上面需要的meta信息. ps. ship from oribitermicro_uniondraw. thanks!&lt;/p&gt;
+&lt;pre class="literal-block"&gt;
+&amp;lt;!-- Prevents iPhone, IPad, and touch devices from scrolling or zooming when touched --&amp;gt;
+&amp;lt;meta name=&amp;quot;viewport&amp;quot; content=&amp;quot;width=device-width, user-scalable=no, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0&amp;quot; /&amp;gt;
+&lt;/pre&gt;
+&lt;p&gt;鼠标事件有: canvas.onmousedown, document.onmousemove, docuemtn.onmouseup&lt;/p&gt;
+&lt;p&gt;触摸屏事件有: document.ontouchstart, document.ontouchmove, docuement.ontouchend&lt;/p&gt;
+&lt;p&gt;鼠标与触摸屏兼容判断? 如何document有 &lt;em&gt;ontouchstart&lt;/em&gt; 事件就不用注册鼠标相关的事件了. ps. 没有查是不是标准.&lt;/p&gt;
+&lt;p&gt;清空画板的实现&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;//context.fillStyle = &amp;quot;#ffffff&amp;quot;;
+//context.fillRect(0, 0, canvas.width, canvas.height);
+// 找到的实现细节有上面两句.说是针对chrome的. 但自己使用时只要下面一句就满足效果了?
+canvas.width = canvas.width;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+</content>
+  </entry>
+  <entry xml:base="/develop-notes/feed.atom">
+    <title type="text">SeaJS on IE</title>
+    <id>/develop-notes/2012/04/08/seajs-on-ie</id>
+    <updated>2012-04-08T00:00:00Z</updated>
+    <link href="/develop-notes/2012/04/08/seajs-on-ie" />
+    <author>
+      <name>稻草人.L</name>
+    </author>
+    <content type="html">&lt;p&gt;上周五在SeaJS的使用上遇到问题, 在IE上面报错, 加载不了easyXDM. 在Chrome/Firefox上面都无误, 到IE上面就理所当然地抛出了错误.&lt;/p&gt;
+&lt;p&gt;IE的错误信息害死人.. &amp;quot;Rpc为Null或不是对象&amp;quot;, 还真以为是Rpc出了问题, 经提醒打印信息处理, 才发现easyXDM已经为Null. 加载失败? 尝试用spm把其打包到init.js里面, 结果还是不行.&lt;/p&gt;
+&lt;p&gt;倒是, 如果设置为&amp;quot;始终从浏览器更新&amp;quot;, 倒是问题解决. -- 我当时有点放弃, 不如把这个init.js或在easyXDM一直过期不缓存处理算了 -- 解决方法不知一个, 把easyXDM放回全局加载, 问题一样能解决. 现上线吧, 这样的改动还是能暂时接受的.&lt;/p&gt;
+&lt;p&gt;把问题反馈给SJ, 他折腾(?)了好一会, 下午给了个答案我, &amp;quot;大小写问题&amp;quot;. 把easyXDM的module dentifier用小写处理, 问题解决.&lt;/p&gt;
+&lt;p&gt;&lt;a class="reference external" href="http://wiki.commonjs.org/wiki/Modules/1.1.1#Module_Identifiers"&gt;Module Identifiers&lt;/a&gt; 里面只是提到:&lt;/p&gt;
+&lt;pre class="literal-block"&gt;
+A term must be a camelCase identifier, &amp;quot;.&amp;quot;, or &amp;quot;..&amp;quot;.
+&lt;/pre&gt;
+&lt;p&gt;没说一定要小写阿. camelCase? 突然想&amp;quot;easyXdm&amp;quot;会不会也行得通? 明天会公司的时候测试一下.&lt;/p&gt;
+&lt;p&gt;如果真如猜测, 看来不是SeaJS的问题, 是自己对标准的理解问题.&lt;/p&gt;
+&lt;p&gt;&amp;lt;Sun Apr  8 23:39:01 CST 2012&amp;gt;&lt;/p&gt;
+&lt;p&gt;尝试过了, easyXdm能行. 不过, 当时顺带再测试了下easyXDM. 也行. 不带这样完的吧. 所以, 测试不带代表性, 无法证明什么.&lt;/p&gt;
+&lt;p&gt;&amp;lt;Sat Apr 21 23:41:14 CST 2012&amp;gt;&lt;/p&gt;
+</content>
+  </entry>
+  <entry xml:base="/develop-notes/feed.atom">
+    <title type="text">Start Using Less</title>
+    <id>/develop-notes/2012/04/21/start-using-less</id>
+    <updated>2012-04-21T00:00:00Z</updated>
+    <link href="/develop-notes/2012/04/21/start-using-less" />
+    <author>
+      <name>稻草人.L</name>
+    </author>
+    <content type="html">&lt;p&gt;&lt;a class="reference external" href="http://lesscss.org/"&gt;less&lt;/a&gt;, The dynamic stylesheet language.&lt;/p&gt;
+&lt;p&gt;作为一个不专一的Web程序员, 不得不为css头痛一下. css没什么错, 只是自己的不专业, 对维护css和在原有css上面追加新东西有点不自在而已.&lt;/p&gt;
+&lt;p&gt;&amp;quot;这个页面想要原来另外一个页面的按钮的效果, 不过颜色稍稍作点改动&amp;quot;.&lt;/p&gt;
+&lt;p&gt;好吧, 用firebug找到按钮具体在哪一行的css, 发现在&amp;quot;#xx .yy ul li span a&amp;quot;上面, 好吧. 认了, 然后copy一份过来. 这种情况, 应该是&amp;quot;css一开始就没抽象好, 以后也没整理过, 那就只能继续乱下去的感觉.&amp;quot;&lt;/p&gt;
+&lt;p&gt;换个好一点的抽象. 需要buttom? 'class=&amp;quot;btn gray width100&amp;quot;'. 组合强大. jqueryUI应该是这样做的. 维护这一份抽象, 得化点功夫.&lt;/p&gt;
+&lt;p&gt;跑题了. 借口了. 自己还没认真体会到前端写css时的乐趣, 只是自己爱折腾罢了.&lt;/p&gt;
+&lt;p&gt;知道less是因为 &lt;a class="reference external" href="https://github.com/twitter/bootstrap"&gt;twitter/bootstrap&lt;/a&gt;, 不过bootstrap还没开始, 先开始less了.&lt;/p&gt;
+&lt;p&gt;variables, operations and functions这些功能的好处在自己这边还没体验出来, 不过Nested Rules, Mixins倒是狠喜欢的说.&lt;/p&gt;
+&lt;p&gt;Nested Rules帮忙避免了写css不断低copy一行父关系来增加子效果. 外加 &amp;quot;&amp;amp;&amp;quot; 的使用, 如虎添翼. 写起来舒服.&lt;/p&gt;
+&lt;p&gt;Mixins避免了在css的class组合. 虽然我说不出这样的class组合有什么不好, 不过可以的话, 我宁愿在html的dom上面, 只是标注了一个class名词.&lt;/p&gt;
+&lt;p&gt;用less.js调试样式, 再用lessc生成具体的css用户生产环境. 在无法避免的前端开放中尝试点新的模式&lt;/p&gt;
+&lt;p&gt;这一次, 又得感谢google v8了.&lt;/p&gt;
+&lt;p&gt;爱折腾, 只是为了更好的开发速度和更好的可维护性. 持续学习中&lt;/p&gt;
+&lt;p&gt;&amp;lt;Sun Apr 22 00:23:43 CST 2012&amp;gt;&lt;/p&gt;
+</content>
+  </entry>
+  <entry xml:base="/develop-notes/feed.atom">
+    <title type="text">Using Bootstrap with Seajs or Requirejs</title>
+    <id>/develop-notes/2012/04/30/using-bootstrap-with-seajs-or-requirejs</id>
+    <updated>2012-04-30T00:00:00Z</updated>
+    <link href="/develop-notes/2012/04/30/using-bootstrap-with-seajs-or-requirejs" />
+    <author>
+      <name>稻草人.L</name>
+    </author>
+    <content type="html">&lt;p&gt;&lt;a class="reference external" href="http://twitter.github.com/bootstrap/"&gt;Bootstrap&lt;/a&gt; 提供了常用的jQuery plugins. 虽然可以打包一次全部使用也不见得很大, 但如果真想按需使用, 就用到了 &lt;a class="reference external" href="http://wiki.commonjs.org/wiki/Modules"&gt;Module Loader&lt;/a&gt;. seajs和requirejs在我这还处于对比阶段, 所以, 颇显麻烦地对比使用了一次.&lt;/p&gt;
+&lt;p&gt;首先给出简单的modal的初始化实现. ps. bootstrap的js代码和jquery放在同一个目录下面&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="nx"&gt;define&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;foo&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;jquery&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;bootstrap-modal&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;],&lt;/span&gt; &lt;span class="kd"&gt;function&lt;/span&gt;&lt;span class="p"&gt;(){&lt;/span&gt;
+      &lt;span class="kd"&gt;var&lt;/span&gt; &lt;span class="nx"&gt;init&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="kd"&gt;function&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+          &lt;span class="nx"&gt;console&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;log&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;start init modal&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+          &lt;span class="nx"&gt;$&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;#lanchModal&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;).&lt;/span&gt;&lt;span class="nx"&gt;click&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kd"&gt;function&lt;/span&gt;&lt;span class="p"&gt;(){&lt;/span&gt;
+             &lt;span class="nx"&gt;$&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;#myModal&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;).&lt;/span&gt;&lt;span class="nx"&gt;modal&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;toggle&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+          &lt;span class="p"&gt;});&lt;/span&gt;
+      &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;init&amp;#39;&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="nx"&gt;init&lt;/span&gt;&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;span class="p"&gt;})&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;这个定义方式, 是requrejs里面默认支持; 其实, seajs虽然没显示说明, 但还是支持的(&lt;a class="reference external" href="http://seajs.org/docs/module-definition.html#module-definition"&gt;Module Definition&lt;/a&gt;):&lt;/p&gt;
+&lt;pre class="literal-block"&gt;
+** NOTICE: It is highly recommended to ignore the id and dependencies arguments in the define statement.
+The optimization tool will generate these arguments automatically in the deployment phase.
+&lt;/pre&gt;
+&lt;p&gt;&amp;quot;The sea, holding water from thousands of rivers, is huge owing to its capacity.&amp;quot;, 如果说seajs不支持此方式, 感觉就对不起这样的定义了.&lt;/p&gt;
+&lt;p&gt;seajs的配置/调用代码:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="c1"&gt;// require sea.js or sea-debug.js&lt;/span&gt;
+&lt;span class="nx"&gt;seajs&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;config&lt;/span&gt;&lt;span class="p"&gt;({&lt;/span&gt;
+    &lt;span class="nx"&gt;base&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;./path/to/lib&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+    &lt;span class="p"&gt;})&lt;/span&gt;
+&lt;span class="nx"&gt;seajs&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;use&lt;/span&gt;&lt;span class="p"&gt;([&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;foo&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;],&lt;/span&gt; &lt;span class="kd"&gt;function&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;foo&lt;/span&gt;&lt;span class="p"&gt;){&lt;/span&gt;
+    &lt;span class="nx"&gt;console&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;log&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;start calling foo using seajs&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+    &lt;span class="nx"&gt;foo&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;init&lt;/span&gt;&lt;span class="p"&gt;();&lt;/span&gt;
+    &lt;span class="p"&gt;})&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;把requirejs的实现也先摆上来:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="c1"&gt;// require require.js&lt;/span&gt;
+&lt;span class="nx"&gt;require&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;config&lt;/span&gt;&lt;span class="p"&gt;({&lt;/span&gt;
+    &lt;span class="nx"&gt;baseUrl&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;./bootstrap/js&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+    &lt;span class="p"&gt;});&lt;/span&gt;
+&lt;span class="nx"&gt;require&lt;/span&gt;&lt;span class="p"&gt;([&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;foo&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;],&lt;/span&gt; &lt;span class="kd"&gt;function&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;foo&lt;/span&gt;&lt;span class="p"&gt;){&lt;/span&gt;
+    &lt;span class="nx"&gt;console&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;log&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;start calling foo using requirejs&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+    &lt;span class="nx"&gt;foo&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;init&lt;/span&gt;&lt;span class="p"&gt;();&lt;/span&gt;
+&lt;span class="p"&gt;})&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;因为是最后的实验结果, 导致已经看不出seajs和requirejs的不同了. seajs推荐的方式是把module放到一个独立的文件里面, 采用 define(function(require, export, module){}) 的 &lt;a class="reference external" href="http://wiki.commonjs.org/wiki/Modules/Wrappings"&gt;Modules/Wrappings&lt;/a&gt; 模式.&lt;/p&gt;
+&lt;p&gt;这里不对比seajs和requirejs. 只是有一点可以确认的, seajs依旧可以把modules定义到同一个文件里面,  现在没考虑spm进来, 所以也不确认是否会引起什么问题. 此问题再追究.&lt;/p&gt;
+&lt;p&gt;现在, 依旧可以用seajs来管理实现对bootstrap的js的依赖, 按需索取.&lt;/p&gt;
+&lt;p&gt;整个demo页面记录在了github, &lt;a class="reference external" href="https://github.com/Tukki/codesnippet/blob/master/javascript/bootstrap-with-seajs.html"&gt;bootstrap with seajs&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&amp;lt;Tue May  1 01:05:54 CST 2012&amp;gt;&lt;/p&gt;
+</content>
+  </entry>
+  <entry xml:base="/develop-notes/feed.atom">
+    <title type="text">初识SeaJs</title>
+    <id>/develop-notes/2012/04/03/meeting-seajs</id>
+    <updated>2012-04-03T00:00:00Z</updated>
+    <link href="/develop-notes/2012/04/03/meeting-seajs" />
+    <author>
+      <name>稻草人.L</name>
+    </author>
+    <content type="html">&lt;p&gt;因工作, 遇上 &lt;a class="reference external" href="http://seajs.org/"&gt;SeaJs&lt;/a&gt;, A Module Loader for the Web. 国内Javascript开源实现(V5). 玉伯, 阿里系, github上面的一个 &lt;a class="reference external" href="https://github.com/seajs/seajs/issues/182#issuecomment-4863961"&gt;说明&lt;/a&gt;:&lt;/p&gt;
+&lt;pre class="literal-block"&gt;
+SeaJS 接下来会作为支付宝官方支持的开源类库来运作，因此以后会更有保障。谢谢大家
+&lt;/pre&gt;
+&lt;p&gt;slideshare上面有两篇分享, &lt;a class="reference external" href="http://www.slideshare.net/alipay/seajs"&gt;SeaJs - 不仅仅时脚本记载器&lt;/a&gt;, &lt;a class="reference external" href="http://www.slideshare.net/lifesinger/seajs-7960228"&gt;SeaJs - 跨环境模块化开放实践&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;其实, 更早认识的是 &lt;a class="reference external" href="http://requirejs.org"&gt;RequireJS&lt;/a&gt;, 那时候遇到JavaScript加载顺序问题时寻求过解决方法, 不过工程不大, 最后只是简单调整了顺序来解决问题.&lt;/p&gt;
+&lt;p&gt;SeaJs的作者有分享 &lt;a class="reference external" href="http://lifesinger.wordpress.com/2011/05/17/the-difference-between-seajs-and-requirejs/"&gt;SeaJS和RequireJS的异同&lt;/a&gt;, 以及 &lt;a class="reference external" href="http://lifesinger.wordpress.com/2011/10/24/comparing-requirejs-with-seajs-1/"&gt;从RequireJS到SeaJS&lt;/a&gt; 系列.&lt;/p&gt;
+&lt;p&gt;自己对于两者的是好是坏还不懂得评价, 还没到那个水平. AMD不好, 但认识的jQuery, Dojo, MooTools都在使用AMD了 (&lt;a class="reference external" href="http://requirejs.org/docs/whyamd.html#amdtoday"&gt;AMD USED TODAY&lt;/a&gt;). 不合适的联想, TCP/IP和OSI网络七层模型. 在开源世界, 社区的力量及设计的灵活性, 可能比设计的好坏更重要. 鄙视JavaScript的设计也无法阻止其称霸浏览器.&lt;/p&gt;
+&lt;p&gt;没有实际的对比不知道好坏. I will give both a try later.&lt;/p&gt;
+&lt;p&gt;&amp;lt;Wed Apr  4 00:03:24 CST 2012&amp;gt;&lt;/p&gt;
+</content>
+  </entry>
+  <entry xml:base="/develop-notes/feed.atom">
+    <title type="text">客户端不同网站间交互实现记录</title>
+    <id>/develop-notes/2012/01/05/different-sites-communication-on-clientside</id>
+    <updated>2012-01-05T00:00:00Z</updated>
+    <link href="/develop-notes/2012/01/05/different-sites-communication-on-clientside" />
+    <author>
+      <name>稻草人.L</name>
+    </author>
+    <content type="html">&lt;p&gt;起个名字真难. 没有标题说的那么大而全, 只是记录下简单自己在2011后半年遇见的几个交互实现.&lt;/p&gt;
+&lt;div class="section" id="javascript"&gt;
+&lt;h2&gt;JavaScript生成链接&lt;/h2&gt;
+&lt;p&gt;Delicious, weibo的分享按钮.&lt;/p&gt;
+&lt;p&gt;这一类是最常见的. JavaScript获取需要的信息, 构建链接, 用window.open打开新窗口.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="section" id="iframe"&gt;
+&lt;h2&gt;服务器生成iframe&lt;/h2&gt;
+&lt;p&gt;&lt;a class="reference external" href="http://readitlaterlist.com/api/buttons"&gt;ReadItLater Button&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;JavaScript生成一iframe插入当前页面, 把需要保持的信息放在iframe上src的链接参数中, 让RIL服务器根据参数值动态生成交互按钮返回作为iframe的内容. 因为使用的是iframe, RIL可以判断用户是否处于登陆状态(根据cookie), 去决定返回让用户点击的时候跳转登陆的按钮, 还是直接POST进行保存内容的按钮, 还是提示用户当前页面处于&amp;quot;已记录&amp;quot;状态. 在生成iframe的一刻已经决定了交换的内容, 尔后进行交换时互不干涉.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="section" id="javascriptiframe"&gt;
+&lt;h2&gt;JavaScript生成iframe&lt;/h2&gt;
+&lt;p&gt;&lt;a class="reference external" href="http://www.instapaper.com"&gt;Instapaper&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Instapaper的&amp;quot;Read Later&amp;quot;按钮, 也是生成iframe. 不过iframe里面需要交换的内容, 是本地js设定的. 服务器返回了iframe的内容模板字符串, 本地js获取需要的值根据模板生成目标内容, 由本地js直接写不带src的iframe.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="section" id="html5"&gt;
+&lt;h2&gt;HTML5&lt;/h2&gt;
+&lt;p&gt;&lt;a class="reference external" href="https://developer.mozilla.org/en/DOM/window.postMessage"&gt;HTML5 window.postMessage&lt;/a&gt;:&lt;/p&gt;
+&lt;pre class="literal-block"&gt;
+window.postMessage is a method for safely enabling cross-origin communication.
+&lt;/pre&gt;
+&lt;p&gt;没实际去应用过, 这个算是HTML5提供的官方解决方案了.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="section" id="flash"&gt;
+&lt;h2&gt;Flash&lt;/h2&gt;
+&lt;p&gt;Diigo, WebNotes提供嵌入当前页面的工具条. 没有认真拆解过, 但确认其没用到Html5特性. 而且两个都属于有后续有不确定交互发生的存在, 由于iframe设定是&amp;quot;上下文无关&amp;quot;. 那猜想应该是用了flash. &lt;a class="reference external" href="http://www.adobe.com/devnet/flash/articles/external_interface.html"&gt;Using the External API for Flash-JavaScript Communication&lt;/a&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="section" id="id2"&gt;
+&lt;h2&gt;直接请求&lt;/h2&gt;
+&lt;p&gt;WebNotes的工具条, 刚才用Firebug测了下, 不是Flash. (内置的flash显示时timer, 不知道时用了干啥的, 心跳包?). 对于HighLighting触发时, 是一GET请求, 带好长的一段编码/加密过的参数. 然后返回一JS, try{...}catch(e){}&lt;/p&gt;
+&lt;p&gt;updated: &amp;lt;!-- Fri Jan  6 14:33:07 CST 2012 --&amp;gt;&lt;/p&gt;
+&lt;/div&gt;
+</content>
+  </entry>
+</feed>
+

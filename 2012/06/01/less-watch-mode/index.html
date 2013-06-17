@@ -1,0 +1,73 @@
+<!doctype html>
+<html>
+  <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+      
+      <title>Less watch mode | 稻草人.L的记录</title>
+      <!--<link href="http://fonts.googleapis.com/css?family=Vollkorn&subset=latin" rel="stylesheet" type="text/css">-->
+      <link rel="stylesheet" href="/develop-notes/static/style.css" type="text/css">
+      <link rel="stylesheet" href="/static/_pygments.css" type="text/css">
+      
+  </head>
+  <body>
+      <div class=container>
+          <div class=header>
+              <a href="/">稻草人.L的记录</a>
+          </div>
+          <div class=navigation>
+              <ul>
+                  <li><a href="/develop-notes/">blog</a></li>
+                  <li><a href="/develop-notes/archive/">archive</a></li>
+                  <li><a href="/develop-notes/tags/">tags</a></li>
+                  <li><a href="/develop-notes/feed.atom" rel="alternate" title="Recent Blog Posts">feed</a></li>
+              </ul>
+          </div>
+          <div class=body>
+              
+  <h1 class="title">Less watch mode</h1>
+
+  
+  <p class=date>written on Friday, June 1, 2012
+  
+
+  <p><a class="reference external" href="http://lesscss.org/">Less</a> 里面提到的watch mode一直没能用上(在开发域名上面运行), 也没去找那里出错了. 忙乎阿. 刚才再Google了下, 找到了解决方式.</p>
+<p>github上面提到个 <a class="reference external" href="https://github.com/cloudhead/less.js/pull/679">pull request #679</a>, 不过还处于open状态, 修改了源码. 解决方式一.</p>
+<p>然后, <a class="reference external" href="http://www.paulsprangers.com/2011/04/quick-tip-less-js-in-development-and-watch-mode/">Less.js in development and watch mode</a>. 原文提到的方式不靠谱, 反而评论提到了两个方式, 一个是修改源码, 等于把自己的开放域名注册到Less.js文件里面. 另外一个, Force init value of less.env var:</p>
+<pre class="literal-block">
+// Force init value of less.env var
+var less = { env: ‘development’ };
+// Less itself
+
+// Watch
+less.watch();
+</pre>
+<p>需要在加载Less.js之前初始化env变量, 不如在非本地测试环境, 加载Less.js后判断 env 是否为 <em>development</em> 而选择了不同的模式. 再手动watch也不能生效.</p>
+<p>ps. 可以用 less.poll 来控制watch频率</p>
+<p>&lt;!-- Fri Jun  1 00:43:06 CST 2012 --&gt;</p>
+
+
+  
+  <p class=tags>This entry was tagged
+    
+      <a href="/develop-notes/tags/css/">css</a>, 
+      <a href="/develop-notes/tags/javascript/">javascript</a> and 
+      <a href="/develop-notes/tags/less/">less</a>
+  
+
+          </div>
+          <div class=footer>
+              <p>&copy; Copyright 2013 by 稻草人.L
+              <p>
+              Content licensed under the Creative Commons
+              attribution-noncommercial-sharealike License.
+              <p>
+              联系我: 
+	      <span>Tukki.Eta(#)gmail.com</span> &nbsp;
+	      <a href="http://twitter.com/scarecrow_L">Twitter</a> &nbsp;
+          <a href="https://www.github.com/tukki">Github</></a> &nbsp;
+      </div>
+
+          </div>
+      </div>
+  </body>
+</html>

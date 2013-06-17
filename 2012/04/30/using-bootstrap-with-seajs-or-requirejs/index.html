@@ -1,0 +1,100 @@
+<!doctype html>
+<html>
+  <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+      
+      <title>Using Bootstrap with Seajs or Requirejs | 稻草人.L的记录</title>
+      <!--<link href="http://fonts.googleapis.com/css?family=Vollkorn&subset=latin" rel="stylesheet" type="text/css">-->
+      <link rel="stylesheet" href="/develop-notes/static/style.css" type="text/css">
+      <link rel="stylesheet" href="/static/_pygments.css" type="text/css">
+      
+  </head>
+  <body>
+      <div class=container>
+          <div class=header>
+              <a href="/">稻草人.L的记录</a>
+          </div>
+          <div class=navigation>
+              <ul>
+                  <li><a href="/develop-notes/">blog</a></li>
+                  <li><a href="/develop-notes/archive/">archive</a></li>
+                  <li><a href="/develop-notes/tags/">tags</a></li>
+                  <li><a href="/develop-notes/feed.atom" rel="alternate" title="Recent Blog Posts">feed</a></li>
+              </ul>
+          </div>
+          <div class=body>
+              
+  <h1 class="title">Using Bootstrap with Seajs or Requirejs</h1>
+
+  
+  <p class=date>written on Monday, April 30, 2012
+  
+
+  <p><a class="reference external" href="http://twitter.github.com/bootstrap/">Bootstrap</a> 提供了常用的jQuery plugins. 虽然可以打包一次全部使用也不见得很大, 但如果真想按需使用, 就用到了 <a class="reference external" href="http://wiki.commonjs.org/wiki/Modules">Module Loader</a>. seajs和requirejs在我这还处于对比阶段, 所以, 颇显麻烦地对比使用了一次.</p>
+<p>首先给出简单的modal的初始化实现. ps. bootstrap的js代码和jquery放在同一个目录下面</p>
+<div class="highlight"><pre><span class="nx">define</span><span class="p">(</span><span class="s1">&#39;foo&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;jquery&#39;</span><span class="p">,</span> <span class="s1">&#39;bootstrap-modal&#39;</span><span class="p">],</span> <span class="kd">function</span><span class="p">(){</span>
+      <span class="kd">var</span> <span class="nx">init</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+          <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;start init modal&#39;</span><span class="p">);</span>
+          <span class="nx">$</span><span class="p">(</span><span class="s2">&quot;#lanchModal&quot;</span><span class="p">).</span><span class="nx">click</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
+             <span class="nx">$</span><span class="p">(</span><span class="s2">&quot;#myModal&quot;</span><span class="p">).</span><span class="nx">modal</span><span class="p">(</span><span class="s1">&#39;toggle&#39;</span><span class="p">);</span>
+          <span class="p">});</span>
+      <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;init&#39;</span><span class="o">:</span> <span class="nx">init</span><span class="p">}</span>
+<span class="p">})</span>
+</pre></div>
+<p>这个定义方式, 是requrejs里面默认支持; 其实, seajs虽然没显示说明, 但还是支持的(<a class="reference external" href="http://seajs.org/docs/module-definition.html#module-definition">Module Definition</a>):</p>
+<pre class="literal-block">
+** NOTICE: It is highly recommended to ignore the id and dependencies arguments in the define statement.
+The optimization tool will generate these arguments automatically in the deployment phase.
+</pre>
+<p>&quot;The sea, holding water from thousands of rivers, is huge owing to its capacity.&quot;, 如果说seajs不支持此方式, 感觉就对不起这样的定义了.</p>
+<p>seajs的配置/调用代码:</p>
+<div class="highlight"><pre><span class="c1">// require sea.js or sea-debug.js</span>
+<span class="nx">seajs</span><span class="p">.</span><span class="nx">config</span><span class="p">({</span>
+    <span class="nx">base</span><span class="o">:</span> <span class="s1">&#39;./path/to/lib&#39;</span><span class="p">,</span>
+    <span class="p">})</span>
+<span class="nx">seajs</span><span class="p">.</span><span class="nx">use</span><span class="p">([</span><span class="s1">&#39;foo&#39;</span><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">foo</span><span class="p">){</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;start calling foo using seajs&#39;</span><span class="p">);</span>
+    <span class="nx">foo</span><span class="p">.</span><span class="nx">init</span><span class="p">();</span>
+    <span class="p">})</span>
+</pre></div>
+<p>把requirejs的实现也先摆上来:</p>
+<div class="highlight"><pre><span class="c1">// require require.js</span>
+<span class="nx">require</span><span class="p">.</span><span class="nx">config</span><span class="p">({</span>
+    <span class="nx">baseUrl</span><span class="o">:</span> <span class="s1">&#39;./bootstrap/js&#39;</span><span class="p">,</span>
+    <span class="p">});</span>
+<span class="nx">require</span><span class="p">([</span><span class="s1">&#39;foo&#39;</span><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">foo</span><span class="p">){</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;start calling foo using requirejs&#39;</span><span class="p">);</span>
+    <span class="nx">foo</span><span class="p">.</span><span class="nx">init</span><span class="p">();</span>
+<span class="p">})</span>
+</pre></div>
+<p>因为是最后的实验结果, 导致已经看不出seajs和requirejs的不同了. seajs推荐的方式是把module放到一个独立的文件里面, 采用 define(function(require, export, module){}) 的 <a class="reference external" href="http://wiki.commonjs.org/wiki/Modules/Wrappings">Modules/Wrappings</a> 模式.</p>
+<p>这里不对比seajs和requirejs. 只是有一点可以确认的, seajs依旧可以把modules定义到同一个文件里面,  现在没考虑spm进来, 所以也不确认是否会引起什么问题. 此问题再追究.</p>
+<p>现在, 依旧可以用seajs来管理实现对bootstrap的js的依赖, 按需索取.</p>
+<p>整个demo页面记录在了github, <a class="reference external" href="https://github.com/Tukki/codesnippet/blob/master/javascript/bootstrap-with-seajs.html">bootstrap with seajs</a></p>
+<p>&lt;Tue May  1 01:05:54 CST 2012&gt;</p>
+
+
+  
+  <p class=tags>This entry was tagged
+    
+      <a href="/develop-notes/tags/javascript/">javascript</a> and 
+      <a href="/develop-notes/tags/seajs/">seajs</a>
+  
+
+          </div>
+          <div class=footer>
+              <p>&copy; Copyright 2013 by 稻草人.L
+              <p>
+              Content licensed under the Creative Commons
+              attribution-noncommercial-sharealike License.
+              <p>
+              联系我: 
+	      <span>Tukki.Eta(#)gmail.com</span> &nbsp;
+	      <a href="http://twitter.com/scarecrow_L">Twitter</a> &nbsp;
+          <a href="https://www.github.com/tukki">Github</></a> &nbsp;
+      </div>
+
+          </div>
+      </div>
+  </body>
+</html>

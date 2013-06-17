@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title type="text">Recent Blog Posts</title>
+  <id>/develop-notes/feed.atom</id>
+  <updated>2011-12-17T00:00:00Z</updated>
+  <link href="/develop-notes/" />
+  <link href="/develop-notes/feed.atom" rel="self" />
+  <subtitle type="text">Recent blog posts</subtitle>
+  <generator>Werkzeug</generator>
+  <entry xml:base="/develop-notes/feed.atom">
+    <title type="text">MySQL group_concat on PostgreSQL</title>
+    <id>/develop-notes/2011/12/03/mysql-group-concat-on-postgresql</id>
+    <updated>2011-12-03T00:00:00Z</updated>
+    <link href="/develop-notes/2011/12/03/mysql-group-concat-on-postgresql" />
+    <author>
+      <name>稻草人.L</name>
+    </author>
+    <content type="html">&lt;p&gt;源于 &lt;a class="reference external" href="http://karwin.blogspot.com/2010/03/rendering-trees-with-closure-tables.html"&gt;Rendering Trees with Closure Tables&lt;/a&gt; 例子是基于MySQL的, 列出Path用的 &lt;a class="reference external" href="http://dev.mysql.com/doc/refman/5.1/en/group-by-functions.html#function_group-concat"&gt;GROUP_CONCAT()&lt;/a&gt; 在Postgresql上面没有对应的直接实现. 下面是自己对应Category版本的解决方法:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="k"&gt;select&lt;/span&gt; &lt;span class="n"&gt;d&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;descendant&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+&lt;span class="n"&gt;array_to_string&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;array_agg&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;cat&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;name&lt;/span&gt; &lt;span class="k"&gt;order&lt;/span&gt; &lt;span class="k"&gt;by&lt;/span&gt; &lt;span class="n"&gt;cat&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;id&lt;/span&gt;&lt;span class="p"&gt;),&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;/&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="c1"&gt;-- line_2&lt;/span&gt;
+&lt;span class="k"&gt;as&lt;/span&gt; &lt;span class="n"&gt;path&lt;/span&gt;
+&lt;span class="k"&gt;from&lt;/span&gt; &lt;span class="n"&gt;closure&lt;/span&gt; &lt;span class="n"&gt;d&lt;/span&gt;
+&lt;span class="k"&gt;join&lt;/span&gt; &lt;span class="n"&gt;closure&lt;/span&gt; &lt;span class="n"&gt;a&lt;/span&gt; &lt;span class="k"&gt;on&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;a&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;descendant&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;d&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;descendant&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="k"&gt;join&lt;/span&gt; &lt;span class="n"&gt;category&lt;/span&gt; &lt;span class="n"&gt;cat&lt;/span&gt; &lt;span class="k"&gt;on&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;cat&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;id&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;a&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;ancestor&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="k"&gt;where&lt;/span&gt; &lt;span class="n"&gt;d&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;ancestor&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt; &lt;span class="k"&gt;and&lt;/span&gt; &lt;span class="n"&gt;d&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;descendant&lt;/span&gt; &lt;span class="o"&gt;!=&lt;/span&gt; &lt;span class="n"&gt;d&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;ancestor&lt;/span&gt;
+&lt;span class="k"&gt;group&lt;/span&gt; &lt;span class="k"&gt;by&lt;/span&gt; &lt;span class="n"&gt;d&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;descendant&lt;/span&gt;
+&lt;span class="k"&gt;order&lt;/span&gt; &lt;span class="k"&gt;by&lt;/span&gt; &lt;span class="n"&gt;path&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;   &lt;span class="c1"&gt;-- line_last&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;如果是PostgreSQL-9.0以上版本的, 可以用 &lt;a class="reference external" href="http://developer.postgresql.org/pgdocs/postgres/functions-aggregate.html"&gt;string_agg&lt;/a&gt; 代替上面的array_to_string:&lt;/p&gt;
+&lt;pre class="literal-block"&gt;
+string_agg(cat.label, '/' order by cat.id) -- line_2
+&lt;/pre&gt;
+&lt;p&gt;其中, 如果line_2里面不用 &amp;quot;order by cat.id&amp;quot;, 得到的路径是倒序的:&lt;/p&gt;
+&lt;pre class="literal-block"&gt;
+&amp;quot;sub11/sub1/root&amp;quot;
+&lt;/pre&gt;
+&lt;p&gt;如果没有line_last的&amp;quot;order by path&amp;quot;, 得到的结果是按&amp;quot;descendant&amp;quot;升序的, 没有把目录树结构顺序表现出来:&lt;/p&gt;
+&lt;pre class="literal-block"&gt;
+&amp;quot;root/sub1&amp;quot;
+&amp;quot;root/sub2&amp;quot;
+&amp;quot;root/sub1/sub11&amp;quot;
+&amp;quot;root/sub2/sub21&amp;quot;
+&amp;quot;root/sub2/sub21/sub211&amp;quot;
+&lt;/pre&gt;
+&lt;p&gt;因为还没有实现文中提到的lenght, 所以也是假定祖先目录的id值比子孙目录的id值小.&lt;/p&gt;
+&lt;p&gt;列出在Google找到的有用信息.&lt;/p&gt;
+&lt;p&gt;&lt;a class="reference external" href="http://www.pgsql.cz/index.php/PostgreSQL_SQL_Tricks#MySQL_function_group_concat_in_PostgreSQL"&gt;MySQL function group_concat in PostgreSQL&lt;/a&gt;, 里面提到个&amp;quot;workaround&amp;quot;(应急方案?). 用&amp;quot;array_to_string + array_agg&amp;quot;组合处理.&lt;/p&gt;
+&lt;p&gt;&lt;a class="reference external" href="http://wiki.postgresql.org/wiki/Array_agg"&gt;array age on postgresql wiki&lt;/a&gt;, 说明了在8.4版本前的PostgreSQL该怎样去实现这个 &lt;em&gt;array_agg&lt;/em&gt;.&lt;/p&gt;
+&lt;p&gt;&lt;a class="reference external" href="http://www.postgresonline.com/journal/archives/191-stringagg.html"&gt;STRING AGGREGATION IN POSTGRESQL, SQL SERVER, AND MYSQL&lt;/a&gt;, 详细的对比式实现&lt;/p&gt;
+&lt;p&gt;中文世界没详细找, 这里有一个 &lt;a class="reference external" href="http://hi.baidu.com/bsdgo/blog/item/7a79fd02359ef71f1c9583f0.html"&gt;postgresql如何实现group_concat功能&lt;/a&gt;, 但相对来说, 信息量还不够.&lt;/p&gt;
+&lt;p&gt;&amp;lt;!-- Sat Dec  3 21:05:25 CST 2011 --&amp;gt;&lt;/p&gt;
+</content>
+  </entry>
+  <entry xml:base="/develop-notes/feed.atom">
+    <title type="text">Rendering SubTrees with Closure Tables</title>
+    <id>/develop-notes/2011/12/17/rendering-subtree-with-closure-tables</id>
+    <updated>2011-12-17T00:00:00Z</updated>
+    <link href="/develop-notes/2011/12/17/rendering-subtree-with-closure-tables" />
+    <author>
+      <name>稻草人.L</name>
+    </author>
+    <content type="html">&lt;p&gt;First of all, thanks Bill Karwin, for all his different posts and articles on Closure Tables, and his great book &lt;a class="reference external" href="http://pragprog.com/book/bksqla/sql-antipatterns"&gt;SQL Antipatterns&lt;/a&gt; (I read the Chinese version)&lt;/p&gt;
+&lt;p&gt;this note base on Bill Karwin's &lt;a class="reference external" href="http://karwin.blogspot.com/2010/03/rendering-trees-with-closure-tables.html"&gt;Rendering Trees with Closure Tables&lt;/a&gt;, the page is great, and telling us how to render trees with closure tables. part from this page:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="k"&gt;select&lt;/span&gt; &lt;span class="nf"&gt;group_concat&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;n&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;label&lt;/span&gt; &lt;span class="k"&gt;order&lt;/span&gt; &lt;span class="k"&gt;by&lt;/span&gt; &lt;span class="n"&gt;n&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;node&lt;/span&gt; &lt;span class="k"&gt;separator&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39; -&amp;gt; &amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="k"&gt;as&lt;/span&gt; &lt;span class="n"&gt;path&lt;/span&gt;
+&lt;span class="k"&gt;from&lt;/span&gt; &lt;span class="n"&gt;closure&lt;/span&gt; &lt;span class="n"&gt;d&lt;/span&gt;
+&lt;span class="k"&gt;join&lt;/span&gt; &lt;span class="n"&gt;closure&lt;/span&gt; &lt;span class="n"&gt;a&lt;/span&gt; &lt;span class="k"&gt;on&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;a&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;descendant&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;d&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;descendant&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="k"&gt;join&lt;/span&gt; &lt;span class="n"&gt;nodes&lt;/span&gt; &lt;span class="n"&gt;n&lt;/span&gt; &lt;span class="k"&gt;on&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;n&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;node&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;a&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;ancestor&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="k"&gt;where&lt;/span&gt; &lt;span class="n"&gt;d&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;ancestor&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt; &lt;span class="k"&gt;and&lt;/span&gt; &lt;span class="n"&gt;d&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;descendant&lt;/span&gt; &lt;span class="o"&gt;!=&lt;/span&gt; &lt;span class="n"&gt;d&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;ancestor&lt;/span&gt;
+&lt;span class="k"&gt;group&lt;/span&gt; &lt;span class="k"&gt;by&lt;/span&gt; &lt;span class="n"&gt;d&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;descendant&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Got:&lt;/p&gt;
+&lt;pre class="literal-block"&gt;
++-------------------------------------------------+
+| path                                            |
++-------------------------------------------------+
+| rootree -&amp;gt; 1stbranch                            |
+| rootree -&amp;gt; midbranch                            |
+| rootree -&amp;gt; midbranch -&amp;gt; corebranch              |
+| rootree -&amp;gt; midbranch -&amp;gt; corebranch -&amp;gt; leafnodes |
+| rootree -&amp;gt; lastbranch                           |
+| rootree -&amp;gt; lastbranch -&amp;gt; lastleaf               |
++-------------------------------------------------+
+&lt;/pre&gt;
+&lt;p&gt;but, how about when I just want to render the subtree? I need the tree show of the &amp;quot;midbrance&amp;quot;, I change the query to:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="k"&gt;select&lt;/span&gt; &lt;span class="nf"&gt;group_concat&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;n&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;label&lt;/span&gt; &lt;span class="k"&gt;order&lt;/span&gt; &lt;span class="k"&gt;by&lt;/span&gt; &lt;span class="n"&gt;n&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;node&lt;/span&gt; &lt;span class="k"&gt;separator&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39; -&amp;gt; &amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="k"&gt;as&lt;/span&gt; &lt;span class="n"&gt;path&lt;/span&gt;
+&lt;span class="k"&gt;from&lt;/span&gt; &lt;span class="n"&gt;closure&lt;/span&gt; &lt;span class="n"&gt;d&lt;/span&gt;
+&lt;span class="k"&gt;join&lt;/span&gt; &lt;span class="n"&gt;closure&lt;/span&gt; &lt;span class="n"&gt;a&lt;/span&gt; &lt;span class="k"&gt;on&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;a&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;descendant&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;d&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;descendant&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="k"&gt;join&lt;/span&gt; &lt;span class="n"&gt;nodes&lt;/span&gt; &lt;span class="n"&gt;n&lt;/span&gt; &lt;span class="k"&gt;on&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;n&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;node&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;a&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;ancestor&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="k"&gt;where&lt;/span&gt; &lt;span class="n"&gt;d&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;ancestor&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="mi"&gt;3&lt;/span&gt;
+&lt;span class="c1"&gt;-- and d.descendant != d.ancestor&lt;/span&gt;
+&lt;span class="k"&gt;group&lt;/span&gt; &lt;span class="k"&gt;by&lt;/span&gt; &lt;span class="n"&gt;d&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;descendant&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;I got:&lt;/p&gt;
+&lt;pre class="literal-block"&gt;
++-------------------------------------------------+
+| path                                            |
++-------------------------------------------------+
+| rootree -&amp;gt; midbranch                            |
+| rootree -&amp;gt; midbranch -&amp;gt; corebranch              |
+| rootree -&amp;gt; midbranch -&amp;gt; corebranch -&amp;gt; leafnodes |
++-------------------------------------------------+
+&lt;/pre&gt;
+&lt;p&gt;I don't care about the &lt;em&gt;roottree&lt;/em&gt; any bit. I want the output like this, just the tree view of the &lt;em&gt;midbranch&lt;/em&gt;:&lt;/p&gt;
+&lt;pre class="literal-block"&gt;
++----------------------------------+
+| path                             |
++----------------------------------+
+| midbranch                        |
+| midbranch-&amp;gt;corebranch            |
+| midbranch-&amp;gt;corebranch-&amp;gt;leafnodes |
++----------------------------------+
+&lt;/pre&gt;
+&lt;p&gt;I'm just a sql newbie, and find out a solution like this finally:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="k"&gt;select&lt;/span&gt; &lt;span class="nf"&gt;group_concat&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;n&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;label&lt;/span&gt; &lt;span class="k"&gt;order&lt;/span&gt; &lt;span class="k"&gt;by&lt;/span&gt; &lt;span class="n"&gt;n&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;node&lt;/span&gt; &lt;span class="k"&gt;separator&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;-&amp;gt;&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="k"&gt;as&lt;/span&gt; &lt;span class="n"&gt;path&lt;/span&gt;
+&lt;span class="k"&gt;from&lt;/span&gt; &lt;span class="n"&gt;closure&lt;/span&gt; &lt;span class="n"&gt;d&lt;/span&gt;
+&lt;span class="k"&gt;left&lt;/span&gt; &lt;span class="k"&gt;join&lt;/span&gt; &lt;span class="n"&gt;closure&lt;/span&gt; &lt;span class="n"&gt;a&lt;/span&gt; &lt;span class="k"&gt;on&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;a&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;descendant&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;d&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;ancestor&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="k"&gt;join&lt;/span&gt; &lt;span class="n"&gt;nodes&lt;/span&gt; &lt;span class="n"&gt;n&lt;/span&gt; &lt;span class="k"&gt;on&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;n&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;node&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;d&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;ancestor&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="k"&gt;where&lt;/span&gt; &lt;span class="n"&gt;a&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;ancestor&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="mi"&gt;3&lt;/span&gt;
+&lt;span class="k"&gt;group&lt;/span&gt; &lt;span class="k"&gt;by&lt;/span&gt; &lt;span class="n"&gt;d&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;descendant&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;the point of the change is, &lt;em&gt;just fire the group operate on the subset&lt;/em&gt;:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="c1"&gt;-- get the subset closure table of node.id == 3&lt;/span&gt;
+&lt;span class="k"&gt;select&lt;/span&gt; &lt;span class="n"&gt;d&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="o"&gt;*&lt;/span&gt; &lt;span class="k"&gt;from&lt;/span&gt; &lt;span class="n"&gt;closure&lt;/span&gt; &lt;span class="n"&gt;d&lt;/span&gt;
+&lt;span class="k"&gt;left&lt;/span&gt; &lt;span class="k"&gt;join&lt;/span&gt; &lt;span class="n"&gt;closure&lt;/span&gt; &lt;span class="n"&gt;a&lt;/span&gt; &lt;span class="k"&gt;on&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;a&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;descendant&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;d&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;ancestor&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="k"&gt;where&lt;/span&gt; &lt;span class="n"&gt;a&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;ancestor&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="mi"&gt;3&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;This sulotion also work on the &lt;em&gt;roottree&lt;/em&gt;.&lt;/p&gt;
+&lt;p&gt;I don't know the performance about this change. From pgAdmin3 explain -- I had a PostgreSQL version of closure tables and first found out this problem and sulotion on it -- two version share the save query plan, but the later get less row in the &lt;em&gt;Hast Join&lt;/em&gt; (the subset).&lt;/p&gt;
+&lt;p&gt;I can't prove it absolute right, but it work so far so good. I even thought how to use &amp;quot;closure table + path enumeration&amp;quot; to solve this problem at first. Maybe this was not a problem, but I'm just scratch my own itch.&lt;/p&gt;
+&lt;p&gt;Here is my PostgreSQL version:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="k"&gt;select&lt;/span&gt; &lt;span class="n"&gt;d&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;descendant&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+&lt;span class="n"&gt;string_agg&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;n&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;label&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;/&amp;#39;&lt;/span&gt; &lt;span class="k"&gt;order&lt;/span&gt; &lt;span class="k"&gt;by&lt;/span&gt; &lt;span class="n"&gt;d&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;ancestor&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="k"&gt;as&lt;/span&gt; &lt;span class="n"&gt;path&lt;/span&gt;
+&lt;span class="k"&gt;from&lt;/span&gt; &lt;span class="n"&gt;closures&lt;/span&gt; &lt;span class="n"&gt;d&lt;/span&gt;
+&lt;span class="k"&gt;left&lt;/span&gt; &lt;span class="k"&gt;join&lt;/span&gt; &lt;span class="n"&gt;closures&lt;/span&gt; &lt;span class="n"&gt;a&lt;/span&gt; &lt;span class="k"&gt;on&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;a&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;descendant&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;d&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;ancestor&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="k"&gt;join&lt;/span&gt; &lt;span class="n"&gt;nodes&lt;/span&gt; &lt;span class="n"&gt;n&lt;/span&gt; &lt;span class="k"&gt;on&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;n&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;id&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;d&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;ancestor&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="k"&gt;where&lt;/span&gt; &lt;span class="n"&gt;a&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;ancestor&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="mi"&gt;3&lt;/span&gt;
+&lt;span class="k"&gt;group&lt;/span&gt; &lt;span class="k"&gt;by&lt;/span&gt; &lt;span class="n"&gt;d&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;descendant&lt;/span&gt;
+&lt;span class="k"&gt;order&lt;/span&gt; &lt;span class="k"&gt;by&lt;/span&gt; &lt;span class="n"&gt;path&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;&amp;lt;!-- Sat Dec 17 00:28:32 CST 2011 --&amp;gt;&lt;/p&gt;
+</content>
+  </entry>
+</feed>
+

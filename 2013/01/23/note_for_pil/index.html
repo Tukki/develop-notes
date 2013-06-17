@@ -1,0 +1,79 @@
+<!doctype html>
+<html>
+  <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+      
+      <title>note for PIL | 稻草人.L的记录</title>
+      <!--<link href="http://fonts.googleapis.com/css?family=Vollkorn&subset=latin" rel="stylesheet" type="text/css">-->
+      <link rel="stylesheet" href="/develop-notes/static/style.css" type="text/css">
+      <link rel="stylesheet" href="/static/_pygments.css" type="text/css">
+      
+  </head>
+  <body>
+      <div class=container>
+          <div class=header>
+              <a href="/">稻草人.L的记录</a>
+          </div>
+          <div class=navigation>
+              <ul>
+                  <li><a href="/develop-notes/">blog</a></li>
+                  <li><a href="/develop-notes/archive/">archive</a></li>
+                  <li><a href="/develop-notes/tags/">tags</a></li>
+                  <li><a href="/develop-notes/feed.atom" rel="alternate" title="Recent Blog Posts">feed</a></li>
+              </ul>
+          </div>
+          <div class=body>
+              
+  <h1 class="title">note for PIL</h1>
+
+  
+  <p class=date>written on Wednesday, January 23, 2013
+  
+
+  <p>这次, 在 <a class="reference external" href="https://github.com/amueller/word_cloud">word_cloud</a> 基础上面, 进行改动. 虽然还有改不动的地方, 记录收获到的东西. 备忘.  同时多接触了一个库, numpy.</p>
+<ol class="arabic">
+<li><p class="first">unicode support</p>
+<p>ImageDraw.text 默认不支持中文(可能时系统问题), 需要指定合适的font, 用truetype类型指定大小输出即可. 一开始折腾没在意, 各种unicode/str转换, 输出一堆乱码.
+在stackoverflow找到解决方法, 字库!! 后来找美工给了两个字库, hy2gjim.ttf/msyh.ttf.</p>
+</li>
+<li><p class="first">字体旋转</p>
+<p>用ImageFont.TransposedFont,  可以指定orientaiton把文字旋转处理, 再draw.text</p>
+</li>
+<li><p class="first">单词/句子的实际大小</p>
+<p>一个时font.getsize(), 另外一个时draw.textsize()
+前者时获取字体的width/height.
+后者在setfont后, 获取的时输出时占用的空间. box_size</p>
+</li>
+<li><p class="first">输出换行</p>
+<p>draw.text()不负责处理换行.. 处理英文可以用 <a class="reference external" href="http://docs.python.org/2/library/textwrap.html">textwrap</a>,  在stackoverflow有 <a class="reference external" href="http://stackoverflow.com/questions/7698231/python-pil-draw-multiline-text-on-image">demo</a>
+中文没化时间找更好的方法. 因为每行的长度差不多, 换行可能就只有几个字, 比较挫地直接由最后一个字重试, 取整句话的实际输出长度, 再判断是否过长, 往前遍历截取. 知道满足. 后面截断的就再换行重试.</p>
+</li>
+<li><p class="first">圆角处理.</p>
+<p>找到这篇文章 <a class="reference external" href="http://tobias.klpstn.com/2008/02/10/simple-image-masking-with-pil/">Simple Image masking with PIL</a>, 其实原理没来得及搞明白. 利用浮层遮盖?  不知道找到圆角边框不够圆滑, 还是没抄到其中的主要意思, 效果不好... 没成.
+ps. 这里可以先合并大图再进行缩略. 这样不用换一个比例找一个图层.</p>
+</li>
+<li><p class="first">图片合并</p>
+<p>用 Image.paste, 有先后顺序, 同一位置后面覆盖前面. 油画~</p>
+</li>
+</ol>
+
+
+  
+
+          </div>
+          <div class=footer>
+              <p>&copy; Copyright 2013 by 稻草人.L
+              <p>
+              Content licensed under the Creative Commons
+              attribution-noncommercial-sharealike License.
+              <p>
+              联系我: 
+	      <span>Tukki.Eta(#)gmail.com</span> &nbsp;
+	      <a href="http://twitter.com/scarecrow_L">Twitter</a> &nbsp;
+          <a href="https://www.github.com/tukki">Github</></a> &nbsp;
+      </div>
+
+          </div>
+      </div>
+  </body>
+</html>

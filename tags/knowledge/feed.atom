@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title type="text">Recent Blog Posts</title>
+  <id>/develop-notes/feed.atom</id>
+  <updated>2011-12-02T00:00:00Z</updated>
+  <link href="/develop-notes/" />
+  <link href="/develop-notes/feed.atom" rel="self" />
+  <subtitle type="text">Recent blog posts</subtitle>
+  <generator>Werkzeug</generator>
+  <entry xml:base="/develop-notes/feed.atom">
+    <title type="text">Hierarchecal Data on Database</title>
+    <id>/develop-notes/2011/12/02/hierarchical-data-on-database</id>
+    <updated>2011-12-02T00:00:00Z</updated>
+    <link href="/develop-notes/2011/12/02/hierarchical-data-on-database" />
+    <author>
+      <name>稻草人.L</name>
+    </author>
+    <content type="html">&lt;p&gt;&lt;a class="reference external" href="http://imrannazar.com/Modified-Preorder-Tree-Traversal"&gt;MPTT&lt;/a&gt;, modified pre-order tree trasversal&lt;/p&gt;
+&lt;p&gt;&lt;a class="reference external" href="http://en.wikipedia.org/wiki/Materialized_path"&gt;Materialized Path&lt;/a&gt;, a technique for encoding a tree in a flat data structure.&lt;/p&gt;
+&lt;p&gt;&lt;a class="reference external" href="https://github.com/django-mptt/django-mptt/"&gt;django-mptt&lt;/a&gt;, MPTT for Django&lt;/p&gt;
+&lt;p&gt;&lt;a class="reference external" href="http://sqlamp.angri.ru/"&gt;sqlamp&lt;/a&gt;, Materialized Path for SQLAlchemy.&lt;/p&gt;
+&lt;p&gt;对于带等级的数据如果写入频繁, 考虑把排序这部分独立? 例如在内存上面独立一段时间, 或者Flat List蛮快的. 读写同步这部分&lt;/p&gt;
+&lt;p&gt;&lt;a class="reference external" href="http://www.sitepoint.com/hierarchical-data-database/"&gt;Storing Hierarchical Data in a Database Article&lt;/a&gt;, 用PHP的解析了MPTT的实现&lt;/p&gt;
+&lt;p&gt;&lt;a class="reference external" href="http://evolt.org/node/4047/"&gt;Four ways to work with hierarchical data&lt;/a&gt;, 列出了Recursion, Stack, Flat Table, MPTT四种方法上面的好坏.&lt;/p&gt;
+&lt;p&gt;&lt;a class="reference external" href="http://www.slideshare.net/billkarwin/models-for-hierarchical-data"&gt;Models for Hierarchichical Data with SQL and PHP&lt;/a&gt;, 图文并茂. 69页显示了一个表格 &amp;quot;Choosing the Right Design&amp;quot;. Closure Table除了多一个表外, 所有的情况都是Easy.&lt;/p&gt;
+&lt;p&gt;对于Closure Table, &amp;quot;A node even connects to itself&amp;quot;, Why? 用来确定自己的身份, 确定自己是根节点? 在 &lt;a class="reference external" href="http://karwin.blogspot.com/2010/03/rendering-trees-with-closure-tables.html"&gt;Karwin&lt;/a&gt; 的blog评论中做了解析, 根结点只是一点:&lt;/p&gt;
+&lt;pre class="literal-block"&gt;
+I have at least three reasons why the self-referencing nodes are useful.
+
+1. Primary key columns must be non-nullable, and the two columns of ancestor,
+   descendant in the closure table serve as the best primary key.
+
+2. The self-referencing row makes it easier when you add a new child node.
+   For example, if you have a path A-B-C-D and you want to add a new child of D,
+   you just run:
+
+      SELECT ancestor, E FROM closure WHERE descendant = D
+
+   If you didn't have a self-referencing row (D,D),
+   you'd have to add the last path (D,E) by hand anyway.
+
+3. Most of the time when you want to query either a chain of ancestors of D,
+   you'd want to include D in the result too. E.g. a breadcrumbs query.
+   If you didn't have the self-referencing row, you'd get the ancestors of D,
+   but not D itself, from this query:
+
+        SELECT ancestor FROM closure WHERE descendant = D
+
+    With the self-referencing row, you get ancestors and also D itself.
+    You get a similar benefit when you want to query for a subtree
+    and include the top node of that subtree.
+
+         SELECT descendant FROM closure WHERE ancestor = B
+
+    So yes, I do think the self-referencing row gives several benefits,
+    even though it looks superfluous at first.
+&lt;/pre&gt;
+&lt;p&gt;&lt;a class="reference external" href="http://stackoverflow.com/questions/4048151/what-are-the-options-for-storing-hierarchical-data-in-a-relational-database"&gt;What are the Options for Storing Hierarchical Data in a Relational Database?&lt;/a&gt;, 提问者理出了好多选择. 提问艺术的高手.&lt;/p&gt;
+&lt;p&gt;&lt;a class="reference external" href="http://troels.arvin.dk/db/rdbms/links/#hierarchical"&gt;Hierarchical data in RDBMSs&lt;/a&gt;, 很全面的数据收集整理&lt;/p&gt;
+&lt;p&gt;&lt;a class="reference external" href="http://www.postgresql.org/docs/current/static/ltree.html"&gt;Postgresql ltree&lt;/a&gt;, This module implements a data type ltree for representing labels of data stored in a hierarchical tree-like structure.&lt;/p&gt;
+&lt;p&gt;&amp;lt;!-- Fri Dec  2 16:59:20 CST 2011 --&amp;gt;&lt;/p&gt;
+&lt;p&gt;[update] 简单的对比记录&lt;/p&gt;
+&lt;ol class="arabic simple"&gt;
+&lt;li&gt;经常读写但不在意查询子树结构的, 用Adjacency List(邻接列表). 递归查询&lt;/li&gt;
+&lt;li&gt;不经常改写, 且需要经常查子树结构, 用nested sets&lt;/li&gt;
+&lt;li&gt;Path Enumeration查询直接子节点比较麻烦. 对生成路径有天然的优势.
+树结构排序也需要额外的字段协调&lt;/li&gt;
+&lt;li&gt;Closure Table -&amp;gt; 两个表. 查询子孙很容易. 但构建目录结构需要一次&amp;quot;group by&amp;quot;
+在非按ID顺序情况下构建树缺乏优势.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;没有银弹. Adjacency List是基础模型, 然后可以按需求选择对应的方法/变种进行辅助. &lt;a class="reference external" href="https://github.com/django-mptt/django-mptt/"&gt;django-mptt&lt;/a&gt; 实现中, 除了lft/ rght外, 保存对应的父节点, 还引入tree_id, level两个字段来辅助查询/构建树结构.&lt;/p&gt;
+&lt;p&gt;再来, 还有NoSQL组合使用的可能.&lt;/p&gt;
+&lt;p&gt;&amp;lt;!-- Mon Dec 19 15:22:43 CST 2011 --&amp;gt;&lt;/p&gt;
+</content>
+  </entry>
+</feed>
+

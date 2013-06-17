@@ -1,0 +1,72 @@
+<!doctype html>
+<html>
+  <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+      
+      <title>设置pip缓存安装文件 | 稻草人.L的记录</title>
+      <!--<link href="http://fonts.googleapis.com/css?family=Vollkorn&subset=latin" rel="stylesheet" type="text/css">-->
+      <link rel="stylesheet" href="/develop-notes/static/style.css" type="text/css">
+      <link rel="stylesheet" href="/static/_pygments.css" type="text/css">
+      
+  </head>
+  <body>
+      <div class=container>
+          <div class=header>
+              <a href="/">稻草人.L的记录</a>
+          </div>
+          <div class=navigation>
+              <ul>
+                  <li><a href="/develop-notes/">blog</a></li>
+                  <li><a href="/develop-notes/archive/">archive</a></li>
+                  <li><a href="/develop-notes/tags/">tags</a></li>
+                  <li><a href="/develop-notes/feed.atom" rel="alternate" title="Recent Blog Posts">feed</a></li>
+              </ul>
+          </div>
+          <div class=body>
+              
+  <h1 class="title">设置pip缓存安装文件</h1>
+
+  
+  <p class=date>written on Saturday, October 15, 2011
+  
+
+  <p>用pylons/pyramid开发, 总有一大堆依赖. 如果用 <a class="reference external" href="http://pypi.python.org/pypi/virtualenv">virtualenv</a> , 要是没有用或不应该用 <a class="reference external" href="http://pypi.python.org/pypi/virtualenvwrapper">virtualenvwrapper</a> 的 <a class="reference external" href="http://www.doughellmann.com/docs/virtualenvwrapper/command_ref.html#cpvirtualenv">cpvirtualenv</a> 命令复制一份运行环境, 则每新开一个工程都要在网上下载一次.</p>
+<p>可能是平时网速不差, 没在意. 知道用heroku部署pyramid工程的时候, 在其部署信息中看到pip的都是本地文件. 才想起这个问题. Google一翻, 发现官方解决方案 <em>$PIP_DOWNLOAD_CACHE</em>, 但不明白的是, 这个是*Undocument Feature*. stackoverflow已有 <a class="reference external" href="http://stackoverflow.com/questions/4806448/how-do-i-install-from-a-local-cache-with-pip">Question</a> 得到解答. 这里把答案Copy过来做个记录.</p>
+<p>from <a class="reference external" href="http://stackoverflow.com/questions/4806448/how-do-i-install-from-a-local-cache-with-pip">http://stackoverflow.com/questions/4806448/how-do-i-install-from-a-local-cache-with-pip</a></p>
+<p>Form the <a class="reference external" href="http://pip.openplans.org/news.html">pip news</a>, viersion 0.1.4:</p>
+<blockquote>
+Added support for an environmental variable $PIP_DOWNLOAD_CACHE which will
+cache package downloads, so future installations won’t require large downloads.
+Network access is still required, but just some downloads will be avoided
+when using this.</blockquote>
+<p>To take advantage of this, I've added the following to my ~/.bash_profile:</p>
+<pre class="literal-block">
+export PIP_DOWNLOAD_CACHE=$HOME/.pip_download_cache
+</pre>
+<p>Notes:
+1. If a newer version of a package is detected, it will be downloaded and added to the PIP_DOWNLOAD_CACHE directory. For instance, I now have quite a few Django packages.
+2. This doesn't remove the need for network access, as stated in the pip news, so it's not the answer for creating new [virtualenv][]s on the airplane, but it's still great.</p>
+<p>原来还是需要网络链接. 看来网络差的时候, 还是得用*cpvirtualenv*.</p>
+<p>Thought: 如果是在局域网, 应该可以把这个cache位置指向同一文件服务器. 应该可以减少不少冗余</p>
+<p>[Sat Oct 15 01:07:30 CST 2011]</p>
+
+
+  
+
+          </div>
+          <div class=footer>
+              <p>&copy; Copyright 2013 by 稻草人.L
+              <p>
+              Content licensed under the Creative Commons
+              attribution-noncommercial-sharealike License.
+              <p>
+              联系我: 
+	      <span>Tukki.Eta(#)gmail.com</span> &nbsp;
+	      <a href="http://twitter.com/scarecrow_L">Twitter</a> &nbsp;
+          <a href="https://www.github.com/tukki">Github</></a> &nbsp;
+      </div>
+
+          </div>
+      </div>
+  </body>
+</html>

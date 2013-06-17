@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title type="text">Recent Blog Posts</title>
+  <id>/develop-notes/feed.atom</id>
+  <updated>2011-11-30T00:00:00Z</updated>
+  <link href="/develop-notes/" />
+  <link href="/develop-notes/feed.atom" rel="self" />
+  <subtitle type="text">Recent blog posts</subtitle>
+  <generator>Werkzeug</generator>
+  <entry xml:base="/develop-notes/feed.atom">
+    <title type="text">hosting static website on gae</title>
+    <id>/develop-notes/2011/11/30/hosting-static-website-on-gae</id>
+    <updated>2011-11-30T00:00:00Z</updated>
+    <link href="/develop-notes/2011/11/30/hosting-static-website-on-gae" />
+    <author>
+      <name>稻草人.L</name>
+    </author>
+    <content type="html">&lt;p&gt;起因: 突然想把部署在DotCloud上面的notes迁移到GAE上面. 理由很简单, 冲动.&lt;/p&gt;
+&lt;dl class="docutils"&gt;
+&lt;dt&gt;获得:&lt;/dt&gt;
+&lt;dd&gt;发现GAE新版支持Jinja2
+&lt;a class="reference external" href="http://code.google.com/appengine/docs/python/config/appconfig.html"&gt;Application　Configuration&lt;/a&gt; 比想象中强大.
+GAE不支持中文文件名上传.
+fork了rstblog进行url生成的修改&lt;/dd&gt;
+&lt;dt&gt;失去:&lt;/dt&gt;
+&lt;dd&gt;6+4 小时. 主要时间放在了URL后面的 &lt;em&gt;trailing slash&lt;/em&gt; 上面&lt;/dd&gt;
+&lt;/dl&gt;
+&lt;div class="section" id="static-files-on-gae"&gt;
+&lt;h2&gt;Static Files on GAE&lt;/h2&gt;
+&lt;p&gt;首先是 &lt;a class="reference external" href="http://code.google.com/appengine/docs/python/config/appconfig.html#Static_File_Handlers"&gt;官方文档&lt;/a&gt;:&lt;/p&gt;
+&lt;pre class="literal-block"&gt;
+Static file handlers can be defined in two ways:
+  as a directory sturcture of static files that maps to a URL path,
+  or as a pattern that maps URLs to specific files.
+&lt;/pre&gt;
+&lt;p&gt;rstblog生成的静态文件结构:&lt;/p&gt;
+&lt;pre class="literal-block"&gt;
+2011
+  |-- 10
+  |   |-- 04
+  |   |   |-- first-rstblog-post
+  |   |   |   `-- index.html
+  |   |   `-- make-rstblog-support-chinese-filename
+  |   |   |    `-- index.html
+  |   |    `-- index.html
+  |   `-- index.html
+&lt;/pre&gt;
+&lt;p&gt;用 &lt;a class="reference external" href="http://code.google.com/appengine/docs/python/config/appconfig.html#Static_Directory_Handlers"&gt;Static Directory Handlers&lt;/a&gt; 映射这个目录结构. 因为全部都是静态文件, 所以URL就不用前序了:&lt;/p&gt;
+&lt;pre class="literal-block"&gt;
+- url: /
+  static_dir: rstblog
+&lt;/pre&gt;
+&lt;p&gt;只是这样的话, 只能用完整路径来显示对应的文件. 而当访问一个目录时, 例如 &amp;quot;/2011/11/28/about-the-hacker-news-ranking/&amp;quot;, 实际要显示的是其目录下的&amp;quot;index.html&amp;quot;文件. (rstblog生成的目录都有对应一个&amp;quot;index.html&amp;quot;来显示了该目录下的文件). 这时要用到的是 &lt;a class="reference external" href="http://code.google.com/appengine/docs/python/config/appconfig.html#Static_File_Pattern_Handlers"&gt;Static File Pattern Handlers&lt;/a&gt;:&lt;/p&gt;
+&lt;pre class="literal-block"&gt;
+- url: (.*)/
+  static_files: rstblog\1/index.html
+      upload: rstblog\1/index.html
+&lt;/pre&gt;
+&lt;p&gt;正则式用的是 &lt;a class="reference external" href="http://en.wikipedia.org/wiki/Regular_expression%23Syntax&amp;amp;usg=__mBDvPGMNbDvCnmh1oLFnVOCuNwI="&gt;POSIX extended regular expression syntax&lt;/a&gt;. &amp;quot;以0个或者0个以上的字符&amp;quot;外加&amp;quot;/&amp;quot;结尾的URL, 都认为是目录, 输出其目录下的&amp;quot;index.html&amp;quot;文件内容.&lt;/p&gt;
+&lt;p&gt;看文档和相关的blog时看上去很简单. 问题却发生在实际执行中. -_-!!&lt;/p&gt;
+&lt;p&gt;rstblog对于记录的链接生成是不带&amp;quot;/&amp;quot;结尾的. 在DotCloud或者自带的开发服务器上面一直没注意到, 因为都自动加&amp;quot;/&amp;quot;后进行了redirect. 而GAE本来就不是为了部署静态文件用的, 所以不会自动识别并自动重定向. (应该这样理解?). Django也是靠在settings上面制定才会主动帮忙加.&lt;/p&gt;
+&lt;p&gt;一开始再GAE方面没找到合适的方法, 就去改rstblog的代码. 让生成的链接自动追加&amp;quot;/&amp;quot;.&lt;/p&gt;
+&lt;p&gt;在github上面fork了rstblog进行修改. &lt;a class="reference external" href="https://github.com/Tukki/rstblog"&gt;Here&lt;/a&gt;. 其实只是改了其Builder初始化时注册的&amp;quot;page'格式:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="c"&gt;#self.register_url(&amp;#39;page&amp;#39;, &amp;#39;/&amp;lt;path:slug&amp;gt;&amp;#39;)&lt;/span&gt;
+&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;register_url&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;#39;page&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s"&gt;&amp;#39;/&amp;lt;path:slug&amp;gt;/&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;6小时结束.&lt;/p&gt;
+&lt;p&gt;后面四小时属于不满意上面的解决方案. 尝试写个Redirector追加&amp;quot;/&amp;quot;到URL上面.&lt;/p&gt;
+&lt;p&gt;一直没有理清思路, 也忽略了GAE的handlers配置是带先后顺序的, 匹配后就不再往下尝试. 于是发生了痛苦的事情.&lt;/p&gt;
+&lt;p&gt;问题在于如何匹配不是指向最终文件的URL, 然后执行script追加&amp;quot;/&amp;quot;.&lt;/p&gt;
+&lt;p&gt;找到的示例都是带前序的, 有明确的pattern. 当rstblog生成的目录结构不适合这样, 也不想重构这个目录结构. 一直在试错, 最后简单点, 确定规则: 只要URI上面不带&amp;quot;.&amp;quot;的, 都进行重定向:&lt;/p&gt;
+&lt;pre class="literal-block"&gt;
+- url: /([^\.]*)
+  script: redirector.app
+&lt;/pre&gt;
+&lt;p&gt;用的是redirector用的是webapp2:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;webapp2&lt;/span&gt;
+
+&lt;span class="k"&gt;class&lt;/span&gt; &lt;span class="nc"&gt;RedirectorHandler&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;webapp2&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;RequestHandler&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+   &lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;get&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;path&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+       &lt;span class="k"&gt;assert&lt;/span&gt; &lt;span class="ow"&gt;not&lt;/span&gt; &lt;span class="s"&gt;&amp;#39;.&amp;#39;&lt;/span&gt; &lt;span class="ow"&gt;in&lt;/span&gt; &lt;span class="n"&gt;path&lt;/span&gt;
+       &lt;span class="n"&gt;path&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;path&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="s"&gt;&amp;#39;/&amp;#39;&lt;/span&gt;
+       &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;redirect&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;path&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+
+&lt;span class="n"&gt;app&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;webapp2&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;WSGIApplication&lt;/span&gt;&lt;span class="p"&gt;([&lt;/span&gt;
+    &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;#39;(.*)&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;RedirectorHandler&lt;/span&gt;&lt;span class="p"&gt;),&lt;/span&gt;  &lt;span class="c"&gt;#直接匹配所有.&lt;/span&gt;
+&lt;span class="p"&gt;],&lt;/span&gt; &lt;span class="n"&gt;debug&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="bp"&gt;True&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;然后是app.yaml&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span class="l-Scalar-Plain"&gt;application&lt;/span&gt;&lt;span class="p-Indicator"&gt;:&lt;/span&gt; &lt;span class="l-Scalar-Plain"&gt;scarecrow-notes&lt;/span&gt;
+&lt;span class="l-Scalar-Plain"&gt;version&lt;/span&gt;&lt;span class="p-Indicator"&gt;:&lt;/span&gt; &lt;span class="l-Scalar-Plain"&gt;1&lt;/span&gt;
+&lt;span class="l-Scalar-Plain"&gt;runtime&lt;/span&gt;&lt;span class="p-Indicator"&gt;:&lt;/span&gt; &lt;span class="l-Scalar-Plain"&gt;python27&lt;/span&gt;
+&lt;span class="l-Scalar-Plain"&gt;api_version&lt;/span&gt;&lt;span class="p-Indicator"&gt;:&lt;/span&gt; &lt;span class="l-Scalar-Plain"&gt;1&lt;/span&gt;
+&lt;span class="l-Scalar-Plain"&gt;threadsafe&lt;/span&gt;&lt;span class="p-Indicator"&gt;:&lt;/span&gt; &lt;span class="l-Scalar-Plain"&gt;true&lt;/span&gt;
+
+&lt;span class="l-Scalar-Plain"&gt;handlers&lt;/span&gt;&lt;span class="p-Indicator"&gt;:&lt;/span&gt;
+
+&lt;span class="p-Indicator"&gt;-&lt;/span&gt; &lt;span class="l-Scalar-Plain"&gt;url&lt;/span&gt;&lt;span class="p-Indicator"&gt;:&lt;/span&gt; &lt;span class="l-Scalar-Plain"&gt;(.*)/&lt;/span&gt;
+  &lt;span class="l-Scalar-Plain"&gt;static_files&lt;/span&gt;&lt;span class="p-Indicator"&gt;:&lt;/span&gt; &lt;span class="l-Scalar-Plain"&gt;rstblog\1/index.html&lt;/span&gt;
+      &lt;span class="l-Scalar-Plain"&gt;upload&lt;/span&gt;&lt;span class="p-Indicator"&gt;:&lt;/span&gt; &lt;span class="l-Scalar-Plain"&gt;rstblog(.*)/index.html&lt;/span&gt;
+
+&lt;span class="c1"&gt;#不带&amp;quot;.&amp;quot;的路径进入redirect状态&lt;/span&gt;
+&lt;span class="p-Indicator"&gt;-&lt;/span&gt; &lt;span class="l-Scalar-Plain"&gt;url&lt;/span&gt;&lt;span class="p-Indicator"&gt;:&lt;/span&gt; &lt;span class="l-Scalar-Plain"&gt;/([^\.]*)&lt;/span&gt;
+  &lt;span class="l-Scalar-Plain"&gt;script&lt;/span&gt;&lt;span class="p-Indicator"&gt;:&lt;/span&gt; &lt;span class="l-Scalar-Plain"&gt;redirector.app&lt;/span&gt;
+
+&lt;span class="p-Indicator"&gt;-&lt;/span&gt; &lt;span class="l-Scalar-Plain"&gt;url&lt;/span&gt;&lt;span class="p-Indicator"&gt;:&lt;/span&gt; &lt;span class="l-Scalar-Plain"&gt;/&lt;/span&gt;
+  &lt;span class="l-Scalar-Plain"&gt;static_dir&lt;/span&gt;&lt;span class="p-Indicator"&gt;:&lt;/span&gt; &lt;span class="l-Scalar-Plain"&gt;rstblog&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;update一下, 可行. 写记录再花4小时... 真少不了折腾.&lt;/p&gt;
+&lt;p&gt;&amp;lt;!-- Wed Nov 30 23:59:51 CST 2011 --&amp;gt;&lt;/p&gt;
+&lt;p&gt;Useful links:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;dl class="first docutils"&gt;
+&lt;dt&gt;&lt;a class="reference external" href="http://www.instantfundas.com/2011/02/how-to-host-static-websites-on-google.html"&gt;How to Host Static Websites on Google App Engine for Free&lt;/a&gt;&lt;/dt&gt;
+&lt;dd&gt;&lt;p class="first last"&gt;里面提到的是windows环境下&lt;/p&gt;
+&lt;/dd&gt;
+&lt;/dl&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;dl class="first docutils"&gt;
+&lt;dt&gt;&lt;a class="reference external" href="http://blog.engelke.com/2008/07/30/google-appengine-for-web-hosting/"&gt;Google AppEngine for web hosting&lt;/a&gt;&lt;/dt&gt;
+&lt;dd&gt;&lt;p class="first last"&gt;这个只是没处理无&amp;quot;/&amp;quot;的情况&lt;/p&gt;
+&lt;/dd&gt;
+&lt;/dl&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;dl class="first docutils"&gt;
+&lt;dt&gt;&lt;a class="reference external" href="https://gist.github.com/873098"&gt;App.yaml designed for serving a static site on Google App Engine (Python).&lt;/a&gt;&lt;/dt&gt;
+&lt;dd&gt;&lt;p class="first last"&gt;超详细的配置文件... 指定了各种类型&lt;/p&gt;
+&lt;/dd&gt;
+&lt;/dl&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;dl class="first docutils"&gt;
+&lt;dt&gt;&lt;a class="reference external" href="http://blog.engelke.com/2008/07/31/appengine-rewrite-rules/"&gt;AppEngine “Rewrite Rules”&lt;/a&gt;&lt;/dt&gt;
+&lt;dd&gt;&lt;p class="first last"&gt;redirector的火花从这里爆发&lt;/p&gt;
+&lt;/dd&gt;
+&lt;/dl&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/div&gt;
+</content>
+  </entry>
+</feed>
+

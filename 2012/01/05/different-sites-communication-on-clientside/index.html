@@ -1,0 +1,92 @@
+<!doctype html>
+<html>
+  <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+      
+      <title>客户端不同网站间交互实现记录 | 稻草人.L的记录</title>
+      <!--<link href="http://fonts.googleapis.com/css?family=Vollkorn&subset=latin" rel="stylesheet" type="text/css">-->
+      <link rel="stylesheet" href="/develop-notes/static/style.css" type="text/css">
+      <link rel="stylesheet" href="/static/_pygments.css" type="text/css">
+      
+  </head>
+  <body>
+      <div class=container>
+          <div class=header>
+              <a href="/">稻草人.L的记录</a>
+          </div>
+          <div class=navigation>
+              <ul>
+                  <li><a href="/develop-notes/">blog</a></li>
+                  <li><a href="/develop-notes/archive/">archive</a></li>
+                  <li><a href="/develop-notes/tags/">tags</a></li>
+                  <li><a href="/develop-notes/feed.atom" rel="alternate" title="Recent Blog Posts">feed</a></li>
+              </ul>
+          </div>
+          <div class=body>
+              
+  <h1 class="title">客户端不同网站间交互实现记录</h1>
+
+  
+  <p class=date>written on Thursday, January 5, 2012
+  
+
+  <p>起个名字真难. 没有标题说的那么大而全, 只是记录下简单自己在2011后半年遇见的几个交互实现.</p>
+<div class="section" id="javascript">
+<h2>JavaScript生成链接</h2>
+<p>Delicious, weibo的分享按钮.</p>
+<p>这一类是最常见的. JavaScript获取需要的信息, 构建链接, 用window.open打开新窗口.</p>
+</div>
+<div class="section" id="iframe">
+<h2>服务器生成iframe</h2>
+<p><a class="reference external" href="http://readitlaterlist.com/api/buttons">ReadItLater Button</a></p>
+<p>JavaScript生成一iframe插入当前页面, 把需要保持的信息放在iframe上src的链接参数中, 让RIL服务器根据参数值动态生成交互按钮返回作为iframe的内容. 因为使用的是iframe, RIL可以判断用户是否处于登陆状态(根据cookie), 去决定返回让用户点击的时候跳转登陆的按钮, 还是直接POST进行保存内容的按钮, 还是提示用户当前页面处于&quot;已记录&quot;状态. 在生成iframe的一刻已经决定了交换的内容, 尔后进行交换时互不干涉.</p>
+</div>
+<div class="section" id="javascriptiframe">
+<h2>JavaScript生成iframe</h2>
+<p><a class="reference external" href="http://www.instapaper.com">Instapaper</a></p>
+<p>Instapaper的&quot;Read Later&quot;按钮, 也是生成iframe. 不过iframe里面需要交换的内容, 是本地js设定的. 服务器返回了iframe的内容模板字符串, 本地js获取需要的值根据模板生成目标内容, 由本地js直接写不带src的iframe.</p>
+</div>
+<div class="section" id="html5">
+<h2>HTML5</h2>
+<p><a class="reference external" href="https://developer.mozilla.org/en/DOM/window.postMessage">HTML5 window.postMessage</a>:</p>
+<pre class="literal-block">
+window.postMessage is a method for safely enabling cross-origin communication.
+</pre>
+<p>没实际去应用过, 这个算是HTML5提供的官方解决方案了.</p>
+</div>
+<div class="section" id="flash">
+<h2>Flash</h2>
+<p>Diigo, WebNotes提供嵌入当前页面的工具条. 没有认真拆解过, 但确认其没用到Html5特性. 而且两个都属于有后续有不确定交互发生的存在, 由于iframe设定是&quot;上下文无关&quot;. 那猜想应该是用了flash. <a class="reference external" href="http://www.adobe.com/devnet/flash/articles/external_interface.html">Using the External API for Flash-JavaScript Communication</a></p>
+</div>
+<div class="section" id="id2">
+<h2>直接请求</h2>
+<p>WebNotes的工具条, 刚才用Firebug测了下, 不是Flash. (内置的flash显示时timer, 不知道时用了干啥的, 心跳包?). 对于HighLighting触发时, 是一GET请求, 带好长的一段编码/加密过的参数. 然后返回一JS, try{...}catch(e){}</p>
+<p>updated: &lt;!-- Fri Jan  6 14:33:07 CST 2012 --&gt;</p>
+</div>
+
+
+  
+  <p class=tags>This entry was tagged
+    
+      <a href="/develop-notes/tags/javascript/">javascript</a>, 
+      <a href="/develop-notes/tags/unfinished/">unfinished</a> and 
+      <a href="/develop-notes/tags/webdev/">webdev</a>
+  
+
+          </div>
+          <div class=footer>
+              <p>&copy; Copyright 2013 by 稻草人.L
+              <p>
+              Content licensed under the Creative Commons
+              attribution-noncommercial-sharealike License.
+              <p>
+              联系我: 
+	      <span>Tukki.Eta(#)gmail.com</span> &nbsp;
+	      <a href="http://twitter.com/scarecrow_L">Twitter</a> &nbsp;
+          <a href="https://www.github.com/tukki">Github</></a> &nbsp;
+      </div>
+
+          </div>
+      </div>
+  </body>
+</html>

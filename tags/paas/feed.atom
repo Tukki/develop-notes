@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title type="text">Recent Blog Posts</title>
+  <id>http://notes-tukki.dotcloud.com/feed.atom</id>
+  <updated>2011-10-05T00:00:00Z</updated>
+  <link href="http://notes-tukki.dotcloud.com" />
+  <link href="http://notes-tukki.dotcloud.com/feed.atom" rel="self" />
+  <subtitle type="text">Recent blog posts</subtitle>
+  <generator>Werkzeug</generator>
+  <entry xml:base="http://notes-tukki.dotcloud.com/feed.atom">
+    <title type="text">在dotcloud部署rstblog</title>
+    <id>http://notes-tukki.dotcloud.com/2011/10/05/rstblog-on-dotcloud</id>
+    <updated>2011-10-05T00:00:00Z</updated>
+    <link href="http://notes-tukki.dotcloud.com/2011/10/05/rstblog-on-dotcloud" />
+    <author>
+      <name>稻草人.L</name>
+    </author>
+    <content type="html">&lt;p&gt;不用heroku部署的原因只有一个, 不想再对生成出来的静态文件再做一次git的源码管理.&lt;/p&gt;
+&lt;p&gt;在dotcloud部署static service的 &lt;a class="reference external" href="http://docs.dotcloud.com/services/static/"&gt;官方教程&lt;/a&gt;
+图文并茂. 唯一注意的时, 文中例子的dotcloud.yml和hellostatic文件夹时在统一父目录下的, 在dotcloud.yml里面用approot标识static directory. 采用此方式在rstblog的目录结构下, 回把所有的源文件都备份到dotcloud上面. 这个并不是我想要的, 我只要上传_build里面的文件就够了. 那就只利用makefile和rsync保证dotcloud.yml在_build里面, 只上传_build文件夹:&lt;/p&gt;
+&lt;pre class="literal-block"&gt;
+upload:
+   rsync -a static/dotcloud.yml _build/dotcloud.yml
+   dotcloud push notes _build/
+   &amp;#64;echo &amp;quot;Done...&amp;quot;
+&lt;/pre&gt;
+&lt;p&gt;这样一来, make upload的时候, 就不怕clean操作把dotcloud.yml文件删掉了.ps.Makefile, dotcloud.yml都在static有备份&lt;/p&gt;
+&lt;p&gt;(Wed Oct  5 17:15:14 CST 2011)&lt;/p&gt;
+</content>
+  </entry>
+</feed>
+

@@ -1,0 +1,66 @@
+<!doctype html>
+<html>
+  <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+      
+      <title>Notes for Middleware | 稻草人.L的记录</title>
+      <!--<link href="http://fonts.googleapis.com/css?family=Vollkorn&subset=latin" rel="stylesheet" type="text/css">-->
+      <link rel="stylesheet" href="/static/style.css" type="text/css">
+      <link rel="stylesheet" href="/static/_pygments.css" type="text/css">
+      
+  </head>
+  <body>
+      <div class=container>
+          <div class=header>
+              <a href="/">稻草人.L的记录</a>
+          </div>
+          <div class=navigation>
+              <ul>
+                  <li><a href="/">blog</a></li>
+                  <li><a href="/archive/">archive</a></li>
+                  <li><a href="/tags/">tags</a></li>
+                  <li><a href="/feed.atom" rel="alternate" title="Recent Blog Posts">feed</a></li>
+              </ul>
+          </div>
+          <div class=body>
+              
+  <h1 class="title">Notes for Middleware</h1>
+
+  
+  <p class=date>written on Tuesday, April 3, 2012
+  
+
+  <p>还没认真地去看PEP333, 只是记录</p>
+<p>以前用django的时候, 没有区分好其内置的 <a class="reference external" href="https://docs.djangoproject.com/en/dev/topics/http/middleware">Django Middleware</a> 和标准下的 <a class="reference external" href="http://www.python.org/dev/peps/pep-0333/#id17">WSGI Middleware</a>. 直到离开过Django, 才明白为什么叫 &quot;Django lets you write web apps in Django&quot;</p>
+<p>django把wsgi隐藏的太好了. 以致我曾认为wsgi就是django这样的. environ真的很少用到.</p>
+<p>现在看来, django的middleware是对wsgi的middleware在django层面的再封装, 提供django-like的实现方式: process_request, proces_response, etc. 模仿PJE的说法 <a class="reference external" href="http://dirtsimple.org/2007/02/wsgi-middleware-considered-harmful.html">If your appkication requires that API to be present, then it's not middleware any more!</a>, django的middleware更多时候, 是application的一部分, 其复用程度, 局限于django工程.</p>
+<p>这里匆忙找到的两篇博文, <a class="reference external" href="http://www.evanfosmark.com/2008/12/python-wsgi-middleware-for-automatic-gzipping/">Python WSGI Middleware for automatic Gzipping</a> 介绍了如何写WSGI标准的Middleware; <a class="reference external" href="http://eflorenzano.com/blog/2008/11/17/wsgi-middlware-awesome-django-use-it-more/">WSGI Middleware is Awesome, and Django Should Use It More</a>, 介绍1.4之前如何整合django和其他Middleware实现.</p>
+<p>对于WSGI, 在django的1.4出来后更好的支持, <a class="reference external" href="https://docs.djangoproject.com/en/dev/releases/1.4/#improved-wsgi-support">Improved WSGI support</a>, 或者, django要回归WSGI生态圈了, 事实上, 我不确认django是否离开过</p>
+<p>&lt;Tue Apr  3 22:07:13 CST 2012&gt;</p>
+
+
+  
+  <p class=tags>This entry was tagged
+    
+      <a href="/tags/django/">django</a>, 
+      <a href="/tags/python/">python</a> and 
+      <a href="/tags/webdev/">webdev</a>
+  
+
+          </div>
+          <div class=footer>
+              <p>&copy; Copyright 2013 by 稻草人.L
+              <p>
+              Content licensed under the Creative Commons
+              attribution-noncommercial-sharealike License.
+              <p>
+              联系我: 
+	      <span>Tukki.Eta(#)gmail.com</span> &nbsp;
+	      <a href="http://twitter.com/scarecrow_L">Twitter</a> &nbsp;
+          <a href="https://www.github.com/tukki">Github</></a> &nbsp;
+      </div>
+
+          </div>
+      </div>
+  </body>
+</html>

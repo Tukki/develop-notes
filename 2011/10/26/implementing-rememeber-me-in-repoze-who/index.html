@@ -1,0 +1,128 @@
+<!doctype html>
+<html>
+  <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+      
+      <title>repoze.who 实现&#34;记住我&#34;功能 | 稻草人.L的记录</title>
+      <!--<link href="http://fonts.googleapis.com/css?family=Vollkorn&subset=latin" rel="stylesheet" type="text/css">-->
+      <link rel="stylesheet" href="/static/style.css" type="text/css">
+      <link rel="stylesheet" href="/static/_pygments.css" type="text/css">
+      
+  </head>
+  <body>
+      <div class=container>
+          <div class=header>
+              <a href="/">稻草人.L的记录</a>
+          </div>
+          <div class=navigation>
+              <ul>
+                  <li><a href="/">blog</a></li>
+                  <li><a href="/archive/">archive</a></li>
+                  <li><a href="/tags/">tags</a></li>
+                  <li><a href="/feed.atom" rel="alternate" title="Recent Blog Posts">feed</a></li>
+              </ul>
+          </div>
+          <div class=body>
+              
+  <h1 class="title">repoze.who 实现&quot;记住我&quot;功能</h1>
+
+  
+  <p class=date>written on Wednesday, October 26, 2011
+  
+
+  <p>至今没有去思考和深究&quot;为什么pyramid有repoze.who好好的不去用, 而再次实现自己的authentication.&quot;</p>
+<p>今天要为用repoze.who实现的登录功能添加个&quot;remember me&quot;功能, 辗转了好几个地方才算是解决.</p>
+<p>repoze.who的plugins <em>AuthTktCookiePlugin</em> 提供的两个初始参数, timeout和reissue_time,
+<a class="reference external" href="http://docs.repoze.org/who/1.0/narr.html">官方文档</a> 如是说(1.0版本, 2.0的文档当前未完整):</p>
+<pre class="literal-block">
+If timeout is specfied, it is the maximum age in seconds allowed for a cookie.
+If reissue_time is specified, when we encounter a cookie that is older than
+the reissue time (in seconds), but younger that the timeout, a new cookie will
+be issued. If timeout is specified, you must also set reissue_time to a lower value.
+</pre>
+<p>比较笼统, 还颇带误导成分. 看pyramid的 <a class="reference external" href="http://docs.pylonsproject.org/projects/pyramid/1.2/api/authentication.html#module-pyramid.authentication">pyramid.authentication.AuthTktAuthenticationPolicy</a>
+的文档说明或者更清晰点:</p>
+<pre class="literal-block">
+timeout
+
+   Default: None. Maximum number of seconds which a newly issued ticket will be considered valid.
+   After this amount of time, the ticket will expire (effectively logging the user out).
+   If this value is None, the ticket never expires. Optional.
+
+reissue_time
+
+   Default: None. If this parameter is set, it represents the number of seconds that must pass
+   before an authentication token cookie is automatically reissued as the result of a request
+   which requires authentication. The duration is measured as the number of seconds since the
+   last auth_tkt cookie was issued and ‘now’. If this value is 0, a new ticket cookie will be
+   reissued on every request which requires authentication.
+
+   A good rule of thumb: if you want auto-expired cookies based on inactivity: set the timeout
+   value to 1200 (20 mins) and set the reissue_time value to perhaps a tenth of the timeout
+   value (120 or 2 mins). It’s nonsensical to set the timeout value lower than the reissue_time
+   value, as the ticket will never be reissued if so. However, such a configuration is not
+   explicitly prevented.
+
+   Optional.
+</pre>
+<p>如pyramid文档说, timeout和reissue_time其实是服务器端处理的. 截取源码:</p>
+<div class="highlight"><pre><span class="c">#in repoze.who.plugins.auth_tkt.py line-71</span>
+<span class="c">#IIdentifier</span>
+<span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">timeout</span> <span class="ow">and</span> <span class="p">(</span> <span class="p">(</span><span class="n">timestamp</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">timeout</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="p">):</span>
+    <span class="k">return</span> <span class="bp">None</span>
+</pre></div>
+<p>而一般所说的cookie过期应该是客户端的, 过期的cookie不会发送到服务器段, 要设定的应该时max_age参数, pyramid文档:</p>
+<pre class="literal-block">
+max_age
+
+Default: None. The max age of the auth_tkt cookie, in seconds. This differs from timeout inasmuch
+as timeout represents the lifetime of the ticket contained in the cookie, while this value represents
+the lifetime of the cookie itself. When this value is set, the cookie’s Max-Age and Expires settings
+will be set, allowing the auth_tkt cookie to last between browser sessions.
+It is typically nonsensical to set this to a value that is lower than timeout or reissue_time,
+although it is not explicitly prevented. Optional.
+</pre>
+<p>repoze.who中auth_tkt的max_age不在初始化中传递, 发现在remember中在参数identity中尝试获取. 文档只字未提, <a class="reference external" href="http://bugs.repoze.org/issue87">Repoze Issue87</a> 有相关信息.:</p>
+<pre class="literal-block">
+in remember now you get
+max_age = identity.get('max_age', None)
+and _get_cookies correctly sets it
+</pre>
+<p>其实问题解决的缺口在repoze.who-friendlyform, 在其源码中</p>
+<div class="highlight"><pre><span class="k">try</span><span class="p">:</span>
+     <span class="n">credentials</span><span class="p">[</span><span class="s">&#39;max_age&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">form</span><span class="p">[</span><span class="s">&#39;remember&#39;</span><span class="p">]</span>
+<span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+     <span class="k">pass</span>
+</pre></div>
+<p>不过明显不符合需求. &quot;remember&quot;一般是checkbox吧, 而不是上面那样是&quot;max_age&quot;的值. 将其修改为:</p>
+<div class="highlight"><pre><span class="k">if</span> <span class="n">form</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;remember&#39;</span><span class="p">):</span>
+    <span class="n">credentials</span><span class="p">[</span><span class="s">&#39;max_age&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">the</span><span class="o">-</span><span class="n">max_age</span><span class="o">-</span><span class="n">value</span>
+</pre></div>
+<p>如果不想这样pitch, 就自己实现个继承friendlyform.FriendlyFormPlugin的class, 覆盖其identity函数, 同时能灵活处理*max_age*值的获取方式. 我把自己的实现放在了github的 <a class="reference external" href="https://github.com/Tukki/codesnippet/blob/master/python/friendlyform_fix_rememberme.py">这里</a></p>
+<p>[Wed Oct 26 20:41:10 CST 2011]</p>
+
+
+  
+  <p class=tags>This entry was tagged
+    
+      <a href="/tags/pyramid/">pyramid</a> and 
+      <a href="/tags/repoze/">repoze</a>
+  
+
+          </div>
+          <div class=footer>
+              <p>&copy; Copyright 2013 by 稻草人.L
+              <p>
+              Content licensed under the Creative Commons
+              attribution-noncommercial-sharealike License.
+              <p>
+              联系我: 
+	      <span>Tukki.Eta(#)gmail.com</span> &nbsp;
+	      <a href="http://twitter.com/scarecrow_L">Twitter</a> &nbsp;
+          <a href="https://www.github.com/tukki">Github</></a> &nbsp;
+      </div>
+
+          </div>
+      </div>
+  </body>
+</html>

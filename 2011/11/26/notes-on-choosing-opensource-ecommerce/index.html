@@ -1,0 +1,81 @@
+<!doctype html>
+<html>
+  <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+      
+      <title>开源电子商务系统选择 | 稻草人.L的记录</title>
+      <!--<link href="http://fonts.googleapis.com/css?family=Vollkorn&subset=latin" rel="stylesheet" type="text/css">-->
+      <link rel="stylesheet" href="/static/style.css" type="text/css">
+      <link rel="stylesheet" href="/static/_pygments.css" type="text/css">
+      
+  </head>
+  <body>
+      <div class=container>
+          <div class=header>
+              <a href="/">稻草人.L的记录</a>
+          </div>
+          <div class=navigation>
+              <ul>
+                  <li><a href="/">blog</a></li>
+                  <li><a href="/archive/">archive</a></li>
+                  <li><a href="/tags/">tags</a></li>
+                  <li><a href="/feed.atom" rel="alternate" title="Recent Blog Posts">feed</a></li>
+              </ul>
+          </div>
+          <div class=body>
+              
+  <h1 class="title">开源电子商务系统选择</h1>
+
+  
+  <p class=date>written on Saturday, November 26, 2011
+  
+
+  <p>曾经做电子商务系统时接触过这个选题, 但当时想法已经冲淡了, 而记录也已经七零八落. 现在写个记录作备忘而已</p>
+<p>如果你是个PHPer, 好多选择, 自己按照需求去判断哪个适用. 如果用Python(like me before), 跳转 <a class="reference internal" href="#python">Python</a></p>
+<div class="section" id="php">
+<h2>PHP</h2>
+<p>Ray Cheung写了个 <a class="reference external" href="http://www.webappers.com/2010/07/09/15-best-free-open-source-ecommerce-platforms/">15 Best Free Open Source Ecommerce Platforms</a> 供参考.</p>
+<p>然后Paul Anthony提供 <a class="reference external" href="http://blog.webdistortion.com/2008/05/03/9-kick-ass-open-source-e-commerce-platforms-reviewed/">10 kick ass Open source E-commerce platforms reviewed</a> 说明了部分系统&quot;值得注意的特性&quot;(Notable Features).</p>
+<p>国内还有些更具中国特色的, 例如 <a class="reference external" href="http://www.ecshop.com/">ECSHOP</a></p>
+<p>对于这些开源系统的选择, stackoverflow有个问题 <a class="reference external" href="http://stackoverflow.com/questions/76420/best-php-ruby-python-e-commerce-solution">Best PHP/Ruby/Python e-commerce solution</a>, 里面提到了一些经验. 像osCommerce 'is absolute garbage and should not be used under nay circumstances', 但不阻止其 &quot;has attracted a large and growing community that consists of over 254,900 store owners, developers, service providers, and enthusiasts who support and work with each other on their online business.&quot;</p>
+<p>试用吧. 他们一般都有提供个demo页来吸引你的眼球.</p>
+<p>然后思考: 你的需求是什么? 他们提供的特性是否直接满足你? 如果有点不满意, 是你迁就他们的实现, 还是下载其源码看看里面的实现, 衡量二次开发成本大不大?</p>
+<p>如果想自己写, 网上教程不少. <a class="reference external" href="http://www.google.com/search?q=php+shop+tutorial&amp;ie=utf-8&amp;oe=utf-8&amp;aq=t&amp;rls=org.mozilla:en-US:official&amp;client=firefox-a#sclient=psy-ab&amp;hl=en&amp;client=firefox-a&amp;hs=HDZ&amp;rls=org.mozilla:en-US%3Aofficial&amp;source=hp&amp;q=php+shopping+tutorial&amp;pbx=1&amp;oq=php+shopping+tutorial&amp;aq=f&amp;aqi=&amp;aql=&amp;gs_sm=e&amp;gs_upl=25276l26102l0l26325l4l4l0l0l0l2l410l1046l3-2.1l3l0&amp;bav=on.2,or.r_gc.r_pw.,cf.osb&amp;fp=eb56d7d37a8e78ab&amp;biw=1525&amp;bih=726">Google之</a>, PHP强大啊. 像这个 <a class="reference external" href="http://www.phpwebcommerce.com/">PHP MySQL Shopping Cart Tutorial</a>, 印象中简单易懂是个好教程.</p>
+<p>ps. 看国内 <a class="reference external" href="http://www.newegg.com.cn/">新蛋</a>, <a class="reference external" href="http://www.360buy.com/">京东</a>, <a class="reference external" href="http://www.suning.com/">苏宁</a>, <a class="reference external" href="http://www.gome.com.cn/">国美</a> 几个商城的风格, 真有点认为他们都在用同一个系统.</p>
+</div>
+<div class="section" id="python">
+<h2>Python</h2>
+<p>相对来说, Python Based的选择真的少可怜. <a class="reference external" href="http://valentinewebsystems.com/en/blog/ecommerce-comparison">Python base eCommerce System technical comparisoon</a>, 里面提到GetPaid, EasyShop, <a class="reference external" href="http://www.getlfs.com/">LFS</a>, <a class="reference external" href="http://www.satchmoproject.com/">Satchmo</a>, 四个, 没了. 或者还有别的没提.</p>
+<p>LFS, Satchmo接触过, 但没有真正去用. 两个都是基于django.</p>
+<p>可能是为了通用, 自己认为LFS的实现其实蛮大的. 像LFS的Product Model, 就包含了base info, stocks, dimension, variants, price calculation, manufacturer. 导致要抽取自己所需, 不全局考虑的话会有点难度.</p>
+<p>而stachmo的可配性相对较高, 不少实现都是放在对应app的modules里面, 可以在&quot;INSTALLED_APPS&quot;里面选择使用. 也提供个ext实现, 比LFS的结构清晰.</p>
+<p>外加一大堆开源App和工具, 还有个 <a class="reference external" href="http://pinaxproject.com">Pinax</a>, 用django写个电子商务系统其实也不是太麻烦的事. 预期不可避免的会遇到里面的实现如果涉及到用户, 必然是用了django内置的auth.</p>
+<p>果然没有银弹.</p>
+<p>&lt;!-- Sat Nov 26 18:06:47 CST 2011 --&gt;</p>
+</div>
+
+
+  
+  <p class=tags>This entry was tagged
+    
+      <a href="/tags/ecommerce/">ecommerce</a> and 
+      <a href="/tags/opensource/">opensource</a>
+  
+
+          </div>
+          <div class=footer>
+              <p>&copy; Copyright 2013 by 稻草人.L
+              <p>
+              Content licensed under the Creative Commons
+              attribution-noncommercial-sharealike License.
+              <p>
+              联系我: 
+	      <span>Tukki.Eta(#)gmail.com</span> &nbsp;
+	      <a href="http://twitter.com/scarecrow_L">Twitter</a> &nbsp;
+          <a href="https://www.github.com/tukki">Github</></a> &nbsp;
+      </div>
+
+          </div>
+      </div>
+  </body>
+</html>

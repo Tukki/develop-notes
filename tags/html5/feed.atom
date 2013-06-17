@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title type="text">Recent Blog Posts</title>
+  <id>http://notes-tukki.dotcloud.com/feed.atom</id>
+  <updated>2012-03-06T00:00:00Z</updated>
+  <link href="http://notes-tukki.dotcloud.com" />
+  <link href="http://notes-tukki.dotcloud.com/feed.atom" rel="self" />
+  <subtitle type="text">Recent blog posts</subtitle>
+  <generator>Werkzeug</generator>
+  <entry xml:base="http://notes-tukki.dotcloud.com/feed.atom">
+    <title type="text">Notes for HTML5 canvas and WebScoket</title>
+    <id>http://notes-tukki.dotcloud.com/2012/03/06/notes-for-html5-canvas-and-websocket</id>
+    <updated>2012-03-06T00:00:00Z</updated>
+    <link href="http://notes-tukki.dotcloud.com/2012/03/06/notes-for-html5-canvas-and-websocket" />
+    <author>
+      <name>稻草人.L</name>
+    </author>
+    <content type="html">&lt;div class="section" id="the-useful-websites"&gt;
+&lt;h2&gt;the useful websites&lt;/h2&gt;
+&lt;p&gt;&lt;a class="reference external" href="http://websocket.org/echo.html"&gt;WebSocket Echo Test&lt;/a&gt;, 可以知道当前使用的浏览器是否支持WebSocket.&lt;/p&gt;
+&lt;p&gt;&lt;a class="reference external" href="http://caniuse.com"&gt;When Can I use...&lt;/a&gt;&lt;/p&gt;
+&lt;blockquote&gt;
+Compatibility tables for support of HTML5, CSS3, SVG,
+and more in desktop and mobile browser.&lt;/blockquote&gt;
+&lt;p&gt;可以查询到canvas, websocket等(其他全部)在各浏览器的支持程度, 应该属于HTML5开放必备收藏之一&lt;/p&gt;
+&lt;p&gt;对于canvas, IE9之前是不支持的, 当可以用Google的 &lt;a class="reference external" href="http://code.google.com/p/explorercanvas/"&gt;explorercanvas&lt;/a&gt; hack一下, 来提供相关的实现.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;  &lt;span class="c"&gt;&amp;lt;!--&lt;/span&gt;
+&lt;span class="c"&gt;Load Canvas support for IE8. ExplorerCanvas courtesy Google.&lt;/span&gt;
+&lt;span class="c"&gt;See: http://code.google.com/p/explorercanvas/&lt;/span&gt;
+&lt;span class="c"&gt;--&amp;gt;&lt;/span&gt;
+&lt;span class="c"&gt;&amp;lt;!--[if lt IE 9]&amp;gt;&lt;/span&gt;
+&lt;span class="c"&gt; &amp;lt;script src=&amp;quot;excanvas.js&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;&lt;/span&gt;
+&lt;span class="c"&gt;&amp;lt;![endif]--&amp;gt;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;&lt;a class="reference external" href="https://developer.mozilla.org/en/Canvas_tutorial"&gt;MDN Canvas tutorial&lt;/a&gt;, canvas入门上品.&lt;/p&gt;
+&lt;p&gt;而unionplatform有个协同画板的展示页 &lt;a class="reference external" href="http://www.unionplatform.com/?page_id=2762"&gt;Multiuser Drawing Pad&lt;/a&gt;, 里面可以下载源码看看画板如何绑定鼠标/touch事件的. 有必要看看此源码, 里面说明了不少事件的使用事项.&lt;/p&gt;
+&lt;p&gt;XMPP, CometD, WebSocket, all about the realtime apps. 现在Websocket的浏览器支持度并不高(&lt;a class="reference external" href="http://caniuse.com/#feat=websockets"&gt;Here&lt;/a&gt;), 现在找到的one-for-all方法为 &lt;a class="reference external" href="http://socket.io"&gt;Socket.io&lt;/a&gt;, 唯一问题在于其是前后端一体化实现, Javasript, Node.js&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="section" id="some-implememnt-details"&gt;
+&lt;h2&gt;some implememnt details&lt;/h2&gt;
+&lt;p&gt;在touch devices上面需要的meta信息. ps. ship from oribitermicro_uniondraw. thanks!&lt;/p&gt;
+&lt;pre class="literal-block"&gt;
+&amp;lt;!-- Prevents iPhone, IPad, and touch devices from scrolling or zooming when touched --&amp;gt;
+&amp;lt;meta name=&amp;quot;viewport&amp;quot; content=&amp;quot;width=device-width, user-scalable=no, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0&amp;quot; /&amp;gt;
+&lt;/pre&gt;
+&lt;p&gt;鼠标事件有: canvas.onmousedown, document.onmousemove, docuemtn.onmouseup&lt;/p&gt;
+&lt;p&gt;触摸屏事件有: document.ontouchstart, document.ontouchmove, docuement.ontouchend&lt;/p&gt;
+&lt;p&gt;鼠标与触摸屏兼容判断? 如何document有 &lt;em&gt;ontouchstart&lt;/em&gt; 事件就不用注册鼠标相关的事件了. ps. 没有查是不是标准.&lt;/p&gt;
+&lt;p&gt;清空画板的实现&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;//context.fillStyle = &amp;quot;#ffffff&amp;quot;;
+//context.fillRect(0, 0, canvas.width, canvas.height);
+// 找到的实现细节有上面两句.说是针对chrome的. 但自己使用时只要下面一句就满足效果了?
+canvas.width = canvas.width;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+</content>
+  </entry>
+</feed>
+

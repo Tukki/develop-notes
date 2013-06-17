@@ -1,0 +1,138 @@
+<!doctype html>
+<html>
+  <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+      
+      <title>Rendering SubTrees with Closure Tables | 稻草人.L的记录</title>
+      <!--<link href="http://fonts.googleapis.com/css?family=Vollkorn&subset=latin" rel="stylesheet" type="text/css">-->
+      <link rel="stylesheet" href="/static/style.css" type="text/css">
+      <link rel="stylesheet" href="/static/_pygments.css" type="text/css">
+      
+  </head>
+  <body>
+      <div class=container>
+          <div class=header>
+              <a href="/">稻草人.L的记录</a>
+          </div>
+          <div class=navigation>
+              <ul>
+                  <li><a href="/">blog</a></li>
+                  <li><a href="/archive/">archive</a></li>
+                  <li><a href="/tags/">tags</a></li>
+                  <li><a href="/feed.atom" rel="alternate" title="Recent Blog Posts">feed</a></li>
+              </ul>
+          </div>
+          <div class=body>
+              
+  <h1 class="title">Rendering SubTrees with Closure Tables</h1>
+
+  
+  <p class=date>written on Saturday, December 17, 2011
+  
+
+  <p>First of all, thanks Bill Karwin, for all his different posts and articles on Closure Tables, and his great book <a class="reference external" href="http://pragprog.com/book/bksqla/sql-antipatterns">SQL Antipatterns</a> (I read the Chinese version)</p>
+<p>this note base on Bill Karwin's <a class="reference external" href="http://karwin.blogspot.com/2010/03/rendering-trees-with-closure-tables.html">Rendering Trees with Closure Tables</a>, the page is great, and telling us how to render trees with closure tables. part from this page:</p>
+<div class="highlight"><pre><span class="k">select</span> <span class="nf">group_concat</span><span class="p">(</span><span class="n">n</span><span class="p">.</span><span class="n">label</span> <span class="k">order</span> <span class="k">by</span> <span class="n">n</span><span class="p">.</span><span class="n">node</span> <span class="k">separator</span> <span class="s1">&#39; -&gt; &#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">path</span>
+<span class="k">from</span> <span class="n">closure</span> <span class="n">d</span>
+<span class="k">join</span> <span class="n">closure</span> <span class="n">a</span> <span class="k">on</span> <span class="p">(</span><span class="n">a</span><span class="p">.</span><span class="n">descendant</span> <span class="o">=</span> <span class="n">d</span><span class="p">.</span><span class="n">descendant</span><span class="p">)</span>
+<span class="k">join</span> <span class="n">nodes</span> <span class="n">n</span> <span class="k">on</span> <span class="p">(</span><span class="n">n</span><span class="p">.</span><span class="n">node</span> <span class="o">=</span> <span class="n">a</span><span class="p">.</span><span class="n">ancestor</span><span class="p">)</span>
+<span class="k">where</span> <span class="n">d</span><span class="p">.</span><span class="n">ancestor</span> <span class="o">=</span> <span class="mi">1</span> <span class="k">and</span> <span class="n">d</span><span class="p">.</span><span class="n">descendant</span> <span class="o">!=</span> <span class="n">d</span><span class="p">.</span><span class="n">ancestor</span>
+<span class="k">group</span> <span class="k">by</span> <span class="n">d</span><span class="p">.</span><span class="n">descendant</span><span class="p">;</span>
+</pre></div>
+<p>Got:</p>
+<pre class="literal-block">
++-------------------------------------------------+
+| path                                            |
++-------------------------------------------------+
+| rootree -&gt; 1stbranch                            |
+| rootree -&gt; midbranch                            |
+| rootree -&gt; midbranch -&gt; corebranch              |
+| rootree -&gt; midbranch -&gt; corebranch -&gt; leafnodes |
+| rootree -&gt; lastbranch                           |
+| rootree -&gt; lastbranch -&gt; lastleaf               |
++-------------------------------------------------+
+</pre>
+<p>but, how about when I just want to render the subtree? I need the tree show of the &quot;midbrance&quot;, I change the query to:</p>
+<div class="highlight"><pre><span class="k">select</span> <span class="nf">group_concat</span><span class="p">(</span><span class="n">n</span><span class="p">.</span><span class="n">label</span> <span class="k">order</span> <span class="k">by</span> <span class="n">n</span><span class="p">.</span><span class="n">node</span> <span class="k">separator</span> <span class="s1">&#39; -&gt; &#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">path</span>
+<span class="k">from</span> <span class="n">closure</span> <span class="n">d</span>
+<span class="k">join</span> <span class="n">closure</span> <span class="n">a</span> <span class="k">on</span> <span class="p">(</span><span class="n">a</span><span class="p">.</span><span class="n">descendant</span> <span class="o">=</span> <span class="n">d</span><span class="p">.</span><span class="n">descendant</span><span class="p">)</span>
+<span class="k">join</span> <span class="n">nodes</span> <span class="n">n</span> <span class="k">on</span> <span class="p">(</span><span class="n">n</span><span class="p">.</span><span class="n">node</span> <span class="o">=</span> <span class="n">a</span><span class="p">.</span><span class="n">ancestor</span><span class="p">)</span>
+<span class="k">where</span> <span class="n">d</span><span class="p">.</span><span class="n">ancestor</span> <span class="o">=</span> <span class="mi">3</span>
+<span class="c1">-- and d.descendant != d.ancestor</span>
+<span class="k">group</span> <span class="k">by</span> <span class="n">d</span><span class="p">.</span><span class="n">descendant</span><span class="p">;</span>
+</pre></div>
+<p>I got:</p>
+<pre class="literal-block">
++-------------------------------------------------+
+| path                                            |
++-------------------------------------------------+
+| rootree -&gt; midbranch                            |
+| rootree -&gt; midbranch -&gt; corebranch              |
+| rootree -&gt; midbranch -&gt; corebranch -&gt; leafnodes |
++-------------------------------------------------+
+</pre>
+<p>I don't care about the <em>roottree</em> any bit. I want the output like this, just the tree view of the <em>midbranch</em>:</p>
+<pre class="literal-block">
++----------------------------------+
+| path                             |
++----------------------------------+
+| midbranch                        |
+| midbranch-&gt;corebranch            |
+| midbranch-&gt;corebranch-&gt;leafnodes |
++----------------------------------+
+</pre>
+<p>I'm just a sql newbie, and find out a solution like this finally:</p>
+<div class="highlight"><pre><span class="k">select</span> <span class="nf">group_concat</span><span class="p">(</span><span class="n">n</span><span class="p">.</span><span class="n">label</span> <span class="k">order</span> <span class="k">by</span> <span class="n">n</span><span class="p">.</span><span class="n">node</span> <span class="k">separator</span> <span class="s1">&#39;-&gt;&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">path</span>
+<span class="k">from</span> <span class="n">closure</span> <span class="n">d</span>
+<span class="k">left</span> <span class="k">join</span> <span class="n">closure</span> <span class="n">a</span> <span class="k">on</span> <span class="p">(</span><span class="n">a</span><span class="p">.</span><span class="n">descendant</span> <span class="o">=</span> <span class="n">d</span><span class="p">.</span><span class="n">ancestor</span><span class="p">)</span>
+<span class="k">join</span> <span class="n">nodes</span> <span class="n">n</span> <span class="k">on</span> <span class="p">(</span><span class="n">n</span><span class="p">.</span><span class="n">node</span> <span class="o">=</span> <span class="n">d</span><span class="p">.</span><span class="n">ancestor</span><span class="p">)</span>
+<span class="k">where</span> <span class="n">a</span><span class="p">.</span><span class="n">ancestor</span> <span class="o">=</span> <span class="mi">3</span>
+<span class="k">group</span> <span class="k">by</span> <span class="n">d</span><span class="p">.</span><span class="n">descendant</span><span class="p">;</span>
+</pre></div>
+<p>the point of the change is, <em>just fire the group operate on the subset</em>:</p>
+<div class="highlight"><pre><span class="c1">-- get the subset closure table of node.id == 3</span>
+<span class="k">select</span> <span class="n">d</span><span class="p">.</span><span class="o">*</span> <span class="k">from</span> <span class="n">closure</span> <span class="n">d</span>
+<span class="k">left</span> <span class="k">join</span> <span class="n">closure</span> <span class="n">a</span> <span class="k">on</span> <span class="p">(</span><span class="n">a</span><span class="p">.</span><span class="n">descendant</span> <span class="o">=</span> <span class="n">d</span><span class="p">.</span><span class="n">ancestor</span><span class="p">)</span>
+<span class="k">where</span> <span class="n">a</span><span class="p">.</span><span class="n">ancestor</span> <span class="o">=</span> <span class="mi">3</span>
+</pre></div>
+<p>This sulotion also work on the <em>roottree</em>.</p>
+<p>I don't know the performance about this change. From pgAdmin3 explain -- I had a PostgreSQL version of closure tables and first found out this problem and sulotion on it -- two version share the save query plan, but the later get less row in the <em>Hast Join</em> (the subset).</p>
+<p>I can't prove it absolute right, but it work so far so good. I even thought how to use &quot;closure table + path enumeration&quot; to solve this problem at first. Maybe this was not a problem, but I'm just scratch my own itch.</p>
+<p>Here is my PostgreSQL version:</p>
+<div class="highlight"><pre><span class="k">select</span> <span class="n">d</span><span class="p">.</span><span class="n">descendant</span><span class="p">,</span>
+<span class="n">string_agg</span><span class="p">(</span><span class="n">n</span><span class="p">.</span><span class="n">label</span><span class="p">,</span> <span class="s1">&#39;/&#39;</span> <span class="k">order</span> <span class="k">by</span> <span class="n">d</span><span class="p">.</span><span class="n">ancestor</span><span class="p">)</span>
+<span class="k">as</span> <span class="n">path</span>
+<span class="k">from</span> <span class="n">closures</span> <span class="n">d</span>
+<span class="k">left</span> <span class="k">join</span> <span class="n">closures</span> <span class="n">a</span> <span class="k">on</span> <span class="p">(</span><span class="n">a</span><span class="p">.</span><span class="n">descendant</span> <span class="o">=</span> <span class="n">d</span><span class="p">.</span><span class="n">ancestor</span><span class="p">)</span>
+<span class="k">join</span> <span class="n">nodes</span> <span class="n">n</span> <span class="k">on</span> <span class="p">(</span><span class="n">n</span><span class="p">.</span><span class="n">id</span> <span class="o">=</span> <span class="n">d</span><span class="p">.</span><span class="n">ancestor</span><span class="p">)</span>
+<span class="k">where</span> <span class="n">a</span><span class="p">.</span><span class="n">ancestor</span> <span class="o">=</span> <span class="mi">3</span>
+<span class="k">group</span> <span class="k">by</span> <span class="n">d</span><span class="p">.</span><span class="n">descendant</span>
+<span class="k">order</span> <span class="k">by</span> <span class="n">path</span>
+</pre></div>
+<p>&lt;!-- Sat Dec 17 00:28:32 CST 2011 --&gt;</p>
+
+
+  
+  <p class=tags>This entry was tagged
+    
+      <a href="/tags/database/">database</a> and 
+      <a href="/tags/postgresql/">postgresql</a>
+  
+
+          </div>
+          <div class=footer>
+              <p>&copy; Copyright 2013 by 稻草人.L
+              <p>
+              Content licensed under the Creative Commons
+              attribution-noncommercial-sharealike License.
+              <p>
+              联系我: 
+	      <span>Tukki.Eta(#)gmail.com</span> &nbsp;
+	      <a href="http://twitter.com/scarecrow_L">Twitter</a> &nbsp;
+          <a href="https://www.github.com/tukki">Github</></a> &nbsp;
+      </div>
+
+          </div>
+      </div>
+  </body>
+</html>

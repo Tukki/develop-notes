@@ -1,0 +1,82 @@
+<!doctype html>
+<html>
+  <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+      
+      <title>用supervisor管理uWSGI | 稻草人.L的记录</title>
+      <!--<link href="http://fonts.googleapis.com/css?family=Vollkorn&subset=latin" rel="stylesheet" type="text/css">-->
+      <link rel="stylesheet" href="/static/style.css" type="text/css">
+      <link rel="stylesheet" href="/static/_pygments.css" type="text/css">
+      
+  </head>
+  <body>
+      <div class=container>
+          <div class=header>
+              <a href="/">稻草人.L的记录</a>
+          </div>
+          <div class=navigation>
+              <ul>
+                  <li><a href="/">blog</a></li>
+                  <li><a href="/archive/">archive</a></li>
+                  <li><a href="/tags/">tags</a></li>
+                  <li><a href="/feed.atom" rel="alternate" title="Recent Blog Posts">feed</a></li>
+              </ul>
+          </div>
+          <div class=body>
+              
+  <h1 class="title">用supervisor管理uWSGI</h1>
+
+  
+  <p class=date>written on Tuesday, October 11, 2011
+  
+
+  <p><a class="reference external" href="http://supervisord.org">Supervisor</a>, is a client/server system that allows its users to monitor and control a bumber of processes on UNIX-like operation systems. 飞龙博客有篇&lt;用Supervisord管理Python进程&gt;, <a class="reference external" href="http://feilong.me/2011/03/monitor-processes-with-supervisord">Here</a>. 还有篇 <a class="reference external" href="http://brandonkonkle.com/blog/2010/sep/14/django-uwsgi-and-nginx/">&lt;Django on uWSGI and Nginx&gt;</a> 里面也有涉及在supervisor中管理uWSGI:</p>
+<pre class="literal-block">
+[program:myapp]
+ command=/usr/local/sbin/uwsgi
+   --home /home/myuser/.virtualenvs/myapp/
+   --module myapp.deploy.wsgi
+   --socket 10.1.2.3:10000
+   --pythonpath /sites/myapp.com/code/myapp
+   --processes 5
+   --master
+   --harakiri 120
+   --max-requests 5000
+ directory=/sites/myapp.com/code/myapp
+ environment=DJANGO_SETTINGS_MODULE='myapp.settings'
+ user=www-data
+ autostart=true
+ autorestart=true
+ stdout_logfile=/sites/myapp.com/logs/uwsgi.log
+ redirect_stderr=true
+ stopsignal=QUIT
+</pre>
+<p>在uWSGI指定了--master/-M, supervisor没有设置stopsignal=QUIT(默认为TERM)情况, supervisor stop program后, 显示是*stopped*, 但其实uWSGI依旧在运行, 在stackoverflow有个非直接解析, <a class="reference external" href="http://stackoverflow.com/questions/5430370/django-uwsgi-nginx-process-dies-for-no-reason">这里</a>:</p>
+<pre class="literal-block">
+You should always add --master/-M on uwsgi even under supervisord, this will allow to restart apps without losing the socket (and without spitting out an error to clients during restart).
+</pre>
+<p>uWSGI的master是个好东西, 但supervisor默认的stopsignal使uWSGI挂了一次, 然后uWSG的master又重启apps. 不注意细节带来的非期望结果.</p>
+<p>supervisor把program转为daemon模式, 所以uWSGI不用自己加deamonize.</p>
+<p>ps. 控制supervisor的program启动顺序, 用的是priority, &quot;Higer priorities indicate programs that start last and shut down first&quot;</p>
+<p>[Wed Oct 12 01:19:41 CST 2011]</p>
+
+
+  
+
+          </div>
+          <div class=footer>
+              <p>&copy; Copyright 2013 by 稻草人.L
+              <p>
+              Content licensed under the Creative Commons
+              attribution-noncommercial-sharealike License.
+              <p>
+              联系我: 
+	      <span>Tukki.Eta(#)gmail.com</span> &nbsp;
+	      <a href="http://twitter.com/scarecrow_L">Twitter</a> &nbsp;
+          <a href="https://www.github.com/tukki">Github</></a> &nbsp;
+      </div>
+
+          </div>
+      </div>
+  </body>
+</html>

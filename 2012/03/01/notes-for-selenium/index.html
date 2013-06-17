@@ -1,0 +1,81 @@
+<!doctype html>
+<html>
+  <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+      
+      <title>Selenium使用记录 | 稻草人.L的记录</title>
+      <!--<link href="http://fonts.googleapis.com/css?family=Vollkorn&subset=latin" rel="stylesheet" type="text/css">-->
+      <link rel="stylesheet" href="/static/style.css" type="text/css">
+      <link rel="stylesheet" href="/static/_pygments.css" type="text/css">
+      
+  </head>
+  <body>
+      <div class=container>
+          <div class=header>
+              <a href="/">稻草人.L的记录</a>
+          </div>
+          <div class=navigation>
+              <ul>
+                  <li><a href="/">blog</a></li>
+                  <li><a href="/archive/">archive</a></li>
+                  <li><a href="/tags/">tags</a></li>
+                  <li><a href="/feed.atom" rel="alternate" title="Recent Blog Posts">feed</a></li>
+              </ul>
+          </div>
+          <div class=body>
+              
+  <h1 class="title">Selenium使用记录</h1>
+
+  
+  <p class=date>written on Thursday, March 1, 2012
+  
+
+  <p><a class="reference external" href="http://seleniumhq.org/">SeleniumHQ</a>:</p>
+<pre class="literal-block">
+Selenium aotumates browsers.
+</pre>
+<p>提供了一个控制浏览器的大好方式, 开源免费可编程.</p>
+<p>自动化浏览器操作, 直接查看官方例子 <a class="reference external" href="http://seleniumhq.org/docs/03_webdriver.html#getting-started-with-selenium-webdriver">Getting Started With Selenium-WebDriver</a></p>
+<p>如果要使用Chrome, <a class="reference external" href="http://seleniumhq.org/docs/03_webdriver.html#chrome-driver">得要有chromedriver</a>, <a class="reference external" href="http://code.google.com/p/chromedriver/">chromedriver官方地址</a></p>
+<p>selenium的WebDriver提供了直接保存screenshot的实现: save_screenshot和get_screenshot_as_file, 还有一个get_screenshot_as_base64:</p>
+<pre class="literal-block">
+Gets the screenshot of the current window as a base64 encoded string
+which is useful in embedded images in HTML.
+</pre>
+<p>单是使用selenium, 会看到浏览器控制的全过程. 如果想不被干扰, 可以用到 <a class="reference external" href="http://en.wikipedia.org/wiki/Xvfb">xvfb</a>. python点, 找到 <a class="reference external" href="https://github.com/ponty/PyVirtualDisplay">PyVirtualDisplay</a></p>
+<div class="highlight"><pre><span class="kn">from</span> <span class="nn">pyvirtualdisplay</span> <span class="kn">import</span> <span class="n">Display</span>
+<span class="n">display</span> <span class="o">=</span> <span class="n">Display</span><span class="p">(</span><span class="n">visible</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="mi">1024</span><span class="p">,</span> <span class="mi">768</span><span class="p">))</span>
+<span class="n">display</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+<span class="c"># .....</span>
+<span class="n">display</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span>
+</pre></div>
+<p>这样, 就能无声无色地控制浏览器了.</p>
+<p>拓展开来, selenium可以解决的问题: 1) ajax页面自动登录; 2) 动态页面内容获取; 3) 网站截图</p>
+<p>不知道哪些提供网站缩略图的实现, 用的是怎样的技术?</p>
+
+
+  
+  <p class=tags>This entry was tagged
+    
+      <a href="/tags/maybe/">maybe</a>, 
+      <a href="/tags/python/">python</a> and 
+      <a href="/tags/selenium/">selenium</a>
+  
+
+          </div>
+          <div class=footer>
+              <p>&copy; Copyright 2013 by 稻草人.L
+              <p>
+              Content licensed under the Creative Commons
+              attribution-noncommercial-sharealike License.
+              <p>
+              联系我: 
+	      <span>Tukki.Eta(#)gmail.com</span> &nbsp;
+	      <a href="http://twitter.com/scarecrow_L">Twitter</a> &nbsp;
+          <a href="https://www.github.com/tukki">Github</></a> &nbsp;
+      </div>
+
+          </div>
+      </div>
+  </body>
+</html>

@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title type="text">Recent Blog Posts</title>
+  <id>http://notes-tukki.dotcloud.com/feed.atom</id>
+  <updated>2012-01-04T00:00:00Z</updated>
+  <link href="http://notes-tukki.dotcloud.com" />
+  <link href="http://notes-tukki.dotcloud.com/feed.atom" rel="self" />
+  <subtitle type="text">Recent blog posts</subtitle>
+  <generator>Werkzeug</generator>
+  <entry xml:base="http://notes-tukki.dotcloud.com/feed.atom">
+    <title type="text">Crawler for Dynamic Page</title>
+    <id>http://notes-tukki.dotcloud.com/2011/12/26/crawler-for-dynamic-page</id>
+    <updated>2011-12-26T00:00:00Z</updated>
+    <link href="http://notes-tukki.dotcloud.com/2011/12/26/crawler-for-dynamic-page" />
+    <author>
+      <name>稻草人.L</name>
+    </author>
+    <content type="html">&lt;p&gt;事实上, 我只是知道有网络爬虫的存在, 对其实现细节, 历史阿都不了解. 这里只是说一个猜测性的可能.&lt;/p&gt;
+&lt;p&gt;最近想写个数据备份脚本, 但目标网站提供的开放API有居多限制, 最重要莫过于数量限制. 于是想直接解析页面获取相关的数据. 下载一个页面回来不是很麻烦的时, 麻烦在于如何让里面的渲染用的javascript执行生存完整的页面. 想过利用自动脚本下载页面源码回来, 调用浏览器渲染, 再保存渲染后的页面进行解析. 于是, 发现 &lt;a class="reference external" href="http://seleniumhq.org/"&gt;Selenium&lt;/a&gt;:&lt;/p&gt;
+&lt;pre class="literal-block"&gt;
+selenium automates browsers. That's it.
+&lt;/pre&gt;
+&lt;p&gt;本来就是一个自动测试工具.(保存Delicious的时候才发现以前已经保存过) 稍稍阅读了其文档, 发现其不仅可以模拟人控制浏览器触发各类事件, 对我最重要一点时可以直接获取到浏览器渲染完成后的html完整代码. ps. 顺带把网页截图的可能也解决了.&lt;/p&gt;
+&lt;p&gt;在试Chrome时, 要用到 &lt;a class="reference external" href="http://code.google.com/p/selenium/wiki/ChromeDriver"&gt;ChromeDriver&lt;/a&gt;. 知道其可以构建service. 就这样想法来了, 是不是爬虫用来对付动态页面的一种方法:&lt;/p&gt;
+&lt;pre class="literal-block"&gt;
+为爬虫实现一个针对动态网页的Proxy中间层.
+Selenium控制Chrome获取目标网页的内容, 然后再让爬虫在上面进行分析处理.
+&lt;/pre&gt;
+&lt;p&gt;我不确定现在的爬虫对于Javascript的处理能力有多强. 但我因为有javascript的经验, 知道其带来的可能性接近无限.&lt;/p&gt;
+&lt;p&gt;Google有自己的浏览器实现Chrome, 有自己的Javascript引擎V8, 而且还是开源. Selenium也是个开源的项目. Chrome搭建服务群, V8加速动态内容生成, Selenium协助爬虫获取内容进行分析. 不确定Google是不是真的在争浏览器市场份额, 当如果这个模式是行得通的话, Google在搜索这一块就有了明显的先天优势.&lt;/p&gt;
+&lt;p&gt;现在的网站越来越动态, 而网页构建应该是最终用户友好而不是爬虫友好的. 这个中间层, 也是一种解决可能. 不过构建中间层的资源, 就得搜索引擎方自己买单了.&lt;/p&gt;
+&lt;p&gt;ps. 写下来, 发现这标题定得真是大而虚. 内容还乱七八糟没重点.&lt;/p&gt;
+&lt;p&gt;&amp;lt;!-- Tue Dec 27 00:40:50 CST 2011 --&amp;gt;&lt;/p&gt;
+</content>
+  </entry>
+  <entry xml:base="http://notes-tukki.dotcloud.com/feed.atom">
+    <title type="text">thoughts about diigo</title>
+    <id>http://notes-tukki.dotcloud.com/2011/12/15/thoughts-about-diigo</id>
+    <updated>2011-12-15T00:00:00Z</updated>
+    <link href="http://notes-tukki.dotcloud.com/2011/12/15/thoughts-about-diigo" />
+    <author>
+      <name>稻草人.L</name>
+    </author>
+    <content type="html">&lt;p&gt;发现 &lt;a class="reference external" href="http://www.diigo.com"&gt;Diigo&lt;/a&gt; 不是因为 &lt;a class="reference external" href="http://delicious.com"&gt;Delicious&lt;/a&gt;, 但的确是Delicious引起的思考和探索过程中, 需要一个 &lt;em&gt;highlighting&lt;/em&gt; 工具, 而在wikipedia上的 &lt;a class="reference external" href="http://en.wikipedia.org/wiki/Web_annotation"&gt;Web annotation&lt;/a&gt; 遇见的.&lt;/p&gt;
+&lt;p&gt;Diigo的官方定位已经不是单纯的Bookmarking Serve. 现在V5.0已经地位为 &lt;em&gt;Collect and Highlight, The Remember&lt;/em&gt;. 官网那有趣的 &lt;a class="reference external" href="http://www.diigo.com/images/homepage/diigo-evolution.png"&gt;进化图&lt;/a&gt; 较完整地地说明了其成长路线.&lt;/p&gt;
+&lt;p&gt;网上有不少Diigo和Delicious的博文. 例如 &lt;a class="reference external" href="http://www.makeuseof.com/tag/7-reasons-diigo-tastes-better-than-delicious/"&gt;7 Reasons Diigo Testes Better Than Delicious&lt;/a&gt;, &lt;a class="reference external" href="http://iisquared.wordpress.com/2010/07/30/diigo-and-delicious/"&gt;Diigo and Delicious&lt;/a&gt;, 还有官方的 &lt;a class="reference external" href="http://www.diigo.com/help/why_diigo"&gt;How is Diigo Better?&lt;/a&gt;, 洋洋洒洒地对比着两个应用. 其实, 我更喜欢里面的一句评论:&lt;/p&gt;
+&lt;pre class="literal-block"&gt;
+Fran Lo:
+Thanks for doing this – it’s great. For all the extra features Diigo has,
+I still prefer Delicious
+– MUCH easier to bookmark websites, and that’s my primary goal.
+&lt;/pre&gt;
+&lt;p&gt;ps. 这是对旧版Delicious的看法, Delicious已经在换血更新. 不确定是不是还simple.&lt;/p&gt;
+&lt;p&gt;用firefox extensions 作了个简单不规范的对比.  用户安装量: delicious -&amp;gt;226230, ReadItLater -&amp;gt; 300859, diigo -&amp;gt; 9470.  6位数对4位数. 一开始我还以为看错了, 再确认的确如此.&lt;/p&gt;
+&lt;p&gt;用这个对比来看用户接受程度的确不靠谱, 但假设下:&lt;/p&gt;
+&lt;pre class="literal-block"&gt;
+需要应用A有用户量Ua, 需要应用B有用户量Ub, 那么同时有A和B两个需求的用户量Uab,
+为Ua, Ub的交集 -- &amp;quot;Ua ∩ Ub&amp;quot;, Uab的值不可能大于Min(Ua, Ub).
+&lt;/pre&gt;
+&lt;p&gt;Diigo提供的特性覆盖面越来越多, &amp;quot;Bookmarks, Hightlights, Sticky Notes, Docs, Images, Notes, ...&amp;quot;, 那么同时需要这些特性的用户群应该会越来越小. 用户会不会为了其中两个功能忽略其他跟多的功能来使用此产品呢?&lt;/p&gt;
+&lt;p&gt;在&amp;lt;重来&amp;gt;上面有个意思, &amp;quot;没人会说, 我觉得软件还是难用一点好&amp;quot;, 互联网上单一功能的应用或者更容易聚集用户.&lt;/p&gt;
+&lt;p&gt;cnet reviews上面有句 &amp;quot;Great tool for educators and students.&amp;quot; Diigo需要突出自己的核心用户群. 就像魔兽争霸, 星际, 有自己的核心用户, 经久不衰.&lt;/p&gt;
+&lt;p&gt;像作批注, 个人认为, 网络文章对于网名来说更多是快餐信息, 需要做批注/记录笔记的是属于深度阅读, 团体操作的一部分人. 自己刚用diigo firefox extension时, 对于wiki上面那文章默认给我高亮了其他人公开的批注信息, 蛮莫名其妙的. 在我还没有需要拓展阅读或者看看别人的看法的时候, 别来干扰我. 还好这个是有可以设定的.&lt;/p&gt;
+&lt;p&gt;Diigo的List, 和新Delicious的Stack, 不确定谁先谁后. 但属于同一概念, 都是为了分享特定的一系列链接做的. google的bookmark服务&amp;quot;Lists will be discontinued on December 19, 2011.&amp;quot;. 在Delicious投力到Stack上的这个时候, 如果不去竞争, 停掉或者是个不错的选择.&lt;/p&gt;
+&lt;p&gt;Diigo导航栏四大项&amp;quot;Library, Network, Groups, Community&amp;quot;. 要去逐个了解还得花上点时间, 或者也不会去深究.&lt;/p&gt;
+&lt;p&gt;作为一个Delicious+ReadItLater的使用者, 将会优先使用Diigo的HighLighting部分, 虽然Diigo也提供了Delicious和RIL的功能. 至于Diigo会不会让我全面转移进去, 现在还有点自我怀疑. 又或者, 会选择其他更纯粹地做HightLighting的单一产品, 例如 &lt;a class="reference external" href="https://www.webnotes.net/"&gt;WebNotes&lt;/a&gt;. Highlighting is awesome!!&lt;/p&gt;
+&lt;p&gt;还有, Diigo没有开放接口.&lt;/p&gt;
+&lt;p&gt;&amp;lt;!-- Thu Dec 15 21:15:15 CST 2011 --&amp;gt;&lt;/p&gt;
+&lt;p&gt;update!&lt;/p&gt;
+&lt;p&gt;在HighLighting方法已经适应WebNotes了. 选择WebNotes而不是Diggo最重要一个特性是&amp;quot;Folder&amp;quot;. 利用目录结构下, 能方便把收集的信息统一起来.&lt;/p&gt;
+&lt;p&gt;对我来说, 在网页上面需要HighLighting, 必然时在为某个问题在寻找更多的资料或解决方法. 对于收藏一网址, 如果觉得里面有一句精彩或多句, 我会选择摘录到evernote或在org-mode上面, 以作更好的整理归类. 收藏一个网址, 要么是其有趣需要记录但又没有额外方便直接的收藏方式, 要么就是会重复访问或是会更新或者时以后会再次用上的页面. 读一本书, 每次读可能都不同的想法. 但有多少人会重复读一个没更新的网页.&lt;/p&gt;
+&lt;p&gt;对我自己来说, 今天highlight的段落, 对应明天不一定有用, 甚至可能时干扰项. 为解决问题来的, 问题解决后就把收集的资料整理收集清理记录. 如果为了长时间记录一方面的知识, 还是找个更容易管理的地方写写记录, 慢慢积累沉淀.&lt;/p&gt;
+&lt;p&gt;Diigo在不断成长, 有自己的定位和用户群. 我只能说, 我比较爱折腾, 现在这种一站式服务还不能满足我在默个方法上面挑剔的要求. 存在即合理, 只是不适合我而已.&lt;/p&gt;
+&lt;p&gt;继续在 &amp;quot;Delicious + ReadItLater + WebNotes, gvim + evernote + org-mode&amp;quot; 中折腾&lt;/p&gt;
+&lt;p&gt;&amp;lt;!-- Mon Dec 26 00:45:10 CST 2011 --&amp;gt;&lt;/p&gt;
+</content>
+  </entry>
+  <entry xml:base="http://notes-tukki.dotcloud.com/feed.atom">
+    <title type="text">Thoughts for 2012</title>
+    <id>http://notes-tukki.dotcloud.com/2012/01/04/thoughts-for-2012</id>
+    <updated>2012-01-04T00:00:00Z</updated>
+    <link href="http://notes-tukki.dotcloud.com/2012/01/04/thoughts-for-2012" />
+    <author>
+      <name>稻草人.L</name>
+    </author>
+    <content type="html">&lt;p&gt;给自己定下的任务是:&lt;/p&gt;
+&lt;pre class="literal-block"&gt;
+在解决用户问题和解决实现问题上面做衡量, 进行决定, 作出选择
+&lt;/pre&gt;
+&lt;p&gt;这两个多月, 一直在给自己找一个定位. 可以理解为职业规划, 但绝对没到职业规划的层面. 其实, 更多的是自己当前想做什么, 什么东西更感兴趣.&lt;/p&gt;
+&lt;p&gt;都&amp;quot;怪&amp;quot;自己兴趣点太多, 好奇心强, 喜欢特别的东西. 结果, 懂很多, 精的很少. 很多东西知其然而不止其所以然. 但又喜欢寻根究底, 很想去了解其为什么这样做, 用怎样的方式解决了怎样的问题. 于是, 我自己一直都承认自己是个矛盾的人, 带极端思维的不稳定物.&lt;/p&gt;
+&lt;p&gt;现在想, 这个思考题是不是思考错了方向. 在我现在看来, 解决问题的要点是找出问题的所在, 确定这个问题有无必要解决, 再去寻找以什么的方式去解决此问题, 可能带来什么风险. 这里, 蛮感谢以前老大说过的 -- &amp;quot;做之前要证明这样做为什么是可行的&amp;quot; -- 可证明的设计. 不存在唯一的解决方法, 如果只有一个解决方法, 那危险就大了.&lt;/p&gt;
+&lt;p&gt;好像又跑题了. 举些例子说, 要不要专注数据库, 要不要专注服务器后台, 要不要专注用户交互设计, 要不要专注Python. 是不是要成为一个领域的专家级, 才是思考的重点.&lt;/p&gt;
+&lt;p&gt;一个人的时间是有限的, 这个世界太多复杂, 太多干扰项, 太多诱惑; 能彻底专注做好一件事的人, 他们具有不可替换的核心价值. 那自己呢? 自己关注性能, 是因为自己讨厌慢; 不喜欢无谓的重复, 因为其可以自动化处理; 喜欢编程, 是因为其充满了创新. 选择互联网, 因为这里充满了创新, 到处都是竞争. 喜欢多角度看问题, 喜欢组合的方式去解决问题, 喜欢单一功能的产品.&lt;/p&gt;
+&lt;p&gt;或者, 我对mysql如何优化还没有多大兴趣. 到底Django好还是Pyramid有前景的比较现在也不在乎. 问心底一句的话, 其实只是 &lt;em&gt;沉迷在解决问题的过程中, 对未知的恐惧而带来的快感, 对卓越的追求&lt;/em&gt;. 如何组合现有资源, 正确快速地解决问题, 可能才是我在关注的. 根据 &lt;a class="reference external" href="http://en.wikipedia.org/wiki/Don%27t_repeat_yourself"&gt;DRY&lt;/a&gt; 在有合适资源的前提下, 不要重造轮子; 当必须自己构建的时候, 要有能力和勇气自己去实现&lt;/p&gt;
+&lt;p&gt;扎实的基础, 锐利的观察, 敏捷的思维, 务实的执行, 多读多看多思考多动手, 积累原始资本, 这些才是自己这一年应该关注的. 我不是个专注的孩子, 在成长的路上.&lt;/p&gt;
+&lt;p&gt;好像没回答最开始的思考. 或者对自己一开始就是个没答案的思考, 一个还不能做出选择的选择. 好好打基础吧, 别急躁.&lt;/p&gt;
+</content>
+  </entry>
+  <entry xml:base="http://notes-tukki.dotcloud.com/feed.atom">
+    <title type="text">使用知乎的第一印象</title>
+    <id>http://notes-tukki.dotcloud.com/2011/11/21/first-impression-on-zhihu-com</id>
+    <updated>2011-11-21T00:00:00Z</updated>
+    <link href="http://notes-tukki.dotcloud.com/2011/11/21/first-impression-on-zhihu-com" />
+    <author>
+      <name>稻草人.L</name>
+    </author>
+    <content type="html">&lt;p&gt;国外 &lt;a class="reference external" href="http://www.quora.com"&gt;Quora&lt;/a&gt;, 国内 &lt;a class="reference external" href="http://www.zhihu.com/"&gt;知乎&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;今天受到注册允许. 刚刚注册进入浏览了下. 以下是第一印象的记录, 不带深入了解, 未考虑误会.&lt;/p&gt;
+&lt;p&gt;ps. 后记, 我不镇定了, 又在追求完美了. 希望知乎越做越好吧.&lt;/p&gt;
+&lt;ol class="arabic simple"&gt;
+&lt;li&gt;话题&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;注册一开始让我填的是&amp;quot;擅长的领域&amp;quot;领域, 然后第二步需要我&amp;quot;关注5个话题&amp;quot;以上才能进入知乎 -- 我的擅长成了我关注的一部分. 一个人现在拥有的东西和他现在感兴趣的东西不一定是一致的吧? 老实说, 我还真不知道知乎里面提供&amp;quot;我感兴趣的话题&amp;quot;是不是值得&amp;quot;我在这里感兴趣的&amp;quot;. 为什么要在我不知道你提供什么的情况下让我作这个思考, 直接让我进去引导我去发现更自然吧. 计算机-&amp;gt;python-&amp;gt;python框架, 现在回看, 感觉在自我细化了&lt;/p&gt;
+&lt;ol class="arabic simple" start="2"&gt;
+&lt;li&gt;出现在我首页的最新动态是怎样来的?&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;周源是提供邀请给我的人, 默认关注他无可厚非. 黄海均是谁? 知乎产品经理? 我什么时候关注了他? 在&amp;quot;第二步&amp;quot;? 没印象!! 如果真在&amp;quot;第二步&amp;quot;, 要么是我分心了, 要么时你隐藏的太好了.&lt;/p&gt;
+&lt;ol class="arabic simple" start="3"&gt;
+&lt;li&gt;&amp;quot;最新动态&amp;quot;没有提供分类, &amp;quot;我关注的人&amp;quot;和&amp;quot;我关注的话题&amp;quot;摆在一个列表上面.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;&amp;quot;ed2k与BT到底有什么区别？&amp;quot;显示的是&amp;quot;P2P&amp;quot;话题, 我没关注这个话题啊? 现在猜测是因为我的&amp;quot;计算机&amp;quot;太大了, 把&amp;quot;P2P&amp;quot;归类进来了.&lt;/p&gt;
+&lt;p&gt;一连显示了周源和周海均两人的动态. 话说&amp;quot;孕妇是否可以吃甲鱼? 为什么?&amp;quot;, &amp;quot;最近性冲动特别频繁，怎么办？&amp;quot;这类对方的动态, 关我鸟事阿. 一开始我还以为我进错网站, 现在想是我不认同知乎的第一点了. 我来知乎是关注话题的, 不是关注人的. 关注一个人我还不如选择人人或在TX, 再或者新浪微博.&lt;/p&gt;
+&lt;ol class="arabic simple" start="4"&gt;
+&lt;li&gt;我关注的话题在哪啊? 退出按钮又哪里去了?&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;原来首页&amp;quot;我关注的问题&amp;quot;不是&amp;quot;我关注的话题&amp;quot;阿. 原来工具栏上我的姓名时可以点击到我的首页的啊, 原来它还在鼠标hover的时候还会下拉的啊, 原来退出按钮在这个下拉菜单里面. 原来我关注的话题在我的主页里面阿.&lt;/p&gt;
+&lt;ol class="arabic simple" start="5"&gt;
+&lt;li&gt;关注.不感兴趣&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;我承认我犹豫了. 我不知道&amp;quot;关注&amp;quot;代表什么? 关注这个问题? 这个话题? 还是这个回答者? &amp;quot;不感兴趣&amp;quot;是把这个问题隐藏掉, 还是把这个答案隐藏掉?&lt;/p&gt;
+&lt;ol class="arabic simple" start="6"&gt;
+&lt;li&gt;topics.话题&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;这些话题云提供了分组. 我被误导了, 我果断关注了设计网络分组下面的第一个&amp;quot;设计网络&amp;quot;. 原来每个分组下的第一个也不见得都是组名一样的大话题, 那我关注&amp;quot;社交网络&amp;quot;这个问题应该是不会如我期望的也能获取到&amp;quot;SNS&amp;quot;话题下面的相关信息了. 猜想下, 如果我问个微博相关的问题, 涉及国内几个微博平台, 或者我真得一个个相关的微博都打到&amp;quot;话题&amp;quot;里面了, 不如我这么知道能不能得到这几个小话题里面的关注者的意见建议. (且抛开对方会不会回答, 至少得保证对方知不知道可以回答.)&lt;/p&gt;
+&lt;p&gt;页面设计上面的陋见了. 我把鼠标移到话题标签上面(Firefox), 左侧显示在加载信息, 然后在标签上面弹出详细描述. 眼花那个缭乱阿, 看着两个信息在跳动式切换, 不舒服!!! 不能直接在弹出框显示在加载然后加载成功后直接替换里面信息吗?&lt;/p&gt;
+&lt;ol class="arabic simple" start="7"&gt;
+&lt;li&gt;原来话题级别是存在的&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;在话题主页里面的组织话题下, 还是有个目录树的, facebook的示例:&lt;/p&gt;
+&lt;pre class="literal-block"&gt;
+-- Web 2.0
+---- SNS
+---- Facebook
+
+-- 产业
+---- 互联网
+------ 社交网络
+-------- SNS
+---------- Facebook
+
+-- 社交网站
+---- Facebook
+&lt;/pre&gt;
+&lt;p&gt;这目录结构层次还挺混乱的. 这种多父类的目录, 有个&amp;quot;我的父类&amp;quot;和&amp;quot;我的父类的父类&amp;quot;是同一个级别的. 目录的层次感没了, 贴着标签为&amp;quot;facebook&amp;quot;的程序相关问题, 相比对于关注&amp;quot;facebook&amp;quot;营销的人是一种信息负担.&lt;/p&gt;
+&lt;p&gt;&amp;lt;!-- Mon Nov 21 22:13:48 CST 2011 --&amp;gt;&lt;/p&gt;
+&lt;p&gt;在微博的更新: 现在的知乎是又一个信息爆炸的地方. 又是那种我只是想关注你这个方面却不得不关注你整个人的地方. 是个话题过滤功能还待完善的产品&lt;/p&gt;
+&lt;p&gt;&amp;lt;!-- Mon Nov 21 22:41:16 CST 2011 --&amp;gt;&lt;/p&gt;
+</content>
+  </entry>
+  <entry xml:base="http://notes-tukki.dotcloud.com/feed.atom">
+    <title type="text">利用CDN加速即时视频</title>
+    <id>http://notes-tukki.dotcloud.com/2011/12/13/real-time-video-on-cdn</id>
+    <updated>2011-12-13T00:00:00Z</updated>
+    <link href="http://notes-tukki.dotcloud.com/2011/12/13/real-time-video-on-cdn" />
+    <author>
+      <name>稻草人.L</name>
+    </author>
+    <content type="html">&lt;p&gt;不知道冲哪里突然有这个想法的: 静态内容(文本/图片/视频)可以利用CDN进行加速, 那动态内容可以不?&lt;/p&gt;
+&lt;p&gt;实时的多人视频, 其中的stream, 也需要用网络上的数据包来传递. 把这个数据包看成是粒度小的静态文件, 那CDN不久可以对其进行加速了, 只不过其寿命比一般静态文件短而已. (当然也可以缓存下来, 作为视频下载用, 意义不大.)&lt;/p&gt;
+&lt;p&gt;然后今晚和Jim聊起, 决定Google下, 发现这做法是存在的. Amazon的aws就有相关的文章.&lt;/p&gt;
+&lt;p&gt;&lt;a class="reference external" href="http://aws.amazon.com/solutions/global-solution-providers/adobe/"&gt;Adobe and Amazon Web Services&lt;/a&gt;, 里面提到支持 HTTP Dynamic Streaming, RTMP, RTMFP.&lt;/p&gt;
+&lt;p&gt;看其 &lt;a class="reference external" href="http://www.adobe.com/products/flashmediaserver/amazonwebservices/"&gt;价格&lt;/a&gt;, 不是这个领域的, 也不知道贵不贵.&lt;/p&gt;
+&lt;p&gt;Amazon的基础服务果然强大.&lt;/p&gt;
+&lt;p&gt;&amp;lt;!-- Tue Dec 13 22:40:27 CST 2011 --&amp;gt;&lt;/p&gt;
+</content>
+  </entry>
+  <entry xml:base="http://notes-tukki.dotcloud.com/feed.atom">
+    <title type="text">对国内微博的个人看法 -- 转发和评论</title>
+    <id>http://notes-tukki.dotcloud.com/2011/10/27/thoughts-on-weibo</id>
+    <updated>2011-10-27T00:00:00Z</updated>
+    <link href="http://notes-tukki.dotcloud.com/2011/10/27/thoughts-on-weibo" />
+    <author>
+      <name>稻草人.L</name>
+    </author>
+    <content type="html">&lt;p&gt;比较常用新浪微博, 所以会无特别知名则指的是微博.&lt;/p&gt;
+&lt;p&gt;因为先接触Twitter, 然后饭否, 再到微博, 所以思维难免定势一下, 以Twitter的方式思考微博. Twitter 只有Reply和Retweet, Retweet分用户发明版和官方实现版. 微博分评论和转发, 评论并转发, 转发并评论, 腾讯微博还有个对话. 收藏差不多.&lt;/p&gt;
+&lt;p&gt;Twitter无评论. 你可以直接回复一条推, 也可以遵循模式去转发一条推的同时加上自己的说话. 比较在意的一点就是, 你的回复推和原推是同一基本的, 你的追随者(followers)能看到你回复了什么. Twitter关注信息的流动.&lt;/p&gt;
+&lt;p&gt;微博的评论, 对你的追随者(粉丝, 听众...)理论上是不可见的, 除非Ta&amp;quot;碰巧&amp;quot;看了同一条微博的评论发现了你.&lt;/p&gt;
+&lt;p&gt;微博的转发和Retweet, 自己不认为其有相同的基因, 相像的应该是Reblog, 轻博客 &lt;a class="reference external" href="http://www.tumblr.com/"&gt;Tumblr&lt;/a&gt; 的Reblog是极致, 不提供评论功能, 只能reblog. G+带Share和Comment, 其中Share其实就是Reblog.  但从界面来看, 十分喜欢G+页面样式, 即使是分享出来的帖子, 也是无色差连接起来, 自然一体. 而新浪微博和腾讯微博对于转发的内容, 都用浅浅的色差和位移进行区别.&lt;/p&gt;
+&lt;p&gt;一点点细节, G+分享的内容如何不带自己的言论是不会显示&amp;quot;转发微博, 转播&amp;quot;这样的字眼.&lt;/p&gt;
+&lt;img alt="/static/2011-10/gplus.png" src="/static/2011-10/gplus.png" /&gt;
+&lt;img alt="/static/2011-10/weibo.png" src="/static/2011-10/weibo.png" /&gt;
+&lt;img alt="/static/2011-10/tx.png" src="/static/2011-10/tx.png" /&gt;
+&lt;p&gt;新浪和腾讯两个微博都带转发/评论功能. 新浪转发和评论是分开计数的, 也必须分开两个列表来查看. 而腾讯微博把两者统一计数, 并在同一个列表下.&lt;/p&gt;
+&lt;img alt="/static/2011-10/weibo-rc.png" src="/static/2011-10/weibo-rc.png" /&gt;
+&lt;img alt="/static/2011-10/tx-rc.png" src="/static/2011-10/tx-rc.png" /&gt;
+&lt;p&gt;或在来说, 腾讯把&amp;quot;转发并评论, 评论并转发&amp;quot;这个困惑解决了:&lt;/p&gt;
+&lt;ol class="arabic simple"&gt;
+&lt;li&gt;对于原微博作者, 你转发和评论她都是能看到的;&lt;/li&gt;
+&lt;li&gt;对于你的追随者, 你想他们知道你想对些什么说些什么就转发, 你不想他们知道你在对什么说些什么就评论.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;1,2两点应该不冲突阿. 新浪这个&amp;quot;并&amp;quot;带来的重复通知, 其实挺让人不爽的, 小黄签提示&amp;quot;你收到N条提示, 你受到N+1条评论&amp;quot;, 分别打开一看, 只是N个人对你同一条微博同时做了&amp;quot;并&amp;quot;操作, 这个重复的信息带来的小小不爽先撇开不说, 那额外的1条评论, 还可能被你一&amp;quot;并&amp;quot;忽略掉.&lt;/p&gt;
+</content>
+  </entry>
+  <entry xml:base="http://notes-tukki.dotcloud.com/feed.atom">
+    <title type="text">对新浪微博的又一点看法 &amp; 2011.11.14</title>
+    <id>http://notes-tukki.dotcloud.com/2011/11/14/thoughts-on-weibo-2011-11-14</id>
+    <updated>2011-11-14T00:00:00Z</updated>
+    <link href="http://notes-tukki.dotcloud.com/2011/11/14/thoughts-on-weibo-2011-11-14" />
+    <author>
+      <name>稻草人.L</name>
+    </author>
+    <content type="html">&lt;p&gt;新浪微博新版界面出来很久了, 体验过后就切换会标准版一致在用. 后来获取到点碎片信息, 不少人甚至愿意留在第一版的界面. 我想, 我们这挺人不是在怀旧而是知道自己在这里需要什么. 或者在这里获取新资讯, 看看名人/草根信息, 发发牢骚, 一上来刚开始用微博没有谁是为了交友的吧. 想起Google Reader改版时看到的一张图片信息: &amp;quot;If I want to use facebook, I did&amp;quot;. 在国内大概可以套用下就是&amp;quot;如果我想用人人, 我早用了&amp;quot;.&lt;/p&gt;
+&lt;p&gt;人人注册后就没用不知道该说些什么. GReader在用, Facebook, Twitter少用.&lt;/p&gt;
+&lt;p&gt;Facebook, 主打关系网络.先不考虑最新的隐私设置(没详细用), 但基本来说, 加好友后对方干过什么基本能知道 -- 最新动态, 喜欢什么, 评论过什么, 现在的听什么, 读什么. 了解一个人, 应该全面地去认识其点点滴滴吧. ps. 不过不知道会不会有个功能叫&amp;quot;不喜欢&amp;quot;, 认识一个人也可以冲其不喜欢什么切入.&lt;/p&gt;
+&lt;p&gt;新浪微博的关系? 十分赞同的是&amp;quot;45度的仰望&amp;quot;. 腾讯的微博广告还主打过&amp;quot;与其在那里仰望, 不如在这里比肩&amp;quot;(事实上我自己不知道应该在qzone和朋友&amp;quot;并肩&amp;quot;还是去差异不大的微博&amp;quot;比肩&amp;quot;). 名人与粉丝的关系, 新闻与读者的关系. 要说朋友间的关系, 早就被源源不断的新信息埋没了. 要不是有个分组功能, 还真不知道去哪里找朋友的更新. 但是, 这分组没有新信息统计通知的: 分组分得太大, 信息淹没, 分组分得太细, 一个个tag去点吧, 反正不是很累.&lt;/p&gt;
+&lt;p&gt;再说, 微博特性之一&amp;quot;转发/评论&amp;quot;, 引发的选择也不少.&lt;/p&gt;
+&lt;ol class="arabic simple"&gt;
+&lt;li&gt;我评论某有趣的微博, 但又想让朋友们知道: 评论并转发啦, 还是转发并评论. 转发不评论应该也可以吧. -_-||&lt;/li&gt;
+&lt;li&gt;我要是潜水不更新状态不转发只评论甚至不评论只看, 我还得接受质疑, &amp;quot;你没玩微博了吧?&amp;quot;&lt;/li&gt;
+&lt;li&gt;更新个状态, Ta获取评论, 回复, Ta也回复, 我再回复并转发, Ta回复了, 回复到转发生成的新微博上面去了. 呃, 信息流的完整性破坏了. 还是回飞个短信或在QQ讨论吧.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;说到这里其实已经开始和Twitter对比了.&lt;/p&gt;
+&lt;p&gt;Twitter主打信息网络, 讲究的就是信息的传播. 里面的Tweet都是平等的. 不存在依赖, 你的推是你自己的, 我回复你后是我自己的推, 你再回复我那也是你自己的推. 我只能删掉我自己的推, 你的回复, &amp;quot;与我无关&amp;quot;管不了. 新浪微博下的评论原微博主是带删除权的, &amp;quot;虽然是你的成果但是我的资产, 看不顺眼删你没商量&amp;quot;.&lt;/p&gt;
+&lt;p&gt;上面说到微博的分组, 对比Twitter的List功能, 真的好基本, 只满足基本要求 -- 分组. 我想关注某娱乐, 但又不想一打开微博自己的全部都是其推送娱乐信息, 我只是想在周六日发呆的时候能分分神. 而我要是想把这组信息分享给朋友, 相信会很纠结. 用过新浪微博的开放接口, 还没有提供获取组信息的接口, 同时获取几个人的状态更新还是属于高级接口一类. 如果说有哪个应用可以让我自己选择获取哪组人的信息为主信息, 而其他按组给我提示更新统计信息能切换获取到就够, 我一定拥抱这个变化. ps. 难道自己写? 呃, 现在有个LazyNotify了. 现在的生活还有其他重点...&lt;/p&gt;
+&lt;p&gt;如果说, 新浪微博提供RSS, 或者第三方提供的相关RSS. 那一定回考虑是不是把一些关注改为GReader订阅模式. 不过GReader已经是&amp;quot;1000+&amp;quot;, 再订阅微博, 会很恐怖吧...&lt;/p&gt;
+&lt;p&gt;已经由新浪微博的中度偏重症使用者慢慢康复过来了, 我一怂恿成功而使用微博的朋友已经宣布微博不好玩了. 或者我们两个只是小众, 体会不到那种&amp;quot;其中的乐趣&amp;quot;. 就算自己用QQ, 也主要是在用其IM部分, 而且还是TM版.&lt;/p&gt;
+&lt;p&gt;一直在拿新浪微博和Facebook, Twitter, Tumblr等来比, 其实后面几个自己也不是很&amp;quot;中毒&amp;quot;, 只是有参与, 以使用者的角色阐述自己的看法. 没有完美的产品, 各自有自己的市场定位, 用户需求. 一个用户&amp;quot;用&amp;quot;一个产品, 应该带一个&amp;quot;用&amp;quot;的理由吧. 产品单一点就好, 像Twitter的&amp;quot;开放+整合&amp;quot;, 不是所有都自己去折腾, 单一到&amp;quot;RT&amp;quot;都是用户自己创造出来的. 不过, 国内的互联网可能不买这个账, 有着自己的&amp;quot;中国特色&amp;quot;. 自己在这个充满变化的互联网, 连入门都还不算.&lt;/p&gt;
+&lt;p&gt;新浪微博的新闻属性, 越发明显了, 但也慢慢弱了, &amp;quot;舆论压力&amp;quot;吧. 最后, 想起和朋友聊天时的一句话: 新浪越来越腾讯了.&lt;/p&gt;
+&lt;p&gt;&amp;quot;没有100%的完美, 只要属于自己的合适&amp;quot;. 该睡了.&lt;/p&gt;
+&lt;p&gt;&amp;lt;-- Mon Nov 14 01:58:36 CST 2011 --&amp;gt;&lt;/p&gt;
+</content>
+  </entry>
+</feed>
+

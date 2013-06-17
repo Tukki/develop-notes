@@ -1,0 +1,95 @@
+<!doctype html>
+<html>
+  <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+      
+      <title>使用decorator增强Django的login_required | 稻草人.L的记录</title>
+      <!--<link href="http://fonts.googleapis.com/css?family=Vollkorn&subset=latin" rel="stylesheet" type="text/css">-->
+      <link rel="stylesheet" href="/static/style.css" type="text/css">
+      <link rel="stylesheet" href="/static/_pygments.css" type="text/css">
+      
+  </head>
+  <body>
+      <div class=container>
+          <div class=header>
+              <a href="/">稻草人.L的记录</a>
+          </div>
+          <div class=navigation>
+              <ul>
+                  <li><a href="/">blog</a></li>
+                  <li><a href="/archive/">archive</a></li>
+                  <li><a href="/tags/">tags</a></li>
+                  <li><a href="/feed.atom" rel="alternate" title="Recent Blog Posts">feed</a></li>
+              </ul>
+          </div>
+          <div class=body>
+              
+  <h1 class="title">使用decorator增强Django的login_required</h1>
+
+  
+  <p class=date>written on Thursday, October 13, 2011
+  
+
+  <p>PS. 感谢open-sources, 感谢pylons, 感谢django.</p>
+<p>在pylons的第三方依赖中, 有 <a class="reference external" href="http://pypi.python.org/pypi/decorator">decorator</a>. 查看其 <a class="reference external" href="http://micheles.googlecode.com/hg/decorator/documentation.html">文档</a>, 才
+发现 <a class="reference external" href="http://docs.python.org/release/2.5.2/lib/module-functools.html">functools.update_wrapper</a> 并非
+完全解决问题, 在用到自省工具(introspection tools), 如pydoc的时候, 会得到错误的参数标识. 因为functools是在开Django的源码时发现的, 所以拿了其contrib.auth下的login_required来确认:</p>
+<div class="highlight"><pre><span class="c"># using python2.5.4</span>
+<span class="k">def</span> <span class="nf">home</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">template_name</span><span class="o">=</span><span class="s">&#39;home.html&#39;</span><span class="p">):</span>
+    <span class="k">pass</span>
+
+<span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">inspect</span> <span class="kn">import</span> <span class="n">getargspec</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="k">print</span> <span class="n">getargspec</span><span class="p">(</span><span class="n">home</span><span class="p">)</span>  <span class="c">#可以看到完整的参数信息</span>
+<span class="p">([</span><span class="s">&#39;request&#39;</span><span class="p">,</span> <span class="s">&#39;template_name&#39;</span><span class="p">],</span> <span class="bp">None</span><span class="p">,</span> <span class="bp">None</span><span class="p">,</span> <span class="p">(</span><span class="s">&#39;home.html&#39;</span><span class="p">,))</span>
+
+<span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">django.contrib.auth.decorators</span> <span class="kn">import</span> <span class="n">login_required</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="k">print</span> <span class="n">getargspec</span><span class="p">(</span><span class="n">login_required</span><span class="p">(</span><span class="n">home</span><span class="p">))</span> <span class="c">#参数信息丢失</span>
+<span class="p">([</span><span class="s">&#39;request&#39;</span><span class="p">],</span> <span class="s">&#39;args&#39;</span><span class="p">,</span> <span class="s">&#39;kwargs&#39;</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
+</pre></div>
+<p>Django的login_required实际调用了*user_passes_test*, 而user_passes_test里面用了functools的wraps:</p>
+<div class="highlight"><pre><span class="k">def</span> <span class="nf">user_passes_test</span><span class="p">(</span><span class="o">...</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">decorator</span><span class="p">(</span><span class="n">view_func</span><span class="p">):</span>
+        <span class="nd">@wraps</span><span class="p">(</span><span class="n">view_func</span><span class="p">,</span> <span class="n">assigned</span><span class="o">=</span><span class="n">available_attrs</span><span class="p">(</span><span class="n">view_func</span><span class="p">)):</span>
+        <span class="k">def</span> <span class="nf">_wrapped_view</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+            <span class="k">pass</span>
+        <span class="k">return</span> <span class="n">_wrapped_view</span>
+    <span class="k">return</span> <span class="n">decorator</span>
+</pre></div>
+<p>尝试用decorator代替wraps:</p>
+<div class="highlight"><pre><span class="kn">from</span> <span class="nn">decorator</span> <span class="kn">import</span> <span class="n">decorator</span>
+
+<span class="k">def</span> <span class="nf">user_passes_test</span><span class="p">(</span><span class="o">...</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_decoratord</span><span class="p">(</span><span class="n">view_func</span><span class="p">):</span>
+        <span class="k">def</span> <span class="nf">_wrapped_view</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+            <span class="k">pass</span>
+        <span class="k">return</span> <span class="n">decorator</span><span class="p">(</span><span class="n">_wrapped_view</span><span class="p">,</span> <span class="n">view_func</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">_decoratord</span>
+
+<span class="o">&gt;&gt;&gt;</span> <span class="k">print</span> <span class="n">getargspec</span><span class="p">(</span><span class="n">login_required</span><span class="p">(</span><span class="n">home</span><span class="p">))</span>     <span class="c">#再测试一次home</span>
+<span class="p">([</span><span class="s">&#39;request&#39;</span><span class="p">,</span> <span class="s">&#39;template_name&#39;</span><span class="p">],</span> <span class="bp">None</span><span class="p">,</span> <span class="bp">None</span><span class="p">,</span> <span class="p">(</span><span class="s">&#39;home.html&#39;</span><span class="p">,))</span>
+</pre></div>
+<p>可以看到, 原home函数的参数信息回来了.</p>
+<p>现在想, 这点不是错误的错误在某种程度接受. 现在遇到的实现, 其文档好多都是独立rst文件.</p>
+<p>不过对于自己还没有懒写独立文档的情况下, 用这个第三方的decorator实现来协作实现python的decorator功能, 感觉会比functools.wraps有点优势.</p>
+<p>(Fri Oct 14 00:37:18 CST 2011)</p>
+
+
+  
+
+          </div>
+          <div class=footer>
+              <p>&copy; Copyright 2013 by 稻草人.L
+              <p>
+              Content licensed under the Creative Commons
+              attribution-noncommercial-sharealike License.
+              <p>
+              联系我: 
+	      <span>Tukki.Eta(#)gmail.com</span> &nbsp;
+	      <a href="http://twitter.com/scarecrow_L">Twitter</a> &nbsp;
+          <a href="https://www.github.com/tukki">Github</></a> &nbsp;
+      </div>
+
+          </div>
+      </div>
+  </body>
+</html>

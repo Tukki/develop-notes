@@ -1,0 +1,92 @@
+<!doctype html>
+<html>
+  <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+      
+      <title>using nginx virtual host without default port | 稻草人.L的记录</title>
+      <!--<link href="http://fonts.googleapis.com/css?family=Vollkorn&subset=latin" rel="stylesheet" type="text/css">-->
+      <link rel="stylesheet" href="/static/style.css" type="text/css">
+      <link rel="stylesheet" href="/static/_pygments.css" type="text/css">
+      
+  </head>
+  <body>
+      <div class=container>
+          <div class=header>
+              <a href="/">稻草人.L的记录</a>
+          </div>
+          <div class=navigation>
+              <ul>
+                  <li><a href="/">blog</a></li>
+                  <li><a href="/archive/">archive</a></li>
+                  <li><a href="/tags/">tags</a></li>
+                  <li><a href="/feed.atom" rel="alternate" title="Recent Blog Posts">feed</a></li>
+              </ul>
+          </div>
+          <div class=body>
+              
+  <h1 class="title">using nginx virtual host without default port</h1>
+
+  
+  <p class=date>written on Sunday, October 9, 2011
+  
+
+  <p>In the Nginx <a class="reference external" href="http://wiki.nginx.org/VirtualHostExample">Virtual Host official examples</a> showing how to setup the Virtual Host with default port <em>80</em>, and tell us can replace 80 with the right one for our requirements. It souds great.</p>
+<p>This tiem I just want to setup my pyramid project with nginx just like <a class="reference external" href="https://docs.pylonsproject.org/projects/pyramid_cookbook/dev/deployment/nginx.html">pyramid cookbook</a>
+showing. All things smoothly going except the PasteScript missing 'wsgiServer'. But the nightmare appearanced when I changed the listening port to <em>8080</em> - all the links point to 'localhost', yet, there was no 8080. Google for it and try the solutions, only the this worked.:</p>
+<pre class="literal-block">
+proxy_set_header Host $host:8080
+</pre>
+<p>Checked the Nginx <a class="reference external" href="http://wiki.nginx.org/HttpProxyModule#proxy_set_header">HttpProxyModele</a> document:</p>
+<pre class="literal-block">
+The unchanged request-header &quot;Host&quot; can be transmitted like this:
+
+    proxy_set_header Host $http_host;
+
+However, if this line is absent from the client request,
+then nothing will be transferred.
+
+In this case it is better to use variable $host,
+it's value is equal to the name of server in the request-header &quot;Host&quot;
+or to the basic name of server, if there is no line:
+
+    proxy_set_header Host $host;
+
+Furthermore, it is possible to transmit the name of server together
+with the port of the proxied server:
+
+    proxy_set_header Host $host:$proxy_port;
+</pre>
+<p>Sound like the <em>$proxy_port</em> is the general and perfect solution. But I'm wrong, it did not work. If I only use the $proxy_port, the links show me that the value is <strong>0.0.80</strong>. WTH...</p>
+<p>Anyway, these configures work:</p>
+<pre class="literal-block">
+proxy_set_header Host $http_host;
+</pre>
+<p>or:</p>
+<pre class="literal-block">
+proxy_set_header Host $host;
+</pre>
+
+
+  
+  <p class=tags>This entry was tagged
+    
+      <a href="/tags/nginx/">nginx</a>
+  
+
+          </div>
+          <div class=footer>
+              <p>&copy; Copyright 2013 by 稻草人.L
+              <p>
+              Content licensed under the Creative Commons
+              attribution-noncommercial-sharealike License.
+              <p>
+              联系我: 
+	      <span>Tukki.Eta(#)gmail.com</span> &nbsp;
+	      <a href="http://twitter.com/scarecrow_L">Twitter</a> &nbsp;
+          <a href="https://www.github.com/tukki">Github</></a> &nbsp;
+      </div>
+
+          </div>
+      </div>
+  </body>
+</html>

@@ -1,0 +1,78 @@
+<!doctype html>
+<html>
+  <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+      
+      <title>Iteration within re.sub() | 稻草人.L的记录</title>
+      <!--<link href="http://fonts.googleapis.com/css?family=Vollkorn&subset=latin" rel="stylesheet" type="text/css">-->
+      <link rel="stylesheet" href="/static/style.css" type="text/css">
+      <link rel="stylesheet" href="/static/_pygments.css" type="text/css">
+      
+  </head>
+  <body>
+      <div class=container>
+          <div class=header>
+              <a href="/">稻草人.L的记录</a>
+          </div>
+          <div class=navigation>
+              <ul>
+                  <li><a href="/">blog</a></li>
+                  <li><a href="/archive/">archive</a></li>
+                  <li><a href="/tags/">tags</a></li>
+                  <li><a href="/feed.atom" rel="alternate" title="Recent Blog Posts">feed</a></li>
+              </ul>
+          </div>
+          <div class=body>
+              
+  <h1 class="title">Iteration within re.sub()</h1>
+
+  
+  <p class=date>written on Friday, December 7, 2012
+  
+
+  <p>今天有个re.sub()相关实现需要在替换字符串的时候附加位移信息进去, 用来标识其是第几次出现.</p>
+<p>查文档函数不支持!  全局变量统计当然可以, 比较丑陋. 想到了闭包, 在函数里面定义函数以访问外层函数的变量, JS的话应该时可以的, 只是python的闭包好像不是这样的, 什么地方理解错了.</p>
+<p>还是Google给力, 问题不是新的. 找到同样的需求. <cite>http://bytes.com/topic/python/answers/39307-iteration-within-sub</cite></p>
+<p>构建类, 用类方法提供给sub作为替换行数... first class? 基础概念都忘了...</p>
+<p>摘录代码片段</p>
+<div class="highlight"><pre><span class="c">#!python</span>
+<span class="kn">import</span> <span class="nn">re</span>
+
+<span class="k">class</span> <span class="nc">Counter</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">count</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="k">def</span> <span class="nf">increment</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">match_object</span><span class="p">):</span>
+        <span class="n">repl</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">count</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">count</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">return</span> <span class="n">repl</span>
+
+<span class="n">text</span> <span class="o">=</span> <span class="s">&#39;abbabababbbbbaaa&#39;</span>
+<span class="n">expected</span>  <span class="o">=</span> <span class="s">&#39;a01a2a3a45678aaa&#39;</span>
+
+<span class="n">c</span> <span class="o">=</span> <span class="n">Counter</span><span class="p">()</span>
+<span class="n">ptn</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s">r&#39;(b)&#39;</span><span class="p">)</span>
+<span class="n">actual</span> <span class="o">=</span> <span class="n">ptn</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="n">c</span><span class="o">.</span><span class="n">increment</span><span class="p">,</span> <span class="n">text</span><span class="p">)</span>
+<span class="k">assert</span> <span class="n">expected</span> <span class="o">==</span> <span class="n">actual</span>
+</pre></div>
+
+
+  
+
+          </div>
+          <div class=footer>
+              <p>&copy; Copyright 2013 by 稻草人.L
+              <p>
+              Content licensed under the Creative Commons
+              attribution-noncommercial-sharealike License.
+              <p>
+              联系我: 
+	      <span>Tukki.Eta(#)gmail.com</span> &nbsp;
+	      <a href="http://twitter.com/scarecrow_L">Twitter</a> &nbsp;
+          <a href="https://www.github.com/tukki">Github</></a> &nbsp;
+      </div>
+
+          </div>
+      </div>
+  </body>
+</html>

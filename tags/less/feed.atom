@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title type="text">Recent Blog Posts</title>
+  <id>http://notes-tukki.dotcloud.com/feed.atom</id>
+  <updated>2012-06-01T00:00:00Z</updated>
+  <link href="http://notes-tukki.dotcloud.com" />
+  <link href="http://notes-tukki.dotcloud.com/feed.atom" rel="self" />
+  <subtitle type="text">Recent blog posts</subtitle>
+  <generator>Werkzeug</generator>
+  <entry xml:base="http://notes-tukki.dotcloud.com/feed.atom">
+    <title type="text">Less watch mode</title>
+    <id>http://notes-tukki.dotcloud.com/2012/06/01/less-watch-mode</id>
+    <updated>2012-06-01T00:00:00Z</updated>
+    <link href="http://notes-tukki.dotcloud.com/2012/06/01/less-watch-mode" />
+    <author>
+      <name>稻草人.L</name>
+    </author>
+    <content type="html">&lt;p&gt;&lt;a class="reference external" href="http://lesscss.org/"&gt;Less&lt;/a&gt; 里面提到的watch mode一直没能用上(在开发域名上面运行), 也没去找那里出错了. 忙乎阿. 刚才再Google了下, 找到了解决方式.&lt;/p&gt;
+&lt;p&gt;github上面提到个 &lt;a class="reference external" href="https://github.com/cloudhead/less.js/pull/679"&gt;pull request #679&lt;/a&gt;, 不过还处于open状态, 修改了源码. 解决方式一.&lt;/p&gt;
+&lt;p&gt;然后, &lt;a class="reference external" href="http://www.paulsprangers.com/2011/04/quick-tip-less-js-in-development-and-watch-mode/"&gt;Less.js in development and watch mode&lt;/a&gt;. 原文提到的方式不靠谱, 反而评论提到了两个方式, 一个是修改源码, 等于把自己的开放域名注册到Less.js文件里面. 另外一个, Force init value of less.env var:&lt;/p&gt;
+&lt;pre class="literal-block"&gt;
+// Force init value of less.env var
+var less = { env: ‘development’ };
+// Less itself
+
+// Watch
+less.watch();
+&lt;/pre&gt;
+&lt;p&gt;需要在加载Less.js之前初始化env变量, 不如在非本地测试环境, 加载Less.js后判断 env 是否为 &lt;em&gt;development&lt;/em&gt; 而选择了不同的模式. 再手动watch也不能生效.&lt;/p&gt;
+&lt;p&gt;ps. 可以用 less.poll 来控制watch频率&lt;/p&gt;
+&lt;p&gt;&amp;lt;!-- Fri Jun  1 00:43:06 CST 2012 --&amp;gt;&lt;/p&gt;
+</content>
+  </entry>
+  <entry xml:base="http://notes-tukki.dotcloud.com/feed.atom">
+    <title type="text">Start Using Less</title>
+    <id>http://notes-tukki.dotcloud.com/2012/04/21/start-using-less</id>
+    <updated>2012-04-21T00:00:00Z</updated>
+    <link href="http://notes-tukki.dotcloud.com/2012/04/21/start-using-less" />
+    <author>
+      <name>稻草人.L</name>
+    </author>
+    <content type="html">&lt;p&gt;&lt;a class="reference external" href="http://lesscss.org/"&gt;less&lt;/a&gt;, The dynamic stylesheet language.&lt;/p&gt;
+&lt;p&gt;作为一个不专一的Web程序员, 不得不为css头痛一下. css没什么错, 只是自己的不专业, 对维护css和在原有css上面追加新东西有点不自在而已.&lt;/p&gt;
+&lt;p&gt;&amp;quot;这个页面想要原来另外一个页面的按钮的效果, 不过颜色稍稍作点改动&amp;quot;.&lt;/p&gt;
+&lt;p&gt;好吧, 用firebug找到按钮具体在哪一行的css, 发现在&amp;quot;#xx .yy ul li span a&amp;quot;上面, 好吧. 认了, 然后copy一份过来. 这种情况, 应该是&amp;quot;css一开始就没抽象好, 以后也没整理过, 那就只能继续乱下去的感觉.&amp;quot;&lt;/p&gt;
+&lt;p&gt;换个好一点的抽象. 需要buttom? 'class=&amp;quot;btn gray width100&amp;quot;'. 组合强大. jqueryUI应该是这样做的. 维护这一份抽象, 得化点功夫.&lt;/p&gt;
+&lt;p&gt;跑题了. 借口了. 自己还没认真体会到前端写css时的乐趣, 只是自己爱折腾罢了.&lt;/p&gt;
+&lt;p&gt;知道less是因为 &lt;a class="reference external" href="https://github.com/twitter/bootstrap"&gt;twitter/bootstrap&lt;/a&gt;, 不过bootstrap还没开始, 先开始less了.&lt;/p&gt;
+&lt;p&gt;variables, operations and functions这些功能的好处在自己这边还没体验出来, 不过Nested Rules, Mixins倒是狠喜欢的说.&lt;/p&gt;
+&lt;p&gt;Nested Rules帮忙避免了写css不断低copy一行父关系来增加子效果. 外加 &amp;quot;&amp;amp;&amp;quot; 的使用, 如虎添翼. 写起来舒服.&lt;/p&gt;
+&lt;p&gt;Mixins避免了在css的class组合. 虽然我说不出这样的class组合有什么不好, 不过可以的话, 我宁愿在html的dom上面, 只是标注了一个class名词.&lt;/p&gt;
+&lt;p&gt;用less.js调试样式, 再用lessc生成具体的css用户生产环境. 在无法避免的前端开放中尝试点新的模式&lt;/p&gt;
+&lt;p&gt;这一次, 又得感谢google v8了.&lt;/p&gt;
+&lt;p&gt;爱折腾, 只是为了更好的开发速度和更好的可维护性. 持续学习中&lt;/p&gt;
+&lt;p&gt;&amp;lt;Sun Apr 22 00:23:43 CST 2012&amp;gt;&lt;/p&gt;
+</content>
+  </entry>
+</feed>
+

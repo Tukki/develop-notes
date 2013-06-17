@@ -5,7 +5,7 @@
       {% block htmlhead %}
       <title>{% block title %}Home{% endblock %} | 稻草人.L的记录</title>
       <!--<link href="http://fonts.googleapis.com/css?family=Vollkorn&subset=latin" rel="stylesheet" type="text/css">-->
-      <link rel="stylesheet" href="/static/style.css" type="text/css">
+      <link rel="stylesheet" href="/develop-notes/static/style.css" type="text/css">
       {%- for link in links %}
       <link rel="{{ link.rel }}" href="{{ link.href }}"{%
       if link.media %} media="{{ link.media }}"{% endif %} type="{{ link.type }}">
@@ -19,10 +19,10 @@
           </div>
           <div class=navigation>
               <ul>
-                  <li><a href="/">blog</a></li>
-                  <li><a href="/archive/">archive</a></li>
-                  <li><a href="/tags/">tags</a></li>
-                  <li><a href="/feed.atom" rel="alternate" title="Recent Blog Posts">feed</a></li>
+                  <li><a href="/develop-notes/">blog</a></li>
+                  <li><a href="/develop-notes/archive/">archive</a></li>
+                  <li><a href="/develop-notes/tags/">tags</a></li>
+                  <li><a href="/develop-notes/feed.atom" rel="alternate" title="Recent Blog Posts">feed</a></li>
               </ul>
           </div>
           <div class=body>

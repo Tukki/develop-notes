@@ -15,5 +15,5 @@ serve:
 upload:
 	rsync -a static/dotcloud.yml _build/dotcloud.yml
 	rsync -a --delete _build/ ../.develop-blog-www/
-	dotcloud push notes ../.develop-blog-www/
+	dotcloud push  ../.develop-blog-www/
 	@echo "Done..."

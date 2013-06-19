@@ -6,7 +6,7 @@ active_modules:
     - latex
 
 author: "稻草人.L"
-canonical_url: /develop-notes/
+canonical_url: http://tukki.github.io/develop-notes/
 #canonical_url: http://scarecrow-notes.appspot.com
 
 modules:
